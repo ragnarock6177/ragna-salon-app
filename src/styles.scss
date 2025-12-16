@@ -1,0 +1,278 @@
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+/* --- 1. Define Design Tokens (Variables) --- */
+$_slate-900: var(--color-slate-900);
+$_slate-800: var(--color-slate-800);
+$_slate-700: var(--color-slate-700);
+$_slate-600: var(--color-slate-600);
+$_slate-300: var(--color-slate-300);
+$_slate-200: var(--color-slate-200);
+$_slate-50: var(--color-slate-50);
+$_white: var(--color-white);
+$_sky-500: var(--color-sky-500);
+$_sky-600: var(--color-sky-600); // Darker sky for hover
+$_sky-500-fade: rgba(var(--color-sky-500), 0.15);
+$_error: var(--color-error);
+$_gray_100 : var(--color-gray-100);
+$_shadow-sm: 0 1px 3px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+
+/* --- 2. Define Themes --- */
+$light-theme: mat.define-theme((color: (theme-type: light,
+        primary: mat.$azure-palette,
+        tertiary: mat.$blue-palette,
+      ),
+      typography: (brand-family: 'inherit',
+        plain-family: 'inherit',
+      ),
+      density: (scale: 0,
+      )));
+
+$dark-theme: mat.define-theme((color: (theme-type: dark,
+        primary: mat.$azure-palette,
+        tertiary: mat.$blue-palette,
+      ),
+      density: (scale: 0,
+      )));
+
+/* --- 3. Apply Themes & Overrides --- */
+html {
+  @include mat.all-component-themes($light-theme);
+
+  // --- Form Field Overrides (Light) ---
+  @include mat.form-field-overrides((filled-container-color: $_white,
+      filled-label-text-color: rgb(100 116 139),
+      filled-input-text-color: $_slate-900,
+      filled-caret-color: $_sky-500,
+      filled-focus-label-text-color: $_sky-500,
+      filled-focus-active-indicator-color: $_sky-500,
+      filled-error-label-text-color: $_error,
+      filled-error-caret-color: $_error,
+    ));
+
+  // --- Dialog Overrides (Light) ---
+  @include mat.dialog-overrides((container-color: $_white,
+      subhead-color: $_slate-700,
+      supporting-text-color: $_slate-700,
+      container-shape: 1rem,
+      container-elevation-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15),
+    ));
+
+  // --- Select Overrides (Light) ---
+  @include mat.select-overrides((panel-background-color: $_white,
+      enabled-trigger-text-color: $_slate-700,
+      enabled-arrow-color: $_slate-700,
+    ));
+
+  // --- Button Overrides (Light) ---
+  @include mat.button-overrides(( // Text Buttons (mat-button)
+      text-label-text-color: $_slate-700,
+      protected-container-elevation-shadow:$_shadow-sm,
+      // Outlined Buttons (mat-outlined-button)
+      outlined-label-text-color: $_slate-700,
+      outlined-outline-color: $_slate-300,
+      // Filled/Raised Buttons (mat-raised-button / mat-flat-button)
+      filled-container-color: $_white,
+      filled-label-text-color: $_slate-700,
+      protected-container-color: $_white,
+      protected-label-text-color: $_slate-700,
+    ));
+
+  // --- Icon Button Overrides (Light) ---
+  @include mat.icon-button-overrides((icon-color: $_slate-700,
+      state-layer-color: $_slate-700,
+    ));
+
+  // --- FAB Overrides (Light) ---
+  @include mat.fab-overrides((container-color: $_sky-500,
+      foreground-color: $_white,
+      state-layer-color: $_white,
+    ));
+
+  // --- Menu Overrides (Light) ---
+  @include mat.menu-overrides((container-color: $_white,
+      item-label-text-color: $_slate-700,
+      item-icon-color: $_slate-700,
+      container-elevation-shadow:$_shadow-sm,
+      item-hover-state-layer-color:$_gray_100 ));
+
+  // --- Table Overrides (Light) ---
+  @include mat.table-overrides((background-color: $_white,
+      header-container-height: 40px,
+      header-headline-size: 12px,
+      header-headline-weight: 500,
+      header-headline-color: $_slate-700,
+      row-item-label-text-color: $_slate-700,
+      row-item-outline-color: $_slate-200,
+    ));
+
+  // Custom border for light mode dialogs
+  .mat-mdc-dialog-surface {
+    border: 1px solid rgba(226, 232, 240, 0.8);
+  }
+}
+
+html.dark {
+  @include mat.all-component-colors($dark-theme);
+
+  // --- Form Field Overrides (Dark) ---
+  @include mat.form-field-overrides((filled-container-color: $_slate-800,
+      filled-label-text-color: $_slate-300,
+      filled-hover-label-text-color: $_slate-200,
+      filled-input-text-color: $_slate-50,
+    ));
+
+  // --- Dialog Overrides (Dark) ---
+  @include mat.dialog-overrides((container-color: $_slate-900,
+      subhead-color: $_slate-200,
+      supporting-text-color: $_slate-200,
+      container-elevation-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5),
+    ));
+
+  // --- Select Overrides (Dark) ---
+  @include mat.select-overrides((panel-background-color: $_slate-800,
+      enabled-trigger-text-color: $_slate-200,
+      enabled-arrow-color: $_slate-200,
+    ));
+
+  // --- Button Overrides (Dark) ---
+  @include mat.button-overrides((text-label-text-color: $_slate-200,
+
+      outlined-label-text-color: $_slate-200,
+      outlined-outline-color: $_slate-600,
+
+      filled-container-color: $_slate-800,
+      filled-label-text-color: $_slate-200,
+      protected-container-color: $_slate-800,
+      protected-label-text-color: $_slate-200,
+    ));
+
+  // --- Icon Button Overrides (Dark) ---
+  @include mat.icon-button-overrides((icon-color: $_slate-200,
+      state-layer-color: $_slate-200,
+    ));
+
+  // --- FAB Overrides (Dark) ---
+  @include mat.fab-overrides((container-color: $_sky-500,
+      foreground-color: $_white,
+    ));
+
+  // --- Menu Overrides (Dark) ---
+  @include mat.menu-overrides((container-color: $_slate-800,
+      item-label-text-color: $_slate-200,
+      item-icon-color: $_slate-200,
+      container-elevation-shadow:$_shadow-sm,
+      item-hover-state-layer-color:$_slate-800 ));
+
+  // --- Table Overrides (Dark) ---
+  @include mat.table-overrides((background-color: $_slate-900,
+      header-headline-color: $_slate-700,
+      row-item-label-text-color: $_slate-300,
+      row-item-outline-color: $_slate-700,
+      header-container-height: 40px,
+      header-headline-size: 12px,
+      header-headline-weight: 400));
+
+  // Custom border for dark mode dialogs
+  .mat-mdc-dialog-surface {
+    border: 1px solid rgba(71, 85, 105, 0.5);
+  }
+
+  // Overlay Backdrop
+  .cdk-overlay-dark-backdrop {
+    background: rgba(0, 0, 0, 0.75);
+  }
+}
+
+/* --- 4. Structural Customizations --- */
+
+// --- Buttons: Shape & Primary Colors ---
+.mat-mdc-button-base {
+  // Change default Pill shape (20px) to rounded rect (0.5rem/8px) to match inputs
+  border-radius: 0.5rem !important;
+}
+
+// Specific fix for "Primary" buttons (mat-flat-button color="primary")
+// We force these to be Sky-500 because the mixins above set the *default* filled button to white/slate.
+.mat-mdc-raised-button.mat-primary,
+.mat-mdc-flat-button.mat-primary {
+  --mdc-filled-button-container-color: #{$_sky-500} !important;
+  --mdc-filled-button-label-text-color: #{$_white} !important;
+  --mdc-protected-button-container-color: #{$_sky-500} !important;
+  --mdc-protected-button-label-text-color: #{$_white} !important;
+
+  &:hover {
+    --mdc-filled-button-container-color: #{$_sky-600} !important;
+    --mdc-protected-button-container-color: #{$_sky-600} !important;
+  }
+}
+
+// --- Form Fields ---
+.mat-mdc-text-field-wrapper {
+  border: 1px solid $_slate-200;
+  border-radius: 0.5rem;
+
+  &::before,
+  &::after {
+    display: none !important;
+  }
+}
+
+html.dark .mat-mdc-text-field-wrapper {
+  border-color: rgb(71 85 105);
+}
+
+// --- Menus & Panels ---
+.mat-mdc-select-panel,
+.mat-mdc-menu-panel {
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: 0.5rem !important;
+}
+
+html.dark .mat-mdc-select-panel,
+html.dark .mat-mdc-menu-panel {
+  border-color: rgba(71, 85, 105, 0.8);
+}
+
+// --- Hover States ---
+.mat-mdc-option,
+.mat-mdc-menu-item {
+
+  &.mat-mdc-option-active,
+  &:hover:not([disabled]) {
+    background-color: $_sky-500-fade;
+  }
+}
+
+// --- Table Header ---
+.mat-mdc-header-cell {
+  font-weight: 600 !important;
+}
+
+// --- Responsive Table Wrapper ---
+.table-container {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid $_slate-200;
+  border-radius: 0.5rem;
+  background-color: $_white;
+
+  .mat-mdc-table {
+    width: 100%;
+    min-width: 800px;
+  }
+}
+
+html.dark .table-container {
+  border-color: rgb(71 85 105);
+  background-color: $_slate-900;
+}
+
+// --- Global Transitions ---
+* {
+  transition-property: background-color, border-color, color;
+  transition-duration: 200ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}

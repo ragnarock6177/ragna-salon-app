@@ -1,0 +1,71 @@
+<div class="flex flex-col gap-4 sm:gap-6">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div>
+            <h1 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">Salon Coupons</h1>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400">Manage discount coupons and promotional
+                offers</p>
+        </div>
+        <button
+            class="inline-flex items-center justify-center gap-2 rounded-lg bg-sky-600 hover:bg-sky-700 text-white text-sm font-medium px-4 py-2.5 transition whitespace-nowrap w-full sm:w-auto">
+            <lucide-angular name="plus" class="w-4 h-4"></lucide-angular>
+            New Coupon
+        </button>
+    </div>
+
+    <!-- Coupons Grid -->
+    <div class="overflow-x-auto overflow-y-auto max-h-[calc(100dvh-210px)] py-2">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 min-w-min">
+            <div *ngFor="let coupon of coupons"
+                class="rounded-xl sm:rounded-2xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 sm:p-5 shadow-sm hover:shadow-md transition">
+                <div class="flex items-start justify-between mb-3 gap-2">
+                    <div class="flex items-center gap-2 min-w-0 flex-1">
+                        <lucide-angular name="ticket"
+                            class="w-4 h-4 sm:w-5 sm:h-5 text-sky-600 shrink-0"></lucide-angular>
+                        <span
+                            class="font-mono text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100 truncate">{{
+                            coupon.code }}</span>
+                    </div>
+                    <span
+                        class="inline-flex items-center gap-1 rounded-full px-2 sm:px-2.5 py-0.5 text-xs border shrink-0"
+                        [ngClass]="{
+          'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 border-emerald-300 dark:border-emerald-700': coupon.active,
+          'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-400 border-gray-300 dark:border-gray-700': !coupon.active
+        }">
+                        <span class="h-1.5 w-1.5 rounded-full" [ngClass]="{
+            'bg-emerald-500': coupon.active,
+            'bg-gray-500': !coupon.active
+          }"></span>
+                        {{ coupon.active ? 'Active' : 'Inactive' }}
+                    </span>
+                </div>
+
+                <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mb-4 line-clamp-2">{{ coupon.description
+                    }}</p>
+
+                <div class="space-y-2 text-xs sm:text-sm">
+                    <div class="flex items-center justify-between">
+                        <span class="text-slate-600 dark:text-slate-400">Discount:</span>
+                        <span class="font-semibold text-slate-900 dark:text-slate-100">{{ coupon.discount }}%</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-slate-600 dark:text-slate-400">Expires:</span>
+                        <span class="text-slate-900 dark:text-slate-100 text-right">{{coupon.expiryDate}}</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-slate-600 dark:text-slate-400">Used:</span>
+                        <span class="text-slate-900 dark:text-slate-100">{{ coupon.usedCount }}/{{ coupon.maxUses
+                            }}</span>
+                    </div>
+                </div>
+
+                <div class="mt-4 pt-4 border-t border-gray-200 dark:border-slate-800 flex gap-2">
+                    <button
+                        class="flex-1 text-xs text-slate-700 dark:text-slate-300 border border-gray-300 dark:border-slate-700 rounded-lg px-3 py-1.5 hover:bg-gray-100 dark:hover:bg-slate-800 transition">Edit</button>
+                    <button
+                        class="flex-1 text-xs text-rose-600 dark:text-rose-400 border border-rose-300 dark:border-rose-700 rounded-lg px-3 py-1.5 hover:bg-rose-50 dark:hover:bg-rose-900/20 transition">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

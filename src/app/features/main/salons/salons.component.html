@@ -1,0 +1,214 @@
+<div class="">
+
+    <!-- Table -->
+    <div
+        class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+        <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-slate-800">
+            <div class="flex flex-col">
+                <h2 class="text-base font-semibold tracking-tight text-slate-900 dark:text-slate-100">Recent users</h2>
+                <p class="text-sm text-slate-600 dark:text-slate-400">Last access events across your workspace.</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <button mat-filled-button class="rounded-xl! h-auto! py-3! px-5!" (click)="openSalonDialog()">
+                    <div class="flex items-center gap-2">
+                        <lucide-angular name="plus" class="w-5 h-5 inline-flex"></lucide-angular>
+                        <span class="text-sm">Add New Salon</span>
+                    </div>
+                </button>
+                <!-- <button
+                    class="hidden sm:inline-flex items-center gap-1.5 rounded-lg border border-gray-300 dark:border-slate-700 px-3 py-1.5 text-xs text-slate-700 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800">
+                    <lucide-angular name="funnel" class="w-3.5 h-3.5"></lucide-angular>
+                    <span></span>
+                </button>
+                <button
+                    class="inline-flex items-center gap-1.5 rounded-lg bg-sky-600 hover:bg-sky-700 text-white text-xs font-medium px-3 py-1.5 transition">
+                    <lucide-angular name="plus" class="w-3.5 h-3.5"></lucide-angular>
+                    New user
+                </button> -->
+            </div>
+        </div>
+        <div class="overflow-x-auto h-[calc(100vh-200px)] min-w-[300px]">
+
+            <table mat-table [dataSource]="isLoading() ? skeletonData : data" class="w-full ">
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef
+                        class="bg-slate-50! dark:bg-slate-900! text-slate-500! min-w-[200px] w-[25%]"> Salon
+                        Details </th>
+                    <td mat-cell *matCellDef="let salon">
+                        <div class="flex items-center gap-3 py-2">
+                            <!-- <div
+                                class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden">
+                                <img *ngIf="salon.images?.length" [src]="salon.images[0]" [alt]="salon.name"
+                                    class="w-full h-full object-cover">
+                                <span *ngIf="!salon.images?.length" class="text-slate-500 font-medium text-sm">{{
+                                    salon.name.charAt(0) }}</span>
+                            </div> -->
+                            @if(!isLoading()){
+                            <div>
+                                <div class="font-medium text-slate-900 dark:text-white">{{ salon.name }}
+                                </div>
+                            </div>
+                            }@else {
+                            <div class="h-5 bg-slate-200 dark:bg-slate-800 rounded w-36"></div>
+                            }
+                        </div>
+                    </td>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="address">
+                    <th mat-header-cell *matHeaderCellDef
+                        class="bg-slate-50! dark:bg-slate-900! text-slate-500! min-w-[250px] w-[30%]">
+                        Address </th>
+                    <td mat-cell *matCellDef="let salon">
+                        @if(!isLoading()){
+                        <div class="flex items-center gap-3 py-2">
+                            <div>
+                                <div class="font-medium text-slate-900 dark:text-white">{{ salon.address }}
+                                </div>
+                            </div>
+                        </div>
+                        }@else {
+                        <div class="h-5 bg-slate-200 dark:bg-slate-800 rounded w-48"></div>
+                        }
+                    </td>
+                </ng-container>
+
+                <!-- Owner Column -->
+                <ng-container matColumnDef="owner">
+                    <th mat-header-cell *matHeaderCellDef
+                        class="bg-slate-50! dark:bg-slate-900! text-slate-500! min-w-[150px]">
+                        Owner
+                    </th>
+                    <td mat-cell *matCellDef="let salon">
+                        @if(!isLoading()){
+                        <div class="text-sm text-slate-700 dark:text-slate-300">{{ salon.owner_name }}</div>
+                        }@else {
+                        <div class="h-5 bg-slate-200 dark:bg-slate-800 rounded w-24"></div>
+                        }
+                    </td>
+                </ng-container>
+
+                <!-- Contact Column -->
+                <ng-container matColumnDef="contact">
+                    <th mat-header-cell *matHeaderCellDef
+                        class="bg-slate-50! dark:bg-slate-900! text-slate-500! min-w-[180px]">
+                        Contact </th>
+                    <td mat-cell *matCellDef="let salon">
+                        @if(!isLoading()){
+                        <div class="flex flex-col gap-1">
+                            <div class="flex items-center text-xs text-slate-500">
+                                <lucide-angular name="mail" class="w-3 h-3 mr-1"></lucide-angular>
+                                {{ salon.email }}
+                            </div>
+                            <div class="flex items-center text-xs text-slate-500">
+                                <lucide-angular name="phone" class="w-3 h-3 mr-1"></lucide-angular>
+                                {{ salon.phone }}
+                            </div>
+                        </div>
+                        }@else {
+                        <div class="h-5 bg-slate-200 dark:bg-slate-800 rounded w-32"></div>
+                        }
+                    </td>
+                </ng-container>
+
+                <!-- Rating Column -->
+                <ng-container matColumnDef="rating">
+                    <th mat-header-cell *matHeaderCellDef
+                        class="bg-slate-50! dark:bg-slate-900! text-slate-500! min-w-[120px]">
+                        Rating </th>
+                    <td mat-cell *matCellDef="let salon">
+                        @if(!isLoading()){
+                        <div class="flex items-center gap-1">
+                            <lucide-angular name="star"
+                                class="w-4 h-4 text-yellow-400 fill-yellow-400"></lucide-angular>
+                            <span class="font-medium text-slate-700 dark:text-slate-300">{{ salon.rating
+                                }}</span>
+                            <span class="text-xs text-slate-400">({{ salon.total_reviews }})</span>
+                        </div>
+                        }@else {
+                        <div class="h-5 bg-slate-200 dark:bg-slate-800 rounded w-20"></div>
+                        }
+                    </td>
+                </ng-container>
+
+                <!-- Status Column -->
+                <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef
+                        class="bg-slate-50! dark:bg-slate-900! text-slate-500! min-w-[100px]">
+                        Status </th>
+                    <td mat-cell *matCellDef="let salon">
+                        @if(!isLoading()){
+                        <span class="px-2.5 py-1 rounded-full text-xs font-medium border" [ngClass]="{
+                'bg-emerald-50 text-emerald-600 border-emerald-200 dark:bg-emerald-950/30 dark:text-emerald-400 dark:border-emerald-800': salon.is_active === 1,
+                'bg-slate-50 text-slate-600 border-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700': salon.is_active === 0
+              }">
+                            {{ salon.is_active === 1 ? 'Active' : 'Inactive' }}
+                        </span>
+                        }@else {
+                        <div class="h-5 bg-slate-200 dark:bg-slate-800 rounded-full w-20"></div>
+                        }
+                    </td>
+                </ng-container>
+
+                <!-- Actions Column -->
+                <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef
+                        class="bg-slate-50! dark:bg-slate-900! text-slate-500! w-[60px]">
+                    </th>
+                    <td mat-cell *matCellDef="let salon">
+                        @if(!isLoading()){
+                        <button mat-icon-button [matMenuTriggerFor]="menu"
+                            class="text-slate-400! hover:text-slate-600!">
+                            <lucide-angular name="ellipsis-vertical" class="w-5 h-5"></lucide-angular>
+                        </button>
+                        <mat-menu #menu="matMenu" class="rounded-xl! min-w-[180px]!">
+                            <button mat-menu-item (click)="editSalon(salon)">
+                                <div class="flex items-center gap-2">
+                                    <lucide-angular name="pencil" class="w-4 h-4 mr-2"></lucide-angular>
+                                    <span>Edit Details</span>
+                                </div>
+                            </button>
+                            <button mat-menu-item (click)="toggleStatus(salon)">
+                                <div class="flex items-center gap-2">
+                                    <lucide-angular [name]="salon.is_active === 1 ? 'ban' : 'check-circle'"
+                                        class="w-4 h-4 mr-2"></lucide-angular>
+                                    <span>{{ salon.is_active === 1 ? 'Deactivate' : 'Activate' }}</span>
+                                </div>
+                            </button>
+                            <button mat-menu-item class="text-red-500!" (click)="deleteSalon(salon)">
+                                <div class="flex items-center gap-2">
+                                    <lucide-angular name="trash-2" class="w-4 h-4 mr-2"></lucide-angular>
+                                    <span>Delete Salon</span>
+                                </div>
+                            </button>
+                        </mat-menu>
+                        }@else {
+                        <div class="h-5 bg-slate-200 dark:bg-slate-800 rounded-full w-5"></div>
+                        }
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                    class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"></tr>
+            </table>
+
+            <!-- Empty State -->
+            <div *ngIf="!isLoading() && !salons()?.length" class="p-12 text-center">
+                <div
+                    class="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <lucide-angular name="store" class="w-8 h-8 text-slate-400"></lucide-angular>
+                </div>
+                <h3 class="text-lg font-medium text-slate-900 dark:text-white mb-1">No salons found</h3>
+                <p class="text-slate-500 dark:text-slate-400 mb-6">Get started by adding your first salon.
+                </p>
+                <button mat-stroked-button color="primary" class="rounded-xl!" (click)="openSalonDialog()">
+                    Add Salon
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

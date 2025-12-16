@@ -1,0 +1,77 @@
+<div class="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 p-4">
+    <div
+        class="w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-8 border border-slate-200 dark:border-slate-800">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">Login</h1>
+            <p class="text-slate-500 dark:text-slate-400">
+                {{ otpSent() ? 'Enter the code sent to your phone' : 'Enter your phone number to continue' }}
+            </p>
+        </div>
+
+        <!-- Form -->
+        <form [formGroup]="loginForm" class="space-y-6">
+
+            <!-- Phone Number Input -->
+            <div *ngIf="!otpSent()">
+                <mat-form-field class="w-full">
+                    <span matTextPrefix class="text-slate-500 mr-2">+91 &nbsp;</span>
+                    <input matInput formControlName="phoneNumber" type="tel" maxlength="10"
+                        placeholder="Enter Your Phone Number">
+                    <lucide-angular matSuffix name="phone" class="mr-4 w-4 h-4"></lucide-angular>
+                    <mat-error *ngIf="phoneNumber?.hasError('required')">Phone number is required</mat-error>
+                    <mat-error *ngIf="phoneNumber?.hasError('pattern')">Enter a valid 10-digit number</mat-error>
+                </mat-form-field>
+            </div>
+
+            <!-- OTP Input -->
+            <div *ngIf="otpSent()" class="animate-in fade-in slide-in-from-bottom-4 duration-300">
+                <mat-form-field class="w-full">
+                    <input matInput formControlName="otp" type="text" placeholder="1234" maxlength="6">
+                    <lucide-angular matSuffix name="lock" class="mr-4 w-4 h-4"></lucide-angular>
+                    <mat-error *ngIf="otp?.hasError('required')">OTP is required</mat-error>
+                </mat-form-field>
+
+                <div class="flex justify-between items-center mt-2">
+                    <button type="button" (click)="reset()"
+                        class="text-sm text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors">
+                        Change Number
+                    </button>
+                    <button type="button" class="text-sm text-sky-500 hover:text-sky-600 font-medium transition-colors">
+                        Resend Code
+                    </button>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <button mat-flat-button class="w-full !h-12 !text-lg !rounded-xl submit-btn"
+                [disabled]="isLoading() || (otpSent() ? loginForm.invalid : phoneNumber?.invalid)"
+                (click)="otpSent() ? verifyOtp() : sendOtp()">
+                <span *ngIf="!isLoading()">
+                    {{ otpSent() ? 'Verify & Login' : 'Send Code' }}
+                </span>
+                <span *ngIf="isLoading()" class="flex items-center justify-center gap-2">
+                    <svg class="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"
+                            fill="none"></circle>
+                        <path class="opacity-75" fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                        </path>
+                    </svg>
+                    Processing...
+                </span>
+            </button>
+
+            <!-- Footer -->
+            <div class="text-center mt-6">
+                <p class="text-sm text-slate-500 dark:text-slate-400">
+                    Are you an admin?
+                    <a routerLink="/auth/admin/login"
+                        class="text-sky-500 hover:text-sky-600 font-medium transition-colors">
+                        Login here
+                    </a>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>

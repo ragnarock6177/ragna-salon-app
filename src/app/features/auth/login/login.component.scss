@@ -1,0 +1,52 @@
+// Empty for now as we use Tailwind/* Add these styles to your global CSS or component styles */
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes pulse-glow {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.8;
+    }
+}
+
+.floating {
+    animation: float 3s ease-in-out infinite;
+}
+
+.glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.submit-btn {
+  background-color: rgb(14, 165, 233) !important;
+  color: white !important;
+  font-weight: 500;
+
+  &:hover:not(:disabled) {
+    background-color: rgb(2, 132, 199) !important;
+  }
+
+  &:disabled {
+    background-color: rgb(203, 213, 225) !important;
+    color: rgb(148, 163, 184) !important;
+  }
+}
+
+:host-context(.dark) .submit-btn:disabled {
+  background-color: rgb(51, 65, 85) !important;
+  color: rgb(100, 116, 139) !important;
+}

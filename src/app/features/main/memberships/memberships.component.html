@@ -1,0 +1,69 @@
+<div class="flex flex-col gap-6">
+    <!-- Header -->
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Membership Plans</h1>
+            <p class="text-sm text-slate-600 dark:text-slate-400">Manage salon membership plans and subscriptions</p>
+        </div>
+        <button
+            class="inline-flex items-center gap-2 rounded-lg bg-sky-600 hover:bg-sky-700 text-white text-sm font-medium px-4 py-2 transition">
+            <lucide-angular name="plus" class="w-4 h-4"></lucide-angular>
+            New Plan
+        </button>
+    </div>
+
+    <!-- Membership Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div *ngFor="let plan of plans"
+            class="rounded-2xl border-2 bg-white dark:bg-slate-900 p-6 shadow-sm hover:shadow-lg transition" [ngClass]="{
+      'border-sky-300 dark:border-sky-600': plan.name === 'Premium',
+      'border-gray-200 dark:border-slate-800': plan.name !== 'Premium'
+    }">
+            <div class="mb-4">
+                <div class="flex items-center gap-2 mb-2">
+                    <lucide-angular name="{{plan.icon}}" class="w-6 h-6" [ngClass]="{
+            'text-sky-600': plan.name === 'Basic',
+            'text-purple-600': plan.name === 'Standard',
+            'text-amber-600': plan.name === 'Premium'
+          }"></lucide-angular>
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-slate-100">{{ plan.name }}</h3>
+                </div>
+                <p class="text-sm text-slate-600 dark:text-slate-400">{{ plan.description }}</p>
+            </div>
+
+            <div class="mb-6">
+                <div class="flex items-baseline gap-1">
+                    <span class="text-3xl font-bold text-slate-900 dark:text-slate-100">₹{{ plan.price }}</span>
+                    <span class="text-slate-600 dark:text-slate-400">/{{ plan.duration }}</span>
+                </div>
+            </div>
+
+            <div class="space-y-3 mb-6">
+                <div *ngFor="let benefit of plan.benefits" class="flex items-start gap-2 text-sm">
+                    <lucide-angular name="{{plan.icon}}" class="w-4 h-4 text-emerald-600 mt-0.5"></lucide-angular>
+                    <span class="text-slate-700 dark:text-slate-300">{{ benefit }}</span>
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <button class="w-full py-2 rounded-lg font-medium text-sm transition" [ngClass]="{
+          'bg-sky-600 hover:bg-sky-700 text-white': plan.name === 'Premium',
+          'bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 text-slate-900 dark:text-slate-100': plan.name !== 'Premium'
+        }">
+                    {{ plan.name === 'Premium' ? 'Most Popular' : 'Select Plan' }}
+                </button>
+                <div class="flex gap-2">
+                    <button
+                        class="flex-1 text-xs text-slate-700 dark:text-slate-300 border border-gray-300 dark:border-slate-700 rounded-lg px-3 py-1.5 hover:bg-gray-100 dark:hover:bg-slate-800">Edit</button>
+                    <button
+                        class="flex-1 text-xs text-rose-600 dark:text-rose-400 border border-rose-300 dark:border-rose-700 rounded-lg px-3 py-1.5 hover:bg-rose-50 dark:hover:bg-rose-900/20">Delete</button>
+                </div>
+            </div>
+
+            <div
+                class="mt-4 pt-4 border-t border-gray-200 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400">
+                <span>{{ plan.activeMembers }} active members</span>
+            </div>
+        </div>
+    </div>
+</div>

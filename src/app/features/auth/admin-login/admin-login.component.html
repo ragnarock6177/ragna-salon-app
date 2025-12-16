@@ -1,0 +1,62 @@
+<div class="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 p-4">
+    <div
+        class="w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-8 border border-slate-200 dark:border-slate-800">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">Admin Portal</h1>
+            <p class="text-slate-500 dark:text-slate-400">
+                Sign in to manage your salon
+            </p>
+        </div>
+
+        <!-- Form -->
+        <form [formGroup]="loginForm" (ngSubmit)="login()" class="space-y-6">
+
+            <!-- Email Input -->
+            <mat-form-field class="w-full">
+                <mat-label>Email Address</mat-label>
+                <input matInput formControlName="email" type="email" placeholder="admin@example.com">
+                <lucide-angular matSuffix name="mail"></lucide-angular>
+                <mat-error *ngIf="email?.hasError('required')">Email is required</mat-error>
+                <mat-error *ngIf="email?.hasError('email')">Enter a valid email address</mat-error>
+            </mat-form-field>
+
+            <!-- Password Input -->
+            <mat-form-field class="w-full">
+                <mat-label>Password</mat-label>
+                <input matInput formControlName="password" [type]="hidePassword() ? 'password' : 'text'">
+                <button mat-icon-button matSuffix (click)="togglePasswordVisibility($event)" type="button">
+                    <!-- <mat-icon class="text-slate-400">{{hidePassword() ? 'visibility_off' : 'visibility'}}</mat-icon> -->
+                    <lucide-angular name="eye"></lucide-angular>
+                </button>
+                <mat-error *ngIf="password?.hasError('required')">Password is required</mat-error>
+            </mat-form-field>
+
+            <!-- Actions -->
+            <button mat-flat-button color="primary" class="w-full h-12! text-lg1 rounded-xl!"
+                [disabled]="isLoading() || loginForm.invalid" type="submit">
+                <span *ngIf="!isLoading()">Sign In</span>
+                <span *ngIf="isLoading()" class="flex items-center justify-center gap-2">
+                    <svg class="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"
+                            fill="none"></circle>
+                        <path class="opacity-75" fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                        </path>
+                    </svg>
+                    Authenticating...
+                </span>
+            </button>
+
+            <!-- Footer -->
+            <div class="text-center mt-6">
+                <p class="text-sm text-slate-500 dark:text-slate-400">
+                    Not an admin?
+                    <a routerLink="/auth/login" class="text-sky-500 hover:text-sky-600 font-medium transition-colors">
+                        User Login
+                    </a>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>
