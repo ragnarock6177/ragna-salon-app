@@ -269,10 +269,3 @@ html.dark .table-container {
   border-color: rgb(71 85 105);
   background-color: $_slate-900;
 }
-
-// --- Global Transitions ---
-* {
-  transition-property: background-color, border-color, color;
-  transition-duration: 200ms;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
