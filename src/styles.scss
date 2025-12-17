@@ -254,7 +254,7 @@ html.dark .mat-mdc-menu-panel {
 .table-container {
   display: block;
   width: 100%;
-  overflow-x: auto;
+  overflow-x: auto !important;
   border: 1px solid $_slate-200;
   border-radius: 0.5rem;
   background-color: $_white;
@@ -262,6 +262,12 @@ html.dark .mat-mdc-menu-panel {
   .mat-mdc-table {
     width: 100%;
     min-width: 800px;
+
+    // Nesting 'thead' here is cleaner and generates the exact same CSS
+    thead {
+      position: relative;
+      z-index: 0;
+    }
   }
 }
 
