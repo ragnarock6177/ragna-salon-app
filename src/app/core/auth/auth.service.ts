@@ -64,10 +64,10 @@ export class AuthService {
         );
     }
 
-    getProfile(): Observable<User> {
-        return this.http.get<User>(`${this.AUTH_API}/profile`).pipe(
+    getProfile(): Observable<any> {
+        return this.http.get<any>(`${this.AUTH_API}/profile`).pipe(
             tap(user => {
-                this.currentUser.set(user);
+                this.currentUser.set(user.data);
                 this.isAuthenticated.set(true);
             })
         );

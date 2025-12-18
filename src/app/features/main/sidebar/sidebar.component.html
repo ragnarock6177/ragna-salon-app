@@ -139,15 +139,24 @@
         <div class="flex items-center gap-3">
             <div
                 class="h-8 w-8 rounded-full bg-gray-200 dark:bg-slate-800 flex items-center justify-center text-xs font-semibold tracking-tight text-slate-700 dark:text-slate-300">
-                AD</div>
+                {{ currentUser()?.name?.slice(0, 2)?.toUpperCase() || 'AD' }}
+            </div>
             <div class="flex flex-col">
-                <span class="text-slate-900 dark:text-slate-100 text-sm">Admin</span>
-                <span class="text-xs text-slate-500 dark:text-slate-400">Salon Owner</span>
+                <span class="text-slate-900 dark:text-slate-100 text-sm font-medium">{{ currentUser()?.name || 'Admin'
+                    }}</span>
+                <span class="text-xs text-slate-500 dark:text-slate-400">{{ currentUser()?.email || 'Salon Owner'
+                    }}</span>
             </div>
         </div>
-        <button id="logout-btn"
+        <button [matMenuTriggerFor]="userMenu"
             class="p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition">
-            <lucide-angular name="log-out" class="w-4 h-4"></lucide-angular>
+            <lucide-angular name="ellipsis-vertical" class="w-4 h-4"></lucide-angular>
         </button>
+        <mat-menu #userMenu="matMenu">
+            <button mat-menu-item (click)="logout()">
+                <lucide-angular name="log-out" class="w-4 h-4 mr-2"></lucide-angular>
+                <span>Logout</span>
+            </button>
+        </mat-menu>
     </div>
 </aside>
