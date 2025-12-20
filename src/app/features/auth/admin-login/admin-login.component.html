@@ -33,7 +33,7 @@
             </mat-form-field>
 
             <!-- Actions -->
-            <button mat-flat-button color="primary" class="w-full !h-12 text-lg !rounded-xl"
+            <button mat-flat-button color="primary" class="w-full h-12! text-lg rounded-xl!"
                 [disabled]="isLoading() || loginForm.invalid" type="submit">
                 <span *ngIf="!isLoading()">Sign In</span>
                 <span *ngIf="isLoading()" class="flex items-center justify-center gap-2">

@@ -9,6 +9,7 @@ $_slate-700: var(--color-slate-700);
 $_slate-600: var(--color-slate-600);
 $_slate-300: var(--color-slate-300);
 $_slate-200: var(--color-slate-200);
+$_slate-100: var(--color-slate-100);
 $_slate-50: var(--color-slate-50);
 $_white: var(--color-white);
 $_sky-500: var(--color-sky-500);
@@ -17,6 +18,10 @@ $_sky-500-fade: rgba(var(--color-sky-500), 0.15);
 $_error: var(--color-error);
 $_gray_100 : var(--color-gray-100);
 $_shadow-sm: 0 1px 3px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+$_gray-50: #f9fafb; // Tailwind bg-gray-50
+$_slate-900: #0f172a; // Tailwind slate-900
+$_border-light: #e2e8f0; // slate-200
+$_border-dark: #1e293b; // slate-800
 
 /* --- 2. Define Themes --- */
 $light-theme: mat.define-theme((color: (theme-type: light,
@@ -99,12 +104,12 @@ html {
 
   // --- Table Overrides (Light) ---
   @include mat.table-overrides((background-color: $_white,
-      header-container-height: 40px,
-      header-headline-size: 12px,
-      header-headline-weight: 500,
       header-headline-color: $_slate-700,
-      row-item-label-text-color: $_slate-700,
-      row-item-outline-color: $_slate-200,
+      row-item-label-text-color: $_slate-900, // Text-slate-900
+      row-item-outline-color: $_border-light, // Border-gray-200
+      header-container-height: 45px, // Matches py-2.5 + line-height approx
+      header-headline-size: 12px, // text-xs
+      header-headline-weight: 500, // font-medium
     ));
 
   // Custom border for light mode dialogs
@@ -166,13 +171,14 @@ html.dark {
       item-hover-state-layer-color:$_slate-800 ));
 
   // --- Table Overrides (Dark) ---
-  @include mat.table-overrides((background-color: $_slate-900,
-      header-headline-color: $_slate-700,
-      row-item-label-text-color: $_slate-300,
-      row-item-outline-color: $_slate-700,
-      header-container-height: 40px,
+  @include mat.table-overrides((background-color: var(--color-slate-950),
+      header-headline-color: $_slate-300,
+      row-item-label-text-color: $_slate-100,
+      row-item-outline-color: $_border-dark,
+      header-container-height: 45px,
       header-headline-size: 12px,
-      header-headline-weight: 400));
+      header-headline-weight: 500, // Tailwind headers are usually medium even in dark
+    ));
 
   // Custom border for dark mode dialogs
   .mat-mdc-dialog-surface {
@@ -245,6 +251,7 @@ html.dark .mat-mdc-menu-panel {
   }
 }
 
+
 // --- Table Header ---
 .mat-mdc-header-cell {
   font-weight: 600 !important;
@@ -255,7 +262,6 @@ html.dark .mat-mdc-menu-panel {
   display: block;
   width: 100%;
   overflow-x: auto !important;
-  border: 1px solid $_slate-200;
   border-radius: 0.5rem;
   background-color: $_white;
 
@@ -274,4 +280,39 @@ html.dark .mat-mdc-menu-panel {
 html.dark .table-container {
   border-color: rgb(71 85 105);
   background-color: $_slate-900;
+}
+
+
+/* --- 5. Modern Scrollbar --- */
+
+// Default (Light Mode)
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1; // slate-300
+  border-radius: 9999px; // Full pill shape
+  border: 2px solid transparent; // Adds "padding" to the thumb via background-clip
+  background-clip: content-box;
+
+  &:hover {
+    background-color: #94a3b8; // slate-400
+  }
+}
+
+// Dark Mode
+html.dark {
+  ::-webkit-scrollbar-thumb {
+    background-color: #334155; // slate-700
+
+    &:hover {
+      background-color: #475569; // slate-600
+    }
+  }
 }
