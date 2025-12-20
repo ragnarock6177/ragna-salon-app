@@ -1,6 +1,6 @@
 <!-- Backdrop for mobile -->
 @if(isOpen) {
-<div (click)="closeSidebar()" class="md:hidden fixed inset-0 bg-black/50 z-40 transition-opacity"></div>
+<div (click)="closeSidebar()" class="md:hidden fixed inset-0 bg-black/50 z-40 "></div>
 }
 
 <!-- Sidebar -->
@@ -30,7 +30,6 @@
               hover:bg-gray-100 dark:hover:bg-slate-800
               hover:text-slate-900 dark:hover:text-slate-50
               border border-slate-200 dark:border-slate-700
-              transition
               [&.active]:border-slate-300 dark:[&.active]:border-slate-600
               [&.active]:bg-gray-200 dark:[&.active]:bg-slate-900
               [&.active]:text-slate-900 dark:[&.active]:text-slate-50">
@@ -43,7 +42,6 @@
               hover:bg-gray-100 dark:hover:bg-slate-800
               hover:text-slate-900 dark:hover:text-slate-50
               border border-slate-200 dark:border-slate-700
-              transition
               [&.active]:border-slate-300 dark:[&.active]:border-slate-600
               [&.active]:bg-gray-200 dark:[&.active]:bg-slate-900
               [&.active]:text-slate-900 dark:[&.active]:text-slate-50">
@@ -57,7 +55,6 @@
               hover:bg-gray-100 dark:hover:bg-slate-800
               hover:text-slate-900 dark:hover:text-slate-50
               border border-slate-200 dark:border-slate-700
-              transition
               [&.active]:border-slate-300 dark:[&.active]:border-slate-600
               [&.active]:bg-gray-200 dark:[&.active]:bg-slate-900
               [&.active]:text-slate-900 dark:[&.active]:text-slate-50">
@@ -70,7 +67,6 @@
               hover:bg-gray-100 dark:hover:bg-slate-800
               hover:text-slate-900 dark:hover:text-slate-50
               border border-slate-200 dark:border-slate-700
-              transition
               [&.active]:border-slate-300 dark:[&.active]:border-slate-600
               [&.active]:bg-gray-200 dark:[&.active]:bg-slate-900
               [&.active]:text-slate-900 dark:[&.active]:text-slate-50">
@@ -84,7 +80,6 @@
               hover:bg-gray-100 dark:hover:bg-slate-800
               hover:text-slate-900 dark:hover:text-slate-50
               border border-slate-200 dark:border-slate-700
-              transition
               [&.active]:border-slate-300 dark:[&.active]:border-slate-600
               [&.active]:bg-gray-200 dark:[&.active]:bg-slate-900
               [&.active]:text-slate-900 dark:[&.active]:text-slate-50">
@@ -98,7 +93,6 @@
               hover:bg-gray-100 dark:hover:bg-slate-800
               hover:text-slate-900 dark:hover:text-slate-50
               border border-slate-200 dark:border-slate-700
-              transition
               [&.active]:border-slate-300 dark:[&.active]:border-slate-600
               [&.active]:bg-gray-200 dark:[&.active]:bg-slate-900
               [&.active]:text-slate-900 dark:[&.active]:text-slate-50">
@@ -119,7 +113,7 @@
                   hover:bg-gray-100 dark:hover:bg-slate-800
                   hover:text-slate-900 dark:hover:text-slate-50
                   border border-transparent
-                  transition
+                  border border-transparent
                   [&.active]:border-slate-200 dark:[&.active]:border-slate-800
                   [&.active]:bg-gray-200 dark:[&.active]:bg-slate-900
                   [&.active]:text-slate-900 dark:[&.active]:text-slate-50">
@@ -149,7 +143,7 @@
             </div>
         </div>
         <button [matMenuTriggerFor]="userMenu"
-            class="p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition">
+            class="p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100">
             <lucide-angular name="ellipsis-vertical" class="w-4 h-4"></lucide-angular>
         </button>
         <mat-menu #userMenu="matMenu">
