@@ -9,7 +9,7 @@
                     <p class="text-sm text-slate-600 dark:text-slate-400">Last access events across your workspace.</p>
                 </div>
                 <div class="flex items-center gap-2">
-                    <button mat-filled-button class="rounded-xl! h-auto! py-3! px-5!" (click)="openSalonDialog()">
+                    <button mat-flat-button (click)="openSalonDialog()">
                         <div class="flex items-center gap-2">
                             <lucide-angular name="plus" class="w-5 h-5 inline-flex"></lucide-angular>
                             <span class="text-sm">Add New Salon</span>
@@ -27,7 +27,7 @@
                 </button> -->
                 </div>
             </div>
-            <div class="w-full overflow-x-auto h-[calc(100dvh-195px)] table-container">
+            <div class="w-full overflow-x-auto h-[calc(100dvh-196px)] table-container">
 
                 <table mat-table [dataSource]="isLoading() ? skeletonData : data" class="w-full ">
 

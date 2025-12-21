@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ThemeService } from './services/theme.service';
 
@@ -10,10 +10,9 @@ import { ThemeService } from './services/theme.service';
 })
 export class AppComponent implements OnInit {
   title = 'salon-app';
-
-  constructor(private themeService: ThemeService) { }
+  private readonly themeService = inject(ThemeService);
 
   ngOnInit(): void {
-    // Theme service automatically loads saved theme from localStorage in its constructor
+    
   }
 }

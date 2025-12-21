@@ -3,10 +3,13 @@
 @include mat.core();
 
 /* --- 1. Define Design Tokens (Variables) --- */
+$_slate-950: var(--color-slate-950);
 $_slate-900: var(--color-slate-900);
 $_slate-800: var(--color-slate-800);
 $_slate-700: var(--color-slate-700);
 $_slate-600: var(--color-slate-600);
+$_slate-500: var(--color-slate-500);
+$_slate-400: var(--color-slate-400);
 $_slate-300: var(--color-slate-300);
 $_slate-200: var(--color-slate-200);
 $_slate-100: var(--color-slate-100);
@@ -22,6 +25,10 @@ $_gray-50: #f9fafb; // Tailwind bg-gray-50
 $_slate-900: #0f172a; // Tailwind slate-900
 $_border-light: #e2e8f0; // slate-200
 $_border-dark: #1e293b; // slate-800
+$_rounded-sm: var(--radius-sm);
+$_rounded-md: var(--radius-md);
+$_rounded-lg: var(--radius-lg);
+$_rounded-xs: var(--radius-xs);
 
 /* --- 2. Define Themes --- */
 $light-theme: mat.define-theme((color: (theme-type: light,
@@ -41,12 +48,214 @@ $dark-theme: mat.define-theme((color: (theme-type: dark,
       density: (scale: 0,
       )));
 
+
+      $button-theme-overrides: (
+  // =========================================================
+  // 1. FILLED BUTTON (Primary Action)
+  // =========================================================
+  filled-container-shape: $_rounded-md,
+  filled-container-color: $_sky-500,
+  filled-label-text-color: #ffffff,
+  filled-label-text-font: var(--tw-font-sans),
+  filled-label-text-weight: 500,
+  filled-horizontal-padding: 12px,
+  filled-container-height:36px,
+  
+  // State Layers (Hover/Focus)
+  filled-hover-state-layer-opacity: 0.08,
+  filled-focus-state-layer-opacity: 0.12,
+  filled-pressed-state-layer-opacity: 0.12,
+  filled-state-layer-color: #ffffff, 
+  // filled-ripple-color: #ffffff,
+
+  // Disabled State
+  filled-disabled-container-color: var(--tw-surface-50),
+  filled-disabled-label-text-color: var(--tw-text-disabled),
+
+  // =========================================================
+  // 2. OUTLINED BUTTON (Secondary Action)
+  // =========================================================
+  outlined-container-shape: var(--tw-rounded-full),
+  outlined-outline-color: var(--tw-primary-600),
+  outlined-outline-width: 1px,
+  outlined-label-text-color: var(--tw-primary-600),
+  outlined-label-text-font: var(--tw-font-sans),
+  outlined-label-text-weight: 500,
+
+  // State Layers
+  outlined-hover-state-layer-opacity: 0.04,
+  outlined-focus-state-layer-opacity: 0.12,
+  outlined-state-layer-color: var(--tw-primary-600),
+  // outlined-ripple-color: var(--tw-primary-600),
+
+  // Disabled State
+  outlined-disabled-outline-color: var(--tw-text-disabled),
+  outlined-disabled-label-text-color: var(--tw-text-disabled),
+
+  // =========================================================
+  // 3. TONAL BUTTON (Alternative Secondary)
+  // =========================================================
+  tonal-container-shape: var(--tw-rounded-full),
+  tonal-container-color: var(--tw-secondary-100),
+  tonal-label-text-color: var(--tw-primary-600),
+  tonal-label-text-font: var(--tw-font-sans),
+  tonal-label-text-weight: 600,
+
+  // State Layers
+  tonal-hover-state-layer-opacity: 0.08,
+  tonal-state-layer-color: var(--tw-primary-600),
+  // tonal-ripple-color: var(--tw-primary-600),
+
+  // Disabled
+  tonal-disabled-container-color: var(--tw-surface-50),
+  tonal-disabled-label-text-color: var(--tw-text-disabled),
+
+  // =========================================================
+  // 4. TEXT BUTTON (Low Emphasis)
+  // =========================================================
+  text-label-text-color: var(--tw-primary-600),
+  text-label-text-font: var(--tw-font-sans),
+  text-label-text-weight: 500,
+  text-container-shape: var(--tw-rounded-md), // Text buttons often look better less rounded
+
+  // State Layers
+  text-hover-state-layer-opacity: 0.04,
+  text-state-layer-color: var(--tw-primary-600),
+  // text-ripple-color: var(--tw-primary-600),
+
+  // Disabled
+  text-disabled-label-text-color: var(--tw-text-disabled),
+
+  // =========================================================
+  // 5. PROTECTED / ELEVATED BUTTON
+  // =========================================================
+  protected-container-shape: var(--tw-rounded-full),
+  protected-container-color: #ffffff,
+  protected-label-text-color: var(--tw-primary-600),
+  protected-container-elevation-shadow: var(--tw-shadow-sm),
+  
+  // Hover/Press Shadows
+  protected-hover-container-elevation-shadow: var(--tw-shadow-md),
+  protected-pressed-container-elevation-shadow: var(--tw-shadow-sm),
+  
+  // State Layers
+  protected-state-layer-color: var(--tw-primary-600),
+  // protected-ripple-color: var(--tw-primary-600),
+
+  // Disabled
+  protected-disabled-container-color: var(--tw-surface-50),
+  protected-disabled-label-text-color: var(--tw-text-disabled),
+  protected-disabled-container-elevation-shadow: none
+);
+
+$dark-button-theme-overrides: (
+  // =========================================================
+  // 1. FILLED BUTTON (Primary Action)
+  // =========================================================
+  filled-container-shape: $_rounded-md,
+  filled-container-color: $_slate-800,
+  filled-label-text-color: #ffffff,
+  filled-label-text-font: var(--tw-font-sans),
+  filled-label-text-weight: 500,
+  filled-horizontal-padding: 12px,
+  filled-container-height:36px,
+  
+  // State Layers (Hover/Focus)
+  filled-hover-state-layer-opacity: 0.08,
+  filled-focus-state-layer-opacity: 0.12,
+  filled-pressed-state-layer-opacity: 0.12,
+  filled-state-layer-color: #ffffff, 
+  // filled-ripple-color: #ffffff,
+
+  // Disabled State
+  filled-disabled-container-color: var(--tw-surface-50),
+  filled-disabled-label-text-color: var(--tw-text-disabled),
+
+  // =========================================================
+  // 2. OUTLINED BUTTON (Secondary Action)
+  // =========================================================
+  outlined-container-shape: var(--tw-rounded-full),
+  outlined-outline-color: var(--tw-primary-600),
+  outlined-outline-width: 1px,
+  outlined-label-text-color: var(--tw-primary-600),
+  outlined-label-text-font: var(--tw-font-sans),
+  outlined-label-text-weight: 500,
+
+  // State Layers
+  outlined-hover-state-layer-opacity: 0.04,
+  outlined-focus-state-layer-opacity: 0.12,
+  outlined-state-layer-color: var(--tw-primary-600),
+  // outlined-ripple-color: var(--tw-primary-600),
+
+  // Disabled State
+  outlined-disabled-outline-color: var(--tw-text-disabled),
+  outlined-disabled-label-text-color: var(--tw-text-disabled),
+
+  // =========================================================
+  // 3. TONAL BUTTON (Alternative Secondary)
+  // =========================================================
+  tonal-container-shape: var(--tw-rounded-full),
+  tonal-container-color: var(--tw-secondary-100),
+  tonal-label-text-color: var(--tw-primary-600),
+  tonal-label-text-font: var(--tw-font-sans),
+  tonal-label-text-weight: 600,
+
+  // State Layers
+  tonal-hover-state-layer-opacity: 0.08,
+  tonal-state-layer-color: var(--tw-primary-600),
+  // tonal-ripple-color: var(--tw-primary-600),
+
+  // Disabled
+  tonal-disabled-container-color: var(--tw-surface-50),
+  tonal-disabled-label-text-color: var(--tw-text-disabled),
+
+  // =========================================================
+  // 4. TEXT BUTTON (Low Emphasis)
+  // =========================================================
+  text-label-text-color: var(--tw-primary-600),
+  text-label-text-font: var(--tw-font-sans),
+  text-label-text-weight: 500,
+  text-container-shape: var(--tw-rounded-md), // Text buttons often look better less rounded
+
+  // State Layers
+  text-hover-state-layer-opacity: 0.04,
+  text-state-layer-color: var(--tw-primary-600),
+  // text-ripple-color: var(--tw-primary-600),
+
+  // Disabled
+  text-disabled-label-text-color: var(--tw-text-disabled),
+
+  // =========================================================
+  // 5. PROTECTED / ELEVATED BUTTON
+  // =========================================================
+  protected-container-shape: var(--tw-rounded-full),
+  protected-container-color: #ffffff,
+  protected-label-text-color: var(--tw-primary-600),
+  protected-container-elevation-shadow: var(--tw-shadow-sm),
+  
+  // Hover/Press Shadows
+  protected-hover-container-elevation-shadow: var(--tw-shadow-md),
+  protected-pressed-container-elevation-shadow: var(--tw-shadow-sm),
+  
+  // State Layers
+  protected-state-layer-color: var(--tw-primary-600),
+  // protected-ripple-color: var(--tw-primary-600),
+
+  // Disabled
+  protected-disabled-container-color: var(--tw-surface-50),
+  protected-disabled-label-text-color: var(--tw-text-disabled),
+  protected-disabled-container-elevation-shadow: none
+);
+
 /* --- 3. Apply Themes & Overrides --- */
 html {
   @include mat.all-component-themes($light-theme);
 
+  @include mat.button-overrides($button-theme-overrides);
+
   // --- Form Field Overrides (Light) ---
-  @include mat.form-field-overrides((filled-container-color: $_white,
+  @include mat.form-field-overrides((
+      filled-container-color: $_white,
       filled-label-text-color: rgb(100 116 139),
       filled-input-text-color: $_slate-900,
       filled-caret-color: $_sky-500,
@@ -68,31 +277,6 @@ html {
   @include mat.select-overrides((panel-background-color: $_white,
       enabled-trigger-text-color: $_slate-700,
       enabled-arrow-color: $_slate-700,
-    ));
-
-  // --- Button Overrides (Light) ---
-  @include mat.button-overrides(( // Text Buttons (mat-button)
-      text-label-text-color: $_slate-700,
-      protected-container-elevation-shadow:$_shadow-sm,
-      // Outlined Buttons (mat-outlined-button)
-      outlined-label-text-color: $_slate-700,
-      outlined-outline-color: $_slate-300,
-      // Filled/Raised Buttons (mat-raised-button / mat-flat-button)
-      filled-container-color: $_white,
-      filled-label-text-color: $_slate-700,
-      protected-container-color: $_white,
-      protected-label-text-color: $_slate-700,
-    ));
-
-  // --- Icon Button Overrides (Light) ---
-  @include mat.icon-button-overrides((icon-color: $_slate-700,
-      state-layer-color: $_slate-700,
-    ));
-
-  // --- FAB Overrides (Light) ---
-  @include mat.fab-overrides((container-color: $_sky-500,
-      foreground-color: $_white,
-      state-layer-color: $_white,
     ));
 
   // --- Menu Overrides (Light) ---
@@ -121,11 +305,19 @@ html {
 html.dark {
   @include mat.all-component-colors($dark-theme);
 
+  @include mat.button-overrides($dark-button-theme-overrides);
+
   // --- Form Field Overrides (Dark) ---
-  @include mat.form-field-overrides((filled-container-color: $_slate-800,
+  @include mat.form-field-overrides((
+      filled-container-color: $_slate-950,
       filled-label-text-color: $_slate-300,
       filled-hover-label-text-color: $_slate-200,
-      filled-input-text-color: $_slate-50,
+      filled-input-text-color: $_slate-500,
+      filled-active-indicator-color: $_slate-500,
+      filled-focus-label-text-color: $_sky-500,
+      filled-focus-active-indicator-color: $_sky-500,
+      filled-error-label-text-color: $_error,
+      filled-error-caret-color: $_error,
     ));
 
   // --- Dialog Overrides (Dark) ---
@@ -139,28 +331,6 @@ html.dark {
   @include mat.select-overrides((panel-background-color: $_slate-800,
       enabled-trigger-text-color: $_slate-200,
       enabled-arrow-color: $_slate-200,
-    ));
-
-  // --- Button Overrides (Dark) ---
-  @include mat.button-overrides((text-label-text-color: $_slate-200,
-
-      outlined-label-text-color: $_slate-200,
-      outlined-outline-color: $_slate-600,
-
-      filled-container-color: $_slate-800,
-      filled-label-text-color: $_slate-200,
-      protected-container-color: $_slate-800,
-      protected-label-text-color: $_slate-200,
-    ));
-
-  // --- Icon Button Overrides (Dark) ---
-  @include mat.icon-button-overrides((icon-color: $_slate-200,
-      state-layer-color: $_slate-200,
-    ));
-
-  // --- FAB Overrides (Dark) ---
-  @include mat.fab-overrides((container-color: $_sky-500,
-      foreground-color: $_white,
     ));
 
   // --- Menu Overrides (Dark) ---
@@ -191,33 +361,11 @@ html.dark {
   }
 }
 
-/* --- 4. Structural Customizations --- */
-
-// --- Buttons: Shape & Primary Colors ---
-.mat-mdc-button-base {
-  // Change default Pill shape (20px) to rounded rect (0.5rem/8px) to match inputs
-  border-radius: 0.5rem !important;
-}
-
-// Specific fix for "Primary" buttons (mat-flat-button color="primary")
-// We force these to be Sky-500 because the mixins above set the *default* filled button to white/slate.
-.mat-mdc-raised-button.mat-primary,
-.mat-mdc-flat-button.mat-primary {
-  --mdc-filled-button-container-color: #{$_sky-500} !important;
-  --mdc-filled-button-label-text-color: #{$_white} !important;
-  --mdc-protected-button-container-color: #{$_sky-500} !important;
-  --mdc-protected-button-label-text-color: #{$_white} !important;
-
-  &:hover {
-    --mdc-filled-button-container-color: #{$_sky-600} !important;
-    --mdc-protected-button-container-color: #{$_sky-600} !important;
-  }
-}
-
 // --- Form Fields ---
 .mat-mdc-text-field-wrapper {
-  border: 1px solid $_slate-200;
+  height: 52px !important;
   border-radius: 0.5rem;
+
 
   &::before,
   &::after {
