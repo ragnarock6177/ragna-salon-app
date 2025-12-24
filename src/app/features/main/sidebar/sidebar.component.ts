@@ -20,6 +20,15 @@ export class SidebarComponent implements OnInit, OnDestroy {
   private authService = inject(AuthService);
   currentUser = this.authService.currentUser;
 
+  navItems = [
+    { label: 'Dashboard', link: '/dashboard', icon: 'layout-dashboard' },
+    { label: 'City', link: '/city', icon: 'building-2' },
+    { label: 'Users', link: '/users', icon: 'users' },
+    { label: 'Salons', link: '/salons', icon: 'store' },
+    { label: 'Coupons', link: '/coupons', icon: 'ticket' },
+    { label: 'Memberships', link: '/memberships', icon: 'crown' },
+  ];
+
   constructor(private sidebarService: SidebarService) { }
 
   ngOnInit(): void {
