@@ -34,8 +34,7 @@ export class CityComponent {
 
 
   ngOnInit() {
-    this.users = this.userSrv.list();
-    this.loadInitialUsers();
+    this.refreshUsers();
 
     // Subscribe to modal open events from user service
     this.modalSubscription = this.userSrv.onOpenModal.subscribe((data) => {
@@ -45,32 +44,42 @@ export class CityComponent {
     });
   }
 
+  refreshUsers() {
+    this.loading = true;
+    this.userSrv.getUsers().subscribe({
+      next: (users) => {
+        this.users = users;
+        this.loading = false;
+        this.loadInitialUsers();
+      },
+      error: (err) => {
+        console.error('Failed to load users', err);
+        this.loading = false;
+      }
+    });
+  }
+
   ngOnDestroy() {
     this.modalSubscription?.unsubscribe();
   }
 
   loadInitialUsers(): void {
-    this.currentLoadedCount = Math.min(this.itemsPerLoad, this.filtered.length);
-    this.displayedUsers = this.filtered.slice(0, this.currentLoadedCount);
+    const filteredList = this.filtered;
+    this.currentLoadedCount = Math.min(this.itemsPerLoad, filteredList.length);
+    this.displayedUsers = filteredList.slice(0, this.currentLoadedCount);
   }
 
   loadMoreUsers(): void {
-    if (this.loading || this.currentLoadedCount >= this.filtered.length) {
+    if (this.currentLoadedCount >= this.filtered.length) {
       return;
     }
 
-    this.loading = true;
-
-    // Simulate loading delay
-    setTimeout(() => {
-      const nextCount = Math.min(
-        this.currentLoadedCount + this.itemsPerLoad,
-        this.filtered.length
-      );
-      this.displayedUsers = this.filtered.slice(0, nextCount);
-      this.currentLoadedCount = nextCount;
-      this.loading = false;
-    }, 300);
+    const nextCount = Math.min(
+      this.currentLoadedCount + this.itemsPerLoad,
+      this.filtered.length
+    );
+    this.displayedUsers = this.filtered.slice(0, nextCount);
+    this.currentLoadedCount = nextCount;
   }
 
   onScroll(event: any): void {
@@ -82,7 +91,7 @@ export class CityComponent {
     }
   }
 
-  openDialog(data: { index?: number }): void {
+  openDialog(data: { user?: User }): void {
     const dialogRef = this.dialog.open(UserDialogComponent, {
       width: '600px',
       maxWidth: '90vw',
@@ -93,9 +102,7 @@ export class CityComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        // Refresh users list and reload
-        this.users = this.userSrv.list();
-        this.loadInitialUsers();
+        this.refreshUsers();
       }
     });
   }
@@ -106,7 +113,7 @@ export class CityComponent {
     if (this.filter === 'active') list = list.filter(u => u.active === 'Active');
     if (this.search) {
       const kw = this.search.toLowerCase();
-      list = list.filter(u => u.name.toLowerCase().includes(kw) || u.email.toLowerCase().includes(kw) || u.role.toLowerCase().includes(kw));
+      list = list.filter(u => u.name.toLowerCase().includes(kw) || u.email.toLowerCase().includes(kw) || (u.role && u.role.toLowerCase().includes(kw)));
     }
     return list;
   }
@@ -117,32 +124,47 @@ export class CityComponent {
   }
 
 
-  edit(idx: number) {
-    this.userSrv.openEdit(idx);
+  edit(user: User) {
+    if (user) {
+      this.userSrv.openEdit(user);
+    }
   }
 
 
-  delete(idx: number) {
-    const user = this.users[idx];
+  delete(user: User) {
+    if (!user) return;
     this.confirmationService.confirm({
       title: 'Delete User',
       message: `Are you sure you want to delete ${user.name}? This action cannot be undone.`,
       confirmText: 'Delete',
       type: 'danger'
     }).subscribe(confirmed => {
-      if (confirmed) {
-        this.userSrv.remove(idx);
-        this.users = this.userSrv.list();
-        this.loadInitialUsers();
+      if (confirmed && user._id) {
+        this.userSrv.remove(user._id).subscribe(() => {
+          this.refreshUsers();
+        });
       }
     });
   }
 
 
-  toggleStatus(idx: number) {
-    this.userSrv.toggleStatus(idx);
-    // Refresh displayed users to reflect status change
-    this.displayedUsers = this.filtered.slice(0, this.currentLoadedCount);
+  toggleStatus(user: User) {
+    if (!user || !user._id) return;
+
+    const order = ['Active', 'Pending', 'Inactive'];
+    const cur = user.active || 'Active'; // Default to Active
+    const next = order[(order.indexOf(cur) + 1) % order.length];
+
+    // Optimistic update
+    const previousStatus = user.active;
+    user.active = next as any;
+
+    this.userSrv.update(user._id, { active: next as any }).subscribe({
+      error: () => {
+        // Revert on error
+        user.active = previousStatus;
+      }
+    });
   }
 
   getOriginalIndex(displayedIndex: number): number {

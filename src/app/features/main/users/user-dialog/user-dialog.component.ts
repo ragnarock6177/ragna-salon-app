@@ -36,10 +36,10 @@ export class UserDialogComponent implements AfterViewInit {
     constructor(
         private fb: FormBuilder,
         private dialogRef: MatDialogRef<UserDialogComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: { index?: number },
+        @Inject(MAT_DIALOG_DATA) public data: { user?: User },
         private userService: UserServiceService
     ) {
-        this.isEditMode = data?.index !== undefined;
+        this.isEditMode = !!data?.user;
 
         // Initialize form
         this.userForm = this.fb.group({
@@ -51,11 +51,8 @@ export class UserDialogComponent implements AfterViewInit {
         });
 
         // If edit mode, populate form with existing data
-        if (this.isEditMode && data.index !== undefined) {
-            const user = this.userService.get(data.index);
-            if (user) {
-                this.userForm.patchValue(user);
-            }
+        if (this.isEditMode && data.user) {
+            this.userForm.patchValue(data.user);
         }
     }
 
@@ -67,13 +64,17 @@ export class UserDialogComponent implements AfterViewInit {
         if (this.userForm.valid) {
             const userData: User = this.userForm.value;
 
-            if (this.isEditMode && this.data.index !== undefined) {
-                this.userService.update(this.data.index, userData);
+            if (this.isEditMode && this.data.user && this.data.user._id) {
+                this.userService.update(this.data.user._id, userData).subscribe({
+                    next: () => this.dialogRef.close(userData),
+                    error: (err) => console.error('Update failed', err)
+                });
             } else {
-                this.userService.add(userData);
+                this.userService.add(userData).subscribe({
+                    next: () => this.dialogRef.close(userData),
+                    error: (err) => console.error('Add failed', err)
+                });
             }
-
-            this.dialogRef.close(userData);
         }
     }
 

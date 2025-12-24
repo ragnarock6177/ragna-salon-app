@@ -52,7 +52,7 @@
               <td class="py-2.5 px-4 text-sm text-slate-700 dark:text-slate-300">{{ u.role }}</td>
               <td class="py-2.5 px-4 text-sm text-slate-700 dark:text-slate-300">{{ u.last }}</td>
               <td class="py-2.5 px-4">
-                <span (click)="toggleStatus(getOriginalIndex(i))"
+                <span (click)="toggleStatus(u)"
                   class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs border cursor-pointer"
                   [ngClass]="{
               'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 border-emerald-300 dark:border-emerald-700': u.active === 'Active',
@@ -69,9 +69,9 @@
               </td>
               <td class="py-2.5 px-4 text-right">
                 <div class="inline-flex items-center gap-2">
-                  <button (click)="edit(getOriginalIndex(i))"
+                  <button (click)="edit(u)"
                     class="inline-flex items-center gap-1 text-xs text-slate-700 dark:text-slate-300 border border-gray-300 dark:border-slate-700 rounded-lg px-2.5 py-1 hover:bg-gray-100 dark:hover:bg-slate-800">Manage</button>
-                  <button (click)="delete(getOriginalIndex(i))"
+                  <button (click)="delete(u)"
                     class="ml-2 inline-flex items-center gap-1 text-xs text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300">Delete</button>
                 </div>
               </td>
