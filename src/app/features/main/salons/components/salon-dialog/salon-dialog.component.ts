@@ -11,6 +11,13 @@ import { Salon } from '../../../../../shared/models/salon';
 import { ApiService } from '../../../../../services/api.service';
 import { map } from 'rxjs';
 
+interface UploadedImage {
+    file: File;
+    url: string;
+    progress: number;
+    uploading: boolean;
+}
+
 @Component({
     selector: 'app-salon-dialog',
     standalone: true,
@@ -32,6 +39,13 @@ export class SalonDialogComponent implements OnInit {
     isEditMode: boolean;
     private apiService = inject(ApiService);
     cities: any[] = [];
+
+    // Image upload properties
+    images: UploadedImage[] = [];
+
+    get isUploading(): boolean {
+        return this.images.some(img => img.uploading);
+    }
 
     servicesList: string[] = [
         'Haircut',
@@ -60,7 +74,9 @@ export class SalonDialogComponent implements OnInit {
             owner_name: [data?.owner_name || '', [Validators.required]],
             services: [JSON.parse(data?.services || '[]') || [], [Validators.required]],
             rating: [data?.rating || '', [Validators.required, Validators.min(0), Validators.max(5)]],
-            city_id: [data?.city_id || '', [Validators.required]]
+            city_id: [data?.city_id || '', [Validators.required]],
+            // Initialize image if editing (assuming data has image_url or similar if backend supported it)
+            // For now just keep it separate from form control or add if needed
         });
     }
 
@@ -75,9 +91,49 @@ export class SalonDialogComponent implements OnInit {
         });
     }
 
+    onFileSelected(event: any) {
+        const files: FileList = event.target.files;
+        if (files) {
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e: any) => {
+                    const image: UploadedImage = {
+                        file: file,
+                        url: e.target.result,
+                        progress: 0,
+                        uploading: true
+                    };
+                    this.images.push(image);
+                    this.simulateUpload(image);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+        // Reset input to allow selecting same files again if needed
+        event.target.value = '';
+    }
+
+    simulateUpload(image: UploadedImage) {
+        const interval = setInterval(() => {
+            if (image.progress < 100) {
+                image.progress += Math.floor(Math.random() * 10) + 5;
+                if (image.progress > 100) image.progress = 100;
+            } else {
+                image.uploading = false;
+                clearInterval(interval);
+            }
+        }, 200);
+    }
+
+    removeImage(index: number) {
+        this.images.splice(index, 1);
+    }
+
     onSubmit() {
         if (this.form.valid) {
-            this.dialogRef.close(this.form.value);
+            const formData = this.form.value;
+            // ideally pass images here
+            this.dialogRef.close(formData);
         }
     }
 

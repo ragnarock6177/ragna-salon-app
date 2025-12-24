@@ -77,7 +77,8 @@ export class SalonsComponent {
   openSalonDialog(salon?: Salon) {
     const dialogRef = this.dialog.open(SalonDialogComponent, {
       data: salon,
-      width: '650px',
+      width: '800px',
+      maxWidth: '95vw',
       panelClass: 'custom-dialog-container'
     });
 

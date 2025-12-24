@@ -8,85 +8,142 @@
         </button>
     </div>
 
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
-        <!-- Name -->
-        <mat-form-field class="w-full">
-            <mat-label>Salon Name</mat-label>
-            <input matInput formControlName="name" placeholder="Ex. Luxe Salon">
-            <mat-error *ngIf="form.get('name')?.hasError('required')">Name is required</mat-error>
-        </mat-form-field>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
-        <!-- Address -->
-        <mat-form-field class="w-full">
-            <mat-label>Address</mat-label>
-            <textarea matInput formControlName="address" rows="3" placeholder="Ex. 123 Main St, City"></textarea>
-            <mat-error *ngIf="form.get('address')?.hasError('required')">Address is required</mat-error>
-        </mat-form-field>
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+            <!-- Left Side: Details -->
+            <div class="md:col-span-8 space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Name -->
+                    <mat-form-field class="w-full">
+                        <mat-label>Salon Name</mat-label>
+                        <input matInput formControlName="name" placeholder="Ex. Luxe Salon">
+                        <mat-error *ngIf="form.get('name')?.hasError('required')">Name is required</mat-error>
+                    </mat-form-field>
 
-        <!-- City -->
-        <mat-form-field class="w-full">
-            <mat-label>City</mat-label>
-            <mat-select formControlName="city_id">
-                <mat-option *ngFor="let city of cities" [value]="city.id">
-                    {{city.name}}
-                </mat-option>
-            </mat-select>
-            <mat-error *ngIf="form.get('city_id')?.hasError('required')">City is required</mat-error>
-        </mat-form-field>
+                    <!-- Owner Name -->
+                    <mat-form-field class="w-full">
+                        <mat-label>Owner Name</mat-label>
+                        <input matInput formControlName="owner_name" placeholder="Ex. John Doe">
+                        <mat-error *ngIf="form.get('owner_name')?.hasError('required')">Owner name is
+                            required</mat-error>
+                    </mat-form-field>
+                </div>
 
-        <div class="grid grid-cols-2 gap-4">
-            <!-- Phone -->
-            <mat-form-field class="w-full">
-                <mat-label>Phone Number</mat-label>
-                <input matInput formControlName="phone" placeholder="Ex. 9876543210">
-                <mat-error *ngIf="form.get('phone')?.hasError('required')">Phone is required</mat-error>
-                <mat-error *ngIf="form.get('phone')?.hasError('pattern')">Invalid phone number</mat-error>
-            </mat-form-field>
+                <!-- Address -->
+                <mat-form-field class="w-full">
+                    <mat-label>Address</mat-label>
+                    <textarea matInput formControlName="address" rows="3"
+                        placeholder="Ex. 123 Main St, City"></textarea>
+                    <mat-error *ngIf="form.get('address')?.hasError('required')">Address is required</mat-error>
+                </mat-form-field>
 
-            <!-- Email -->
-            <mat-form-field class="w-full">
-                <mat-label>Email Address</mat-label>
-                <input matInput formControlName="email" placeholder="Ex. salon@example.com">
-                <mat-error *ngIf="form.get('email')?.hasError('required')">Email is required</mat-error>
-                <mat-error *ngIf="form.get('email')?.hasError('email')">Invalid email address</mat-error>
-            </mat-form-field>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- City -->
+                    <mat-form-field class="w-full">
+                        <mat-label>City</mat-label>
+                        <mat-select formControlName="city_id">
+                            <mat-option *ngFor="let city of cities" [value]="city.id">
+                                {{city.name}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="form.get('city_id')?.hasError('required')">City is required</mat-error>
+                    </mat-form-field>
+
+                    <!-- Rating -->
+                    <mat-form-field class="w-full">
+                        <mat-label>Rating</mat-label>
+                        <input matInput type="number" formControlName="rating" min="0" max="5" step="0.1"
+                            placeholder="Ex. 4.5">
+                        <mat-error *ngIf="form.get('rating')?.hasError('required')">Rating is required</mat-error>
+                        <mat-error *ngIf="form.get('rating')?.hasError('min')">Minimum rating is 0</mat-error>
+                        <mat-error *ngIf="form.get('rating')?.hasError('max')">Maximum rating is 5</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Phone -->
+                    <mat-form-field class="w-full">
+                        <mat-label>Phone Number</mat-label>
+                        <input matInput formControlName="phone" placeholder="Ex. 9876543210">
+                        <mat-error *ngIf="form.get('phone')?.hasError('required')">Phone is required</mat-error>
+                        <mat-error *ngIf="form.get('phone')?.hasError('pattern')">Invalid phone number</mat-error>
+                    </mat-form-field>
+
+                    <!-- Email -->
+                    <mat-form-field class="w-full">
+                        <mat-label>Email Address</mat-label>
+                        <input matInput formControlName="email" placeholder="Ex. salon@example.com">
+                        <mat-error *ngIf="form.get('email')?.hasError('required')">Email is required</mat-error>
+                        <mat-error *ngIf="form.get('email')?.hasError('email')">Invalid email address</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <!-- Services -->
+                <mat-form-field class="w-full">
+                    <mat-label>Services</mat-label>
+                    <mat-select formControlName="services" multiple>
+                        <mat-option *ngFor="let service of servicesList" [value]="service">
+                            {{service}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="form.get('services')?.hasError('required')">At least one service is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <!-- Right Side: Image Upload -->
+            <div class="md:col-span-4">
+                <div class="flex flex-col gap-4 h-full">
+                    <!-- Upload Area -->
+                    <div class="flex flex-col items-center justify-center py-6 text-center cursor-pointer border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900/50 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors h-48 md:h-auto md:flex-1"
+                        (click)="fileInput.click()">
+                        <div class="p-3 bg-sky-50 dark:bg-sky-900/20 text-sky-600 dark:text-sky-400 rounded-full mb-3">
+                            <lucide-angular name="image-plus" class="w-6 h-6"></lucide-angular>
+                        </div>
+                        <p class="text-sm font-medium text-slate-900 dark:text-slate-100">Upload Images</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Max 5MB</p>
+                        <input #fileInput type="file" (change)="onFileSelected($event)" class="hidden" accept="image/*"
+                            multiple>
+                    </div>
+
+                    <!-- Image Grid -->
+                    <div *ngIf="images.length > 0" class="grid grid-cols-3 gap-2 max-h-60 overflow-y-auto pr-1">
+                        <div *ngFor="let img of images; let i = index"
+                            class="relative group rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700 aspect-square">
+                            <img [src]="img.url" class="w-full h-full object-cover bg-slate-100 dark:bg-slate-800">
+
+                            <!-- Delete Button -->
+                            <div *ngIf="!img.uploading"
+                                class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button type="button" (click)="removeImage(i)"
+                                    class="p-1 bg-white/90 dark:bg-slate-900/90 text-rose-600 hover:text-rose-700 rounded-full shadow-sm backdrop-blur-xs">
+                                    <lucide-angular name="trash-2" class="w-3 h-3"></lucide-angular>
+                                </button>
+                            </div>
+
+                            <!-- Progress Overlay -->
+                            <div *ngIf="img.uploading"
+                                class="absolute inset-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xs flex flex-col items-center justify-center p-2">
+                                <div class="w-full space-y-1">
+                                    <div class="h-1 w-full bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                                        <div class="h-full bg-sky-500 transition-all duration-200 ease-out"
+                                            [style.width.%]="img.progress"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-4">
-            <!-- Services -->
-            <mat-form-field class="w-full">
-                <mat-label>Services</mat-label>
-                <mat-select formControlName="services" multiple>
-                    <mat-option *ngFor="let service of servicesList" [value]="service">
-                        {{service}}
-                    </mat-option>
-                </mat-select>
-                <mat-error *ngIf="form.get('services')?.hasError('required')">At least one service is required
-                </mat-error>
-            </mat-form-field>
-
-            <!-- Rating -->
-            <mat-form-field class="w-full">
-                <mat-label>Rating</mat-label>
-                <input matInput type="number" formControlName="rating" min="0" max="5" step="0.1" placeholder="Ex. 4.5">
-                <mat-error *ngIf="form.get('rating')?.hasError('required')">Rating is required</mat-error>
-                <mat-error *ngIf="form.get('rating')?.hasError('min')">Minimum rating is 0</mat-error>
-                <mat-error *ngIf="form.get('rating')?.hasError('max')">Maximum rating is 5</mat-error>
-            </mat-form-field>
-        </div>
-
-        <!-- Owner Name -->
-        <mat-form-field class="w-full">
-            <mat-label>Owner Name</mat-label>
-            <input matInput formControlName="owner_name" placeholder="Ex. John Doe">
-            <mat-error *ngIf="form.get('owner_name')?.hasError('required')">Owner name is required</mat-error>
-        </mat-form-field>
-
-        <div class="flex justify-end gap-3 mt-6">
+        <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-slate-100 dark:border-slate-800">
             <button mat-stroked-button type="button" (click)="onCancel()" class="rounded-xl!">
                 Cancel
             </button>
-            <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid" class="rounded-xl!">
+            <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid || isUploading"
+                class="rounded-xl!">
                 {{ isEditMode ? 'Update Salon' : 'Create Salon' }}
             </button>
         </div>
