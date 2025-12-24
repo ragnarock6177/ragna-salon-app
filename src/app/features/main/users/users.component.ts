@@ -7,10 +7,11 @@ import { UserDialogComponent } from './user-dialog/user-dialog.component';
 import { Subscription } from 'rxjs';
 import { LucideAngularModule } from 'lucide-angular';
 import { ConfirmationService } from '../../../services/confirmation.service';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-users',
-  imports: [CommonModule, LucideAngularModule],
+  imports: [CommonModule, LucideAngularModule, MatButtonModule],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
 })

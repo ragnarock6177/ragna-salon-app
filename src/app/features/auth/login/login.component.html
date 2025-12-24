@@ -33,18 +33,18 @@
                 </mat-form-field>
 
                 <div class="flex justify-between items-center mt-2">
-                    <button type="button" (click)="reset()"
-                        class="text-sm text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 ">
+                    <button mat-button type="button" (click)="reset()"
+                        class="text-sm! text-slate-500! hover:text-slate-700! dark:text-slate-400! dark:hover:text-slate-200! ">
                         Change Number
                     </button>
-                    <button type="button" class="text-sm text-sky-500 hover:text-sky-600 font-medium ">
+                    <button mat-button type="button" class="text-sm! text-sky-500! hover:text-sky-600! font-medium! ">
                         Resend Code
                     </button>
                 </div>
             </div>
 
             <!-- Actions -->
-            <button mat-flat-button class="w-full !h-12 !text-lg !rounded-xl submit-btn"
+            <button mat-flat-button color="primary" class="w-full text-lg! submit-btn"
                 [disabled]="isLoading() || (otpSent() ? loginForm.invalid : phoneNumber?.invalid)"
                 (click)="otpSent() ? verifyOtp() : sendOtp()">
                 <span *ngIf="!isLoading()">

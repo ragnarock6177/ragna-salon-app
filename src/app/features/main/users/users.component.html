@@ -11,13 +11,12 @@
           <p class="text-sm text-slate-600 dark:text-slate-400">Last access events across your workspace.</p>
         </div>
         <div class="flex items-center gap-2">
-          <button (click)="filter = filter === 'active' ? 'all' : 'active';"
-            class="hidden sm:inline-flex items-center gap-1.5 rounded-lg border border-gray-300 dark:border-slate-700 px-3 py-1.5 text-xs text-slate-700 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800">
+          <button mat-stroked-button (click)="filter = filter === 'active' ? 'all' : 'active';"
+            class="hidden sm:inline-flex items-center gap-1.5! bg-white! dark:bg-slate-900!">
             <lucide-angular name="funnel" class="w-3.5 h-3.5"></lucide-angular>
             <span>{{ filter === 'active' ? 'Active only' : 'Filters' }}</span>
           </button>
-          <button (click)="openAdd()"
-            class="inline-flex items-center gap-1.5 rounded-lg bg-sky-600 hover:bg-sky-700 text-white text-xs font-medium px-3 py-1.5">
+          <button mat-flat-button color="primary" (click)="openAdd()" class="inline-flex items-center gap-1.5!">
             <lucide-angular name="plus" class="w-3.5 h-3.5"></lucide-angular>
             New user
           </button>
@@ -69,10 +68,10 @@
               </td>
               <td class="py-2.5 px-4 text-right">
                 <div class="inline-flex items-center gap-2">
-                  <button (click)="edit(u)"
-                    class="inline-flex items-center gap-1 text-xs text-slate-700 dark:text-slate-300 border border-gray-300 dark:border-slate-700 rounded-lg px-2.5 py-1 hover:bg-gray-100 dark:hover:bg-slate-800">Manage</button>
-                  <button (click)="delete(u)"
-                    class="ml-2 inline-flex items-center gap-1 text-xs text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300">Delete</button>
+                  <button mat-stroked-button (click)="edit(u)" class="h-8! px-2.5!">
+                    Manage
+                  </button>
+                  <button mat-button color="warn" (click)="delete(u)" class="h-8!">Delete</button>
                 </div>
               </td>
             </tr>
