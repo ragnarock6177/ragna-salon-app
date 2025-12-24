@@ -74,12 +74,10 @@ export class SalonsComponent {
     }
   }
 
-  openSalonDialog(salon?: Salon) {
+  openSalonDialog(salon?: Salon, panelClass: string = 'dialog-lg') {
     const dialogRef = this.dialog.open(SalonDialogComponent, {
       data: salon,
-      width: '800px',
-      maxWidth: '95vw',
-      panelClass: 'custom-dialog-container'
+      panelClass: panelClass
     });
 
     dialogRef.afterClosed().subscribe(result => {

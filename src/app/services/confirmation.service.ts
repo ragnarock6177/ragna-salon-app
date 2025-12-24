@@ -14,7 +14,7 @@ export class ConfirmationService {
         return this.dialog.open(ConfirmationDialogComponent, {
             data: data,
             width: '400px',
-            panelClass: 'confirmation-dialog-container',
+            panelClass: 'dialog-sm',
             autoFocus: false
         }).afterClosed();
     }
