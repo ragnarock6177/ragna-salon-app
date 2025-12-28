@@ -7,14 +7,22 @@ export const AUTH_ROUTES: Routes = [
     {
         path: 'login',
         component: LoginComponent,
-        title: 'Login - Salon App',
-        canActivate: [guestGuard]
+        title: 'Login',
+        canActivate: [guestGuard],
+        data: {
+            description: 'Sign in to access your Ragna Salon account.',
+            keywords: 'login, sign in, salon account, authentication'
+        }
     },
     {
         path: 'admin/login',
         component: AdminLoginComponent,
-        title: 'Admin Login - Salon App',
-        canActivate: [guestGuard]
+        title: 'Admin Login',
+        canActivate: [guestGuard],
+        data: {
+            description: 'Administrator login for Ragna Salon management portal.',
+            keywords: 'admin login, administrator, salon management, admin portal'
+        }
     },
     {
         path: '',
@@ -22,3 +30,4 @@ export const AUTH_ROUTES: Routes = [
         pathMatch: 'full'
     }
 ];
+

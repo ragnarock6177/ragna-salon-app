@@ -1,6 +1,6 @@
 import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { PreloadAllModules, provideRouter, withPreloading } from '@angular/router';
+import { PreloadAllModules, provideRouter, TitleStrategy, withPreloading } from '@angular/router';
 import {
   LucideAngularModule,
   // Sidebar navigation icons
@@ -18,6 +18,7 @@ import {
 } from 'lucide-angular';
 import { routes } from './app.routes';
 import { authInterceptor } from './core/auth/auth.interceptor';
+import { SeoTitleStrategy } from './core/seo/seo-title-strategy';
 
 const usedIcons = {
   LayoutDashboard, Building2, Users, Store, Ticket, Crown,
@@ -32,6 +33,8 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes, withPreloading(PreloadAllModules)),
     provideHttpClient(withInterceptors([authInterceptor])),
-    importProvidersFrom(LucideAngularModule.pick(usedIcons))
+    importProvidersFrom(LucideAngularModule.pick(usedIcons)),
+    // SEO: Custom title strategy for consistent page titles
+    { provide: TitleStrategy, useClass: SeoTitleStrategy }
   ]
 };

@@ -1,0 +1,22 @@
+# Ragna Salon - robots.txt
+# https://www.robotstxt.org/
+
+User-agent: *
+
+# Allow public pages
+Allow: /auth/login
+Allow: /auth/admin/login
+
+# Disallow authenticated/admin areas
+Disallow: /dashboard
+Disallow: /city
+Disallow: /salons
+Disallow: /users
+Disallow: /coupons
+Disallow: /memberships
+
+# Disallow API endpoints
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://ragna-salon.com/sitemap.xml

@@ -22,37 +22,67 @@ export const routes: Routes = [
                 path: 'dashboard',
                 title: 'Dashboard',
                 loadComponent: () => import('./features/main/dashboard/dashboard.component').then(m => m.DashboardComponent),
-                data: { title: 'Dashboard', subtitle: 'Overview of your salon operations' }
+                data: {
+                    title: 'Dashboard',
+                    subtitle: 'Overview of your salon operations',
+                    description: 'View key metrics, appointments, and salon performance at a glance.',
+                    keywords: 'dashboard, salon analytics, appointments overview, salon metrics'
+                }
             },
             {
                 path: 'city',
-                title: 'City',
+                title: 'City Management',
                 loadComponent: () => import('./features/main/city/city.component').then(m => m.CityComponent),
-                data: { title: 'City Management', subtitle: 'Manage available cities' }
+                data: {
+                    title: 'City Management',
+                    subtitle: 'Manage available cities',
+                    description: 'Add, edit, and manage cities where your salons operate.',
+                    keywords: 'city management, service areas, salon locations'
+                }
             },
             {
                 path: 'salons',
                 title: 'Salons',
                 loadComponent: () => import('./features/main/salons/salons.component').then(m => m.SalonsComponent),
-                data: { title: 'Salons', subtitle: 'Manage registered salons and their details' }
+                data: {
+                    title: 'Salons',
+                    subtitle: 'Manage registered salons and their details',
+                    description: 'Manage all your salon locations, services, and business details.',
+                    keywords: 'salon management, beauty salons, spa locations, salon directory'
+                }
             },
             {
                 path: 'users',
                 title: 'Users',
                 loadComponent: () => import('./features/main/users/users.component').then(m => m.UsersComponent),
-                data: { title: 'Users', subtitle: 'Manage system users' }
+                data: {
+                    title: 'Users',
+                    subtitle: 'Manage system users',
+                    description: 'Manage user accounts, roles, and permissions.',
+                    keywords: 'user management, staff accounts, customer accounts, permissions'
+                }
             },
             {
                 path: 'coupons',
                 title: 'Coupons',
                 loadComponent: () => import('./features/main/coupons/coupons.component').then(m => m.CouponsComponent),
-                data: { title: 'Coupons', subtitle: 'Manage discount coupons' }
+                data: {
+                    title: 'Coupons',
+                    subtitle: 'Manage discount coupons',
+                    description: 'Create and manage promotional coupons and discount codes.',
+                    keywords: 'discount coupons, promo codes, salon offers, promotions'
+                }
             },
             {
                 path: 'memberships',
                 title: 'Memberships',
                 loadComponent: () => import('./features/main/memberships/memberships.component').then(m => m.MembershipsComponent),
-                data: { title: 'Memberships', subtitle: 'Manage membership plans' }
+                data: {
+                    title: 'Memberships',
+                    subtitle: 'Manage membership plans',
+                    description: 'Create and manage membership plans for loyal customers.',
+                    keywords: 'membership plans, loyalty programs, subscription plans, VIP memberships'
+                }
             }
         ]
     },
@@ -61,3 +91,4 @@ export const routes: Routes = [
         redirectTo: 'dashboard'
     }
 ];
+

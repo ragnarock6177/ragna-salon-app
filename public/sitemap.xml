@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- 
+    Ragna Salon Sitemap
+    Note: This is primarily an admin panel, so only public pages are listed.
+    The sitemap should be updated when public-facing pages are added.
+  -->
+  
+  <!-- Homepage / Login -->
+  <url>
+    <loc>https://ragna-salon-app.vercel.app/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <!-- User Login -->
+  <url> 
+    <loc>https://ragna-salon-app.vercel.app/auth/login</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- Admin Login -->
+  <url>
+    <loc>https://ragna-salon-app.vercel.app/auth/admin/login</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+</urlset>
