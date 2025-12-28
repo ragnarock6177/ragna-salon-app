@@ -294,6 +294,7 @@ html {
 
   // --- Form Field Overrides (Light) ---
   @include mat.form-field-overrides((filled-container-color: $_white,
+      container-height: 52px,
       filled-label-text-color: rgb(100 116 139),
       filled-input-text-color: $_slate-900,
       filled-caret-color: $_sky-500,
@@ -305,6 +306,8 @@ html {
       filled-error-active-indicator-color: transparent,
       filled-error-focus-label-text-color: $_error-dark,
       error-text-color: $_error-dark,
+            filled-with-label-container-padding-bottom: 4px,
+      filled-with-label-container-padding-top: 20px
     ));
 
   // --- Dialog Overrides (Light) ---
@@ -353,6 +356,7 @@ html.dark {
 
   // --- Form Field Overrides (Dark) ---
   @include mat.form-field-overrides((filled-container-color: $_slate-950,
+      container-height: 52px,
       filled-label-text-color: $_slate-300,
       filled-hover-label-text-color: $_slate-200,
       filled-input-text-color: $_slate-500,
@@ -364,6 +368,8 @@ html.dark {
       filled-error-active-indicator-color: transparent,
       filled-error-focus-label-text-color: $_error-dark,
       error-text-color: $_error-dark,
+            filled-with-label-container-padding-bottom: 4px,
+      filled-with-label-container-padding-top: 20px
     ));
 
   // --- Dialog Overrides (Dark) ---
@@ -409,7 +415,6 @@ html.dark {
 
 // --- Form Fields ---
 .mat-mdc-text-field-wrapper {
-  height: 52px !important;
   border-radius: 12px !important;
   border: 1px solid $_border-light;
   overflow: hidden;
@@ -464,7 +469,6 @@ html.dark .mat-mdc-menu-panel {
 // --- Hover States ---
 .mat-mdc-option,
 .mat-mdc-menu-item {
-  min-height: 40px !important;
 
   &.mat-mdc-option-active,
   &:hover:not([disabled]) {

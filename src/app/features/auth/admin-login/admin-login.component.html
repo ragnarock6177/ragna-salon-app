@@ -27,7 +27,7 @@
             </div>
 
             <!-- Form -->
-            <form [formGroup]="loginForm" (ngSubmit)="login()" class="space-y-6">
+            <form [formGroup]="loginForm" (ngSubmit)="login()" class="space-y-1">
 
                 <!-- Email Input -->
                 <div class="space-y-1">
@@ -59,7 +59,7 @@
                 <!-- Actions -->
                 <div class="pt-2">
 
-                    <button mat-flat-button class="w-full btn-md text-lg!" [disabled]="isLoading() || loginForm.invalid"
+                    <button mat-flat-button class="w-full btn-lg text-lg!" [disabled]="isLoading() || loginForm.invalid"
                         type="submit">
                         <span *ngIf="!isLoading()" class="flex items-center justify-center gap-2">
                             Sign In

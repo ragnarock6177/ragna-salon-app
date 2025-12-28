@@ -1,4 +1,4 @@
-<div class="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 p-4">
+<div class="h-dvh flex items-center justify-center bg-slate-50 dark:bg-slate-950 p-4">
     <div
         class="w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-8 border border-slate-200 dark:border-slate-800">
         <!-- Header -->
@@ -10,7 +10,7 @@
         </div>
 
         <!-- Form -->
-        <form [formGroup]="loginForm" class="space-y-6">
+        <form [formGroup]="loginForm" class="space-y-1.5">
 
             <!-- Phone Number Input -->
             <div *ngIf="!otpSent()">
@@ -44,7 +44,7 @@
             </div>
 
             <!-- Actions -->
-            <button mat-flat-button class="w-full text-lg! submit-btn"
+            <button mat-flat-button class="w-full text-lg! btn-lg"
                 [disabled]="isLoading() || (otpSent() ? loginForm.invalid : phoneNumber?.invalid)"
                 (click)="otpSent() ? verifyOtp() : sendOtp()">
                 <span *ngIf="!isLoading()">
