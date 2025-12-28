@@ -324,7 +324,7 @@ html {
   @include mat.dialog-overrides((container-color: $_white,
       subhead-color: $_slate-700,
       supporting-text-color: $_slate-700,
-      container-shape: 1rem,
+      container-shape: 16px,
       container-elevation-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15),
     ));
 
@@ -386,6 +386,7 @@ html.dark {
   // --- Dialog Overrides (Dark) ---
   @include mat.dialog-overrides((container-color: $_slate-900,
       subhead-color: $_slate-200,
+      container-shape: 16px,
       supporting-text-color: $_slate-200,
       container-elevation-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5),
     ));
@@ -557,41 +558,30 @@ html.dark {
   }
 }
 
-/* --- 6. Dialog Size Utility Classes --- */
-.dialog-sm {
+// Dialog Sizes
+@mixin dialog-size($width) {
   max-width: 95vw !important;
 
   .mat-mdc-dialog-surface {
-    width: 400px !important;
+    width: $width !important;
     max-width: 95vw !important;
   }
+}
+
+.dialog-sm {
+  @include dialog-size(400px);
 }
 
 .dialog-md {
-  max-width: 95vw !important;
-
-  .mat-mdc-dialog-surface {
-    width: 600px !important;
-    max-width: 95vw !important;
-  }
+  @include dialog-size(600px);
 }
 
 .dialog-lg {
-  max-width: 95vw !important;
-
-  .mat-mdc-dialog-surface {
-    width: 800px !important;
-    max-width: 95vw !important;
-  }
+  @include dialog-size(800px);
 }
 
 .dialog-xl {
-  max-width: 95vw !important;
-
-  .mat-mdc-dialog-surface {
-    width: 1000px !important;
-    max-width: 95vw !important;
-  }
+  @include dialog-size(1000px);
 }
 
 .dialog-full-screen {
