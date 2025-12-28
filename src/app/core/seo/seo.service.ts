@@ -52,6 +52,8 @@ export class SeoService {
                 description: data['description'] || data['subtitle'],
                 keywords: data['keywords']
             });
+            // Update canonical URL for current route
+            this.setCanonicalUrl();
         });
     }
 
