@@ -1,13 +1,13 @@
 <!-- Backdrop for mobile -->
-@if (isOpen) {
+@if (isOpen()) {
 <div (click)="closeSidebar()" class="md:hidden fixed inset-0 bg-black/50 z-40">
 </div>
 }
 
 <!-- Sidebar -->
 <aside [ngClass]="{
-    'translate-x-0': isOpen,
-    '-translate-x-full md:translate-x-0': !isOpen
+    'translate-x-0': isOpen(),
+    '-translate-x-full md:translate-x-0': !isOpen()
   }" class="fixed md:static inset-y-0 left-0 z-50
          w-64 flex flex-col
          bg-white dark:bg-slate-950

@@ -1,8 +1,7 @@
-import { Component, OnInit, OnDestroy, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, signal, effect } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SidebarService } from '../../../services/sidebar.service';
-import { Subscription } from 'rxjs';
 import { LucideAngularModule } from 'lucide-angular';
 import { AuthService } from '../../../core/auth/auth.service';
 import { MatMenuModule } from '@angular/material/menu';
@@ -15,10 +14,9 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './sidebar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SidebarComponent implements OnInit, OnDestroy {
-  isOpen = false;
-  private subscription?: Subscription;
+export class SidebarComponent {
   private authService = inject(AuthService);
+  private sidebarService = inject(SidebarService);
   currentUser = this.authService.currentUser;
 
   navItems = [
@@ -30,17 +28,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
     { label: 'Memberships', link: '/memberships', icon: 'crown' },
   ];
 
-  constructor(private sidebarService: SidebarService) { }
+  isOpen = signal(false);
 
-  ngOnInit(): void {
-    this.subscription = this.sidebarService.sidebarOpen$.subscribe(
-      isOpen => this.isOpen = isOpen
-    );
-  }
-
-  ngOnDestroy(): void {
-    this.subscription?.unsubscribe();
-  }
+  effectref = effect(() => {
+    this.isOpen.set(this.sidebarService.isOpen());
+  })
 
   closeSidebar(): void {
     this.sidebarService.closeSidebar();

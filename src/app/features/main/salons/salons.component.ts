@@ -1,6 +1,6 @@
 import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { BehaviorSubject, map, Subscription, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, map, switchMap, tap } from 'rxjs';
 import { SalonDialogComponent } from './components/salon-dialog/salon-dialog.component';
 import { ConfirmationService } from '../../../services/confirmation.service';
 import { Salon } from '../../../shared/models/salon';
