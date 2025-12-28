@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 
@@ -17,6 +17,7 @@ interface MembershipPlan {
   imports: [CommonModule, LucideAngularModule],
   templateUrl: './memberships.component.html',
   styleUrl: './memberships.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MembershipsComponent implements OnInit {
   plans: MembershipPlan[] = [

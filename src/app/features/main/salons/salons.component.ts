@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { BehaviorSubject, map, Subscription, switchMap, tap } from 'rxjs';
 import { SalonDialogComponent } from './components/salon-dialog/salon-dialog.component';
@@ -36,6 +36,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
   ],
   templateUrl: './salons.component.html',
   styleUrl: './salons.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SalonsComponent {
 
@@ -51,8 +52,7 @@ export class SalonsComponent {
     switchMap(() => this.apiService.getSalons().pipe(
       map((data) => data.data),
       tap((data) => {
-        console.log(data)
-        this.data = data
+        this.data = data;
         this.isLoading.set(false);
       })
     ))
@@ -119,8 +119,8 @@ export class SalonsComponent {
       type: action === 'activate' ? 'info' : 'danger'
     }).subscribe(confirmed => {
       if (confirmed) {
-        // Call API to update status
-        console.log(`Updating status for ${salon.id} to ${newStatus}`);
+        // TODO: Call API to update status
+        this.apiService.updateSalon(salon.id, { is_active: newStatus }).subscribe();
       }
     });
   }
@@ -137,7 +137,7 @@ export class SalonsComponent {
       type: 'danger'
     }).subscribe(confirmed => {
       if (confirmed) {
-        console.log('Delete salon', salon.id);
+        // TODO: Call API to delete salon
       }
     });
   }

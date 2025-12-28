@@ -20,31 +20,37 @@ export const routes: Routes = [
             },
             {
                 path: 'dashboard',
+                title: 'Dashboard',
                 loadComponent: () => import('./features/main/dashboard/dashboard.component').then(m => m.DashboardComponent),
                 data: { title: 'Dashboard', subtitle: 'Overview of your salon operations' }
             },
             {
                 path: 'city',
+                title: 'City',
                 loadComponent: () => import('./features/main/city/city.component').then(m => m.CityComponent),
                 data: { title: 'City Management', subtitle: 'Manage available cities' }
             },
             {
                 path: 'salons',
+                title: 'Salons',
                 loadComponent: () => import('./features/main/salons/salons.component').then(m => m.SalonsComponent),
                 data: { title: 'Salons', subtitle: 'Manage registered salons and their details' }
             },
             {
                 path: 'users',
+                title: 'Users',
                 loadComponent: () => import('./features/main/users/users.component').then(m => m.UsersComponent),
                 data: { title: 'Users', subtitle: 'Manage system users' }
             },
             {
                 path: 'coupons',
+                title: 'Coupons',
                 loadComponent: () => import('./features/main/coupons/coupons.component').then(m => m.CouponsComponent),
                 data: { title: 'Coupons', subtitle: 'Manage discount coupons' }
             },
             {
                 path: 'memberships',
+                title: 'Memberships',
                 loadComponent: () => import('./features/main/memberships/memberships.component').then(m => m.MembershipsComponent),
                 data: { title: 'Memberships', subtitle: 'Manage membership plans' }
             }

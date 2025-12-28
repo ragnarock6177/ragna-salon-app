@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
@@ -6,6 +6,7 @@ import { LucideAngularModule } from 'lucide-angular';
   imports: [LucideAngularModule],
   templateUrl: './stats.component.html',
   styleUrl: './stats.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StatsComponent {
 

@@ -23,7 +23,7 @@
     </div>
 
     <div class="flex flex-col">
-      <span class="font-semibold text-slate-900 dark:text-slate-50">SalonPanel</span>
+      <span class="font-semibold text-slate-900 dark:text-slate-50">Salon Panel</span>
       <span class="text-sm text-slate-600 dark:text-slate-400">Management</span>
     </div>
 
@@ -36,7 +36,8 @@
   <!-- Navigation (ONLY SCROLL AREA) -->
   <nav class="flex-1 min-h-0 overflow-y-auto px-3 py-4 text-sm space-y-1">
     <!-- Reusable nav item -->
-    <a *ngFor="let item of navItems" [routerLink]="item.link" routerLinkActive="active" (click)="closeSidebar()" class="nav-btn flex items-center gap-3 rounded-lg px-3 py-2
+    <a *ngFor="let item of navItems; trackBy: trackByLink" [routerLink]="item.link" routerLinkActive="active"
+      (click)="closeSidebar()" class="nav-btn flex items-center gap-3 rounded-lg px-3 py-2
              text-slate-700 dark:text-slate-300
              hover:bg-gray-100 dark:hover:bg-slate-800
              border border-slate-200 dark:border-slate-700

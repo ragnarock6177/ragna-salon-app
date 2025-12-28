@@ -1,9 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SidebarService } from '../../../services/sidebar.service';
 import { ThemeService } from '../../../services/theme.service';
-import { Subscription, filter, map, mergeMap, tap } from 'rxjs';
+import { Subscription, filter } from 'rxjs';
 import { LucideAngularModule } from 'lucide-angular';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 
@@ -12,6 +12,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
   imports: [CommonModule, FormsModule, LucideAngularModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   search = '';
@@ -26,7 +27,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private sidebarService: SidebarService,
     private themeService: ThemeService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
   ) {
     // Get initial theme state
     this.isDarkMode = this.themeService.getCurrentTheme();
@@ -38,21 +39,22 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.log(this.activatedRoute)
+    this.updateTitleFromRoute();
     this.routerSubscription = this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd),
-      map(() => this.activatedRoute),
-      tap(route => console.log(route)),
-      map(route => {
-        while (route.firstChild) route = route.firstChild;
-        return route;
-      }),
-      mergeMap(route => route.data)
-    ).subscribe(data => {
-      console.log(data)
-      this.title = data['title'] || 'Salon Dashboard';
-      this.subtitle = data['subtitle'] || 'Manage your salon operations';
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.updateTitleFromRoute();
     });
+  }
+
+  private updateTitleFromRoute(): void {
+    let route = this.activatedRoute;
+    while (route.firstChild) {
+      route = route.firstChild;
+    }
+    const data = route.snapshot.data;
+    this.title = data['title'] || 'Salon Dashboard';
+    this.subtitle = data['subtitle'] || 'Manage your salon operations';
   }
 
   ngOnDestroy(): void {

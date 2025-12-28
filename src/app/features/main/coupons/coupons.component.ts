@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 
@@ -17,6 +17,7 @@ interface Coupon {
   imports: [CommonModule, LucideAngularModule],
   templateUrl: './coupons.component.html',
   styleUrl: './coupons.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CouponsComponent implements OnInit {
   coupons: Coupon[] = [

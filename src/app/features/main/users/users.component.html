@@ -40,7 +40,8 @@
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-200 dark:divide-slate-800 dark:bg-slate-950">
-            <tr *ngFor="let u of displayedUsers; let i = index" class="hover:bg-gray-50 dark:hover:bg-slate-900">
+            <tr *ngFor="let u of displayedUsers; let i = index; trackBy: trackByUserId"
+              class="hover:bg-gray-50 dark:hover:bg-slate-900">
               <td class="py-2.5 px-4">
                 <div class="flex items-center gap-3">
                   <div

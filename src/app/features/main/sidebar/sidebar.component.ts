@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SidebarService } from '../../../services/sidebar.service';
@@ -13,6 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
   imports: [RouterModule, CommonModule, LucideAngularModule, MatMenuModule, MatButtonModule],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SidebarComponent implements OnInit, OnDestroy {
   isOpen = false;
@@ -48,4 +49,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
   logout(): void {
     this.authService.logout();
   }
+
+  trackByLink = (_: number, item: typeof this.navItems[0]) => item.link;
 }

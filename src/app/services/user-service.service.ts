@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Subject, Observable, map, tap } from 'rxjs';
+import { Subject, Observable, map, tap, switchMap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { User } from '../shared/models/user';
 
@@ -44,9 +44,8 @@ export class UserServiceService {
 
   // CRUD operations - Stubbed or implemented optimistically for now as focus is on GET
   add(u: User): Observable<any> {
-    // Assuming POST to /users
     return this.http.post(this.API_URL, u).pipe(
-      tap(() => this.getUsers().subscribe()) // Refresh cache
+      switchMap(() => this.getUsers())
     );
   }
 

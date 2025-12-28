@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { ConfirmationService } from '../../../services/confirmation.service';
@@ -13,6 +13,7 @@ import { LucideAngularModule } from 'lucide-angular';
   imports: [CommonModule, LucideAngularModule],
   templateUrl: './city.component.html',
   styleUrl: './city.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CityComponent {
   users: User[] = [];

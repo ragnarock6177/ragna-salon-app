@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { User } from '../../../shared/models/user';
 import { UserServiceService } from '../../../services/user-service.service';
 import { CommonModule } from '@angular/common';
@@ -14,6 +14,7 @@ import { MatButtonModule } from '@angular/material/button';
   imports: [CommonModule, LucideAngularModule, MatButtonModule],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 
@@ -189,4 +190,5 @@ export class UsersComponent implements OnInit, OnDestroy {
     return u.name ? u.name.split(' ').map((n: any) => n[0]).slice(0, 2).join('').toUpperCase() : 'NA';
   }
 
+  trackByUserId = (_: number, user: User) => user._id;
 }
