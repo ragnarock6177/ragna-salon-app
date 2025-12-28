@@ -60,6 +60,7 @@ $button-theme-overrides: (
   filled-container-color: $_sky-500,
   filled-label-text-color: #ffffff,
   filled-label-text-font: var(--tw-font-sans),
+  filled-label-text-size: 14px,
   filled-label-text-weight: 500,
   filled-horizontal-padding: 16px,
   filled-container-height: 40px,
@@ -83,6 +84,7 @@ $button-theme-overrides: (
   outlined-outline-width: 1px,
   outlined-label-text-color: var(--tw-primary-600),
   outlined-label-text-font: var(--tw-font-sans),
+  outlined-label-text-size: 14px,
   outlined-label-text-weight: 500,
 
   // State Layers
@@ -102,6 +104,7 @@ $button-theme-overrides: (
   tonal-container-color: var(--tw-secondary-100),
   tonal-label-text-color: var(--tw-primary-600),
   tonal-label-text-font: var(--tw-font-sans),
+  tonal-label-text-size: 14px,
   tonal-label-text-weight: 500,
 
   // State Layers
@@ -118,6 +121,7 @@ $button-theme-overrides: (
   // =========================================================
   text-label-text-color: var(--tw-primary-600),
   text-label-text-font: var(--tw-font-sans),
+  text-label-text-size: 14px,
   text-label-text-weight: 500,
   text-container-shape: 8px,
   // rounded-lg for text buttons
@@ -136,6 +140,7 @@ $button-theme-overrides: (
   protected-container-shape: 8px,
   protected-container-color: #ffffff,
   protected-label-text-color: var(--tw-primary-600),
+  protected-label-text-size: 14px,
   protected-container-elevation-shadow: var(--tw-shadow-sm),
 
   // Hover/Press Shadows
@@ -175,6 +180,7 @@ $dark-button-theme-overrides: (
   filled-container-color: $_sky-500,
   filled-label-text-color: #ffffff,
   filled-label-text-font: var(--tw-font-sans),
+  filled-label-text-size: 14px,
   filled-label-text-weight: 500,
   filled-horizontal-padding: 16px,
   filled-container-height: 40px,
@@ -199,6 +205,7 @@ $dark-button-theme-overrides: (
   outlined-horizontal-padding: 16px,
   outlined-label-text-color: $_slate-200,
   outlined-label-text-font: var(--tw-font-sans),
+  outlined-label-text-size: 14px,
   outlined-label-text-weight: 500,
   outlined-container-height: 40px,
 
@@ -219,6 +226,7 @@ $dark-button-theme-overrides: (
   tonal-container-color: var(--tw-secondary-100),
   tonal-label-text-color: var(--tw-primary-600),
   tonal-label-text-font: var(--tw-font-sans),
+  tonal-label-text-size: 14px,
   tonal-label-text-weight: 500,
 
   // State Layers
@@ -235,6 +243,7 @@ $dark-button-theme-overrides: (
   // =========================================================
   text-label-text-color: var(--tw-primary-600),
   text-label-text-font: var(--tw-font-sans),
+  text-label-text-size: 14px,
   text-label-text-weight: 500,
   text-container-shape: 8px,
   // Text buttons often look better less rounded
@@ -296,7 +305,9 @@ html {
   @include mat.form-field-overrides((filled-container-color: $_white,
       container-height: 52px,
       filled-label-text-color: rgb(100 116 139),
+      filled-label-text-size: 14px,
       filled-input-text-color: $_slate-900,
+      container-text-size: 14px,
       filled-caret-color: $_sky-500,
       filled-focus-label-text-color: $_sky-500,
       filled-focus-active-indicator-color: transparent,
@@ -306,9 +317,8 @@ html {
       filled-error-active-indicator-color: transparent,
       filled-error-focus-label-text-color: $_error-dark,
       error-text-color: $_error-dark,
-            filled-with-label-container-padding-bottom: 4px,
-      filled-with-label-container-padding-top: 20px
-    ));
+      filled-with-label-container-padding-bottom: 4px,
+      filled-with-label-container-padding-top: 20px));
 
   // --- Dialog Overrides (Light) ---
   @include mat.dialog-overrides((container-color: $_white,
@@ -358,8 +368,10 @@ html.dark {
   @include mat.form-field-overrides((filled-container-color: $_slate-950,
       container-height: 52px,
       filled-label-text-color: $_slate-300,
+      filled-label-text-size: 14px,
       filled-hover-label-text-color: $_slate-200,
       filled-input-text-color: $_slate-500,
+      container-text-size: 14px,
       filled-active-indicator-color: transparent,
       filled-focus-label-text-color: $_sky-500,
       filled-focus-active-indicator-color: transparent,
@@ -368,9 +380,8 @@ html.dark {
       filled-error-active-indicator-color: transparent,
       filled-error-focus-label-text-color: $_error-dark,
       error-text-color: $_error-dark,
-            filled-with-label-container-padding-bottom: 4px,
-      filled-with-label-container-padding-top: 20px
-    ));
+      filled-with-label-container-padding-bottom: 4px,
+      filled-with-label-container-padding-top: 20px));
 
   // --- Dialog Overrides (Dark) ---
   @include mat.dialog-overrides((container-color: $_slate-900,
