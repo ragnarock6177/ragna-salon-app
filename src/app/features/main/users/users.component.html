@@ -11,14 +11,17 @@
           <p class="text-sm text-slate-600 dark:text-slate-400">Last access events across your workspace.</p>
         </div>
         <div class="flex items-center gap-2">
-          <button mat-stroked-button (click)="filter = filter === 'active' ? 'all' : 'active';"
-            class="hidden sm:inline-flex items-center gap-1.5! bg-white! dark:bg-slate-900!">
-            <lucide-angular name="funnel" class="w-3.5 h-3.5"></lucide-angular>
-            <span>{{ filter === 'active' ? 'Active only' : 'Filters' }}</span>
+          <button mat-stroked-button (click)="filter = filter === 'active' ? 'all' : 'active';" class="btn-md">
+            <div class="flex items-center gap-2">
+              <lucide-angular name="funnel" class="w-3.5 h-3.5 inline-flex"></lucide-angular>
+              <span class="text-sm">{{ filter === 'active' ? 'Active only' : 'Filters' }}</span>
+            </div>
           </button>
-          <button mat-flat-button color="primary" (click)="openAdd()" class="inline-flex items-center gap-1.5!">
-            <lucide-angular name="plus" class="w-3.5 h-3.5"></lucide-angular>
-            New user
+          <button mat-flat-button (click)="openAdd()" class="btn-md">
+            <div class="flex items-center gap-2 text-sm">
+              <lucide-angular name="plus" class="w-3.5 h-3.5 inline-flex"></lucide-angular>
+              <span class="">New user</span>
+            </div>
           </button>
         </div>
       </div>
@@ -29,6 +32,7 @@
             class="bg-gray-50 dark:bg-slate-900 border-b border-gray-200 dark:border-slate-800 text-xs text-slate-700 dark:text-slate-300 sticky top-0">
             <tr>
               <th class="text-left font-medium py-2.5 px-4">User</th>
+              <th class="text-left font-medium py-2.5 px-4">Email</th>
               <th class="text-left font-medium py-2.5 px-4">Role</th>
               <th class="text-left font-medium py-2.5 px-4">Last active</th>
               <th class="text-left font-medium py-2.5 px-4">Status</th>
@@ -44,10 +48,10 @@
                     {{ getName(u) }}</div>
                   <div class="flex flex-col">
                     <span class="text-sm text-slate-900 dark:text-slate-100">{{ u.name }}</span>
-                    <span class="text-xs text-slate-500 dark:text-slate-400">{{ u.email }}</span>
                   </div>
                 </div>
               </td>
+              <td class="py-2.5 px-4 text-sm text-slate-500 dark:text-slate-400">{{ u.email }}</td>
               <td class="py-2.5 px-4 text-sm text-slate-700 dark:text-slate-300">{{ u.role }}</td>
               <td class="py-2.5 px-4 text-sm text-slate-700 dark:text-slate-300">{{ u.last }}</td>
               <td class="py-2.5 px-4">
@@ -68,10 +72,12 @@
               </td>
               <td class="py-2.5 px-4 text-right">
                 <div class="inline-flex items-center gap-2">
-                  <button mat-stroked-button (click)="edit(u)" class="h-8! px-2.5!">
+                  <button mat-stroked-button (click)="edit(u)" class="btn-sm">
                     Manage
                   </button>
-                  <button mat-button color="warn" (click)="delete(u)" class="h-8!">Delete</button>
+                  <button mat-button (click)="delete(u)" class="btn-sm bg-red-600! text-white!">
+                    Delete
+                  </button>
                 </div>
               </td>
             </tr>

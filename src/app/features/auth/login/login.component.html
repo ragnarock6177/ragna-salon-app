@@ -44,7 +44,7 @@
             </div>
 
             <!-- Actions -->
-            <button mat-flat-button color="primary" class="w-full text-lg! submit-btn"
+            <button mat-flat-button class="w-full text-lg! submit-btn"
                 [disabled]="isLoading() || (otpSent() ? loginForm.invalid : phoneNumber?.invalid)"
                 (click)="otpSent() ? verifyOtp() : sendOtp()">
                 <span *ngIf="!isLoading()">

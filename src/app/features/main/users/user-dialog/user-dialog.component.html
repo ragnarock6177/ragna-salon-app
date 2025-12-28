@@ -1,26 +1,13 @@
-<div class="user-dialog">
-    <div class="dialog-header">
-        <div class="flex items-center gap-3">
-            <div class="h-10 w-10 rounded-xl bg-sky-500/10 dark:bg-sky-500/20 flex items-center justify-center">
-                <lucide-angular name="user-plus" class="w-5 h-5 text-sky-600 dark:text-sky-400"></lucide-angular>
-            </div>
-            <div>
-                <h2 class="text-xl font-semibold text-slate-900 dark:text-slate-50">
-                    {{ isEditMode ? 'Edit User' : 'Add New User' }}
-                </h2>
-                <p class="text-sm text-slate-600 dark:text-slate-400">
-                    {{ isEditMode ? 'Update user information' : 'Create a new user account' }}
-                </p>
-            </div>
-        </div>
-        <button mat-icon-button (click)="onCancel()" class="close-btn">
-            <lucide-angular name="x" class="w-5 h-5"></lucide-angular>
-        </button>
-    </div>
+<!-- <div class="flex items-center justify-between "> -->
+<h2 mat-dialog-title class="text-lg! font-bold!">
+    {{ isEditMode ? 'Edit User' : 'Add New User' }}
+</h2>
+<!-- </div> -->
 
-    <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="dialog-content">
-        <div class="form-grid">
-            <mat-form-field appearance="fill" class="full-width">
+<mat-dialog-content class="py-6!">
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()" id="userForm">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <mat-form-field class="w-full md:col-span-2">
                 <mat-label class="inline-flex items-center gap-1">
                     <lucide-angular name="user" class="w-4 h-4"></lucide-angular>
                     Full Name
@@ -34,7 +21,7 @@
                 </mat-error>
             </mat-form-field>
 
-            <mat-form-field appearance="fill" class="full-width">
+            <mat-form-field class="w-full md:col-span-2">
                 <mat-label class="inline-flex items-center gap-1">
                     <lucide-angular name="mail" class="w-4 h-4"></lucide-angular>
                     Email Address
@@ -48,7 +35,7 @@
                 </mat-error>
             </mat-form-field>
 
-            <mat-form-field appearance="fill">
+            <mat-form-field class="w-full">
                 <mat-label class="inline-flex items-center gap-1">
                     <lucide-angular name="shield" class="w-4 h-4"></lucide-angular>
                     Role
@@ -60,7 +47,7 @@
                 </mat-select>
             </mat-form-field>
 
-            <mat-form-field appearance="fill">
+            <mat-form-field class="w-full">
                 <mat-label class="inline-flex items-center gap-1">
                     <lucide-angular name="activity" class="w-4 h-4"></lucide-angular>
                     Status
@@ -75,16 +62,15 @@
                 </mat-select>
             </mat-form-field>
         </div>
-
-        <div class="dialog-actions">
-            <button type="button" mat-stroked-button (click)="onCancel()"
-                class="inline-flex items-center gap-1 cancel-btn">
-                Cancel
-            </button>
-            <button type="submit" mat-raised-button [disabled]="!userForm.valid"
-                class="inline-flex items-center gap-1 submit-btn">
-                {{ isEditMode ? 'Update User' : 'Create User' }}
-            </button>
-        </div>
     </form>
-</div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button type="button" mat-stroked-button (click)="onCancel()" class="inline-flex items-center gap-1 cancel-btn">
+        Cancel
+    </button>
+    <button type="submit" mat-flat-button color="primary" [disabled]="!userForm.valid" form="userForm"
+        class="inline-flex items-center gap-1 submit-btn">
+        {{ isEditMode ? 'Update User' : 'Create User' }}
+    </button>
+</mat-dialog-actions>

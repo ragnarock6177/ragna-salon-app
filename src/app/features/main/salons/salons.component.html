@@ -13,7 +13,7 @@
                     <p class="text-sm text-slate-600 dark:text-slate-400">Last access events across your workspace.</p>
                 </div>
                 <div class="flex items-center gap-2">
-                    <button mat-flat-button (click)="openSalonDialog()">
+                    <button mat-flat-button (click)="openSalonDialog()" class="btn-md">
                         <div class="flex items-center gap-2">
                             <lucide-angular name="plus" class="w-5 h-5 inline-flex"></lucide-angular>
                             <span class="text-sm">Add New Salon</span>
@@ -202,7 +202,7 @@
                     <h3 class="text-lg font-medium text-slate-900 dark:text-white mb-1">No salons found</h3>
                     <p class="text-slate-500 dark:text-slate-400 mb-6">Get started by adding your first salon.
                     </p>
-                    <button mat-stroked-button color="primary" class="rounded-xl!" (click)="openSalonDialog()">
+                    <button mat-stroked-button color="primary" (click)="openSalonDialog()">
                         Add Salon
                     </button>
                 </div>

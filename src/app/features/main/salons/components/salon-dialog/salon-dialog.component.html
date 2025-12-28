@@ -12,9 +12,9 @@
     <!-- Scrollable Content -->
     <div class="flex-1 overflow-y-auto p-6">
         <form [formGroup]="form" (ngSubmit)="onSubmit()" id="salonForm">
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
                 <!-- Left Side: Details -->
-                <div class="md:col-span-8 space-y-4">
+                <div class="md:col-span-8 space-y-2">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <!-- Name -->
                         <mat-form-field class="w-full">
@@ -147,11 +147,11 @@
     <!-- Footer -->
     <div class="p-6 pt-4 border-t border-slate-100 dark:border-slate-800 shrink-0 bg-white dark:bg-slate-900">
         <div class="flex justify-end gap-3">
-            <button mat-stroked-button type="button" (click)="onCancel()" class="rounded-xl!">
+            <button mat-stroked-button type="button" (click)="onCancel()">
                 Cancel
             </button>
             <button mat-flat-button color="primary" type="submit" form="salonForm"
-                [disabled]="form.invalid || isUploading" class="rounded-xl!">
+                [disabled]="form.invalid || isUploading">
                 {{ isEditMode ? 'Update Salon' : 'Create Salon' }}
             </button>
         </div>

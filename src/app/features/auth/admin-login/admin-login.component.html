@@ -49,7 +49,7 @@
                         <input matInput formControlName="password" [type]="hidePassword() ? 'password' : 'text'"
                             class="text-slate-900! dark:text-white!">
                         <button mat-icon-button matSuffix (click)="togglePasswordVisibility($event)" type="button"
-                            class="text-slate-400! dark:text-slate-500! hover:text-indigo-500! transition-colors">
+                            class="text-slate-400! dark:text-slate-500!">
                             <lucide-angular [name]="hidePassword() ? 'eye' : 'eye-off'"></lucide-angular>
                         </button>
                         <mat-error *ngIf="password?.hasError('required')">Password is required</mat-error>
@@ -58,9 +58,9 @@
 
                 <!-- Actions -->
                 <div class="pt-2">
-                    <button mat-flat-button color="primary"
-                        class="w-full text-lg! shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 transition-all duration-300 transform active:scale-[0.98]"
-                        [disabled]="isLoading() || loginForm.invalid" type="submit">
+
+                    <button mat-flat-button class="w-full btn-md text-lg!" [disabled]="isLoading() || loginForm.invalid"
+                        type="submit">
                         <span *ngIf="!isLoading()" class="flex items-center justify-center gap-2">
                             Sign In
                         </span>
