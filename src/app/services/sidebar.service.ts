@@ -24,9 +24,7 @@ export class SidebarService {
     }
 
     toggleSidebar(): void {
-        console.log('ok')
         this._isOpen.update(value => !value);
-        console.log(this.isOpen())
     }
 
     openSidebar(): void {

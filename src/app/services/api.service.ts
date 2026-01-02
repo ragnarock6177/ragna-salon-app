@@ -18,11 +18,40 @@ export class ApiService {
     return this.http.post(this.adminApiUrl + '/salons', data);
   }
 
-  updateSalon(id: number, data: any): Observable<any> {
+  updateSalon(id: number | string, data: any): Observable<any> {
     return this.http.put(this.adminApiUrl + `/salons/${id}`, data);
   }
 
+  deleteSalon(id: number | string): Observable<any> {
+    return this.http.delete(this.adminApiUrl + `/salons/${id}`);
+  }
+
+  deleteMultipleSalons(ids: (number | string)[]): Observable<any> {
+    return this.http.post(this.adminApiUrl + '/salons/bulk-delete', { ids });
+  }
+
+  // City APIs
   getCities(): Observable<any> {
     return this.http.get(this.adminApiUrl + '/city');
+  }
+
+  addCity(data: any): Observable<any> {
+    return this.http.post(this.adminApiUrl + '/city', data);
+  }
+
+  updateCity(id: number | string, data: any): Observable<any> {
+    return this.http.put(this.adminApiUrl + `/city/${id}`, data);
+  }
+
+  activateCity(id: number | string): Observable<any> {
+    return this.http.put(this.adminApiUrl + `/city/activate/${id}`, {});
+  }
+
+  deactivateCity(id: number | string): Observable<any> {
+    return this.http.put(this.adminApiUrl + `/city/deactivate/${id}`, {});
+  }
+
+  deleteCity(id: number | string): Observable<any> {
+    return this.http.delete(this.adminApiUrl + `/city/${id}`);
   }
 }

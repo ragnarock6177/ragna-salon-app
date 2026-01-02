@@ -293,12 +293,42 @@ $dark-fab-overrides: (
   // disabled-foreground-color: $_slate-500,
 );
 
+// --- Checkbox Overrides (Shared) ---
+$checkbox-overrides: (
+  // State Layer Opacity - Set to none/0 to remove hover/focus effects
+  selected-focus-state-layer-opacity: 0,
+  selected-hover-state-layer-opacity: 0,
+  selected-pressed-state-layer-opacity: 0,
+  unselected-focus-state-layer-opacity: 0,
+  unselected-hover-state-layer-opacity: 0,
+  unselected-pressed-state-layer-opacity: 0,
+
+  // Touch Target
+  touch-target-size: 40px,
+
+  // Selected (Checked) Icon Colors
+  selected-icon-color: $_sky-500,
+  selected-hover-icon-color: $_sky-500,
+  selected-focus-icon-color: $_sky-500,
+  selected-pressed-icon-color: $_sky-500,
+  selected-checkmark-color: $_white,
+
+  // Disabled Colors
+  disabled-label-color: var(--mat-sys-on-surface),
+  disabled-selected-icon-color: var(--mat-sys-on-surface),
+  disabled-unselected-icon-color: var(--mat-sys-on-surface),
+
+  // Density
+  state-layer-size: 40px,
+);
+
 /* --- 3. Apply Themes & Overrides --- */
 html {
   @include mat.all-component-themes($light-theme);
 
   @include mat.button-overrides($button-theme-overrides);
   @include mat.icon-button-overrides($icon-button-overrides);
+  @include mat.checkbox-overrides($checkbox-overrides);
   @include mat.fab-overrides($fab-overrides);
 
   // --- Form Field Overrides (Light) ---
@@ -363,6 +393,7 @@ html.dark {
   @include mat.button-overrides($dark-button-theme-overrides);
   @include mat.icon-button-overrides($dark-icon-button-overrides);
   @include mat.fab-overrides($dark-fab-overrides);
+  @include mat.checkbox-overrides($checkbox-overrides);
 
   // --- Form Field Overrides (Dark) ---
   @include mat.form-field-overrides((filled-container-color: $_slate-950,
@@ -513,7 +544,7 @@ html.dark .mat-mdc-menu-panel {
     // Nesting 'thead' here is cleaner and generates the exact same CSS
     thead {
       position: relative;
-      z-index: 0;
+      z-index: 2;
     }
   }
 }

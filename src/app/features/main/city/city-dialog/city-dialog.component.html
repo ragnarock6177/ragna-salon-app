@@ -1,0 +1,31 @@
+<h2 mat-dialog-title class="text-lg! font-bold!">
+    {{ isEditMode ? 'Edit City' : 'Add New City' }}
+</h2>
+
+<mat-dialog-content class="py-4!">
+    <form [formGroup]="cityForm" (ngSubmit)="onSubmit()" id="cityForm">
+        <mat-form-field class="w-full">
+            <mat-label class="inline-flex items-center gap-1">
+                <lucide-angular name="map-pin" class="w-4 h-4"></lucide-angular>
+                City Name
+            </mat-label>
+            <input matInput formControlName="name" placeholder="Enter city name" required>
+            <mat-error *ngIf="cityForm.get('name')?.hasError('required')">
+                City name is required
+            </mat-error>
+            <mat-error *ngIf="cityForm.get('name')?.hasError('minlength')">
+                City name must be at least 2 characters
+            </mat-error>
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button type="button" mat-stroked-button (click)="onCancel()" class="inline-flex items-center gap-1 cancel-btn">
+        Cancel
+    </button>
+    <button type="submit" mat-flat-button color="primary" [disabled]="!cityForm.valid" form="cityForm"
+        class="inline-flex items-center gap-1 submit-btn">
+        {{ isEditMode ? 'Update City' : 'Add City' }}
+    </button>
+</mat-dialog-actions>

@@ -1,76 +1,65 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Subscription } from 'rxjs';
 import { ConfirmationService } from '../../../services/confirmation.service';
-import { UserServiceService } from '../../../services/user-service.service';
-import { User } from '../../../shared/models/user';
-import { UserDialogComponent } from '../users/user-dialog/user-dialog.component';
+import { ApiService } from '../../../services/api.service';
+import { City } from '../../../shared/models/city';
+import { CityDialogComponent } from './city-dialog/city-dialog.component';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-city',
-  imports: [CommonModule, LucideAngularModule],
+  imports: [CommonModule, LucideAngularModule, MatButtonModule],
   templateUrl: './city.component.html',
   styleUrl: './city.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CityComponent {
-  users: User[] = [];
-  displayedUsers: User[] = [];
+  cities: City[] = [];
+  displayedCities: City[] = [];
   filter: 'all' | 'active' = 'all';
   search = '';
   loading = false;
 
   private itemsPerLoad = 10;
   private currentLoadedCount = 0;
-  private modalSubscription?: Subscription;
-
 
   constructor(
-    private userSrv: UserServiceService,
+    private apiService: ApiService,
     private dialog: MatDialog,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private cdr: ChangeDetectorRef
   ) { }
 
-
   ngOnInit() {
-    this.refreshUsers();
-
-    // Subscribe to modal open events from user service
-    this.modalSubscription = this.userSrv.onOpenModal.subscribe((data) => {
-      if (data !== null) {
-        this.openDialog(data);
-      }
-    });
+    this.refreshCities();
   }
 
-  refreshUsers() {
+  refreshCities() {
     this.loading = true;
-    this.userSrv.getUsers().subscribe({
-      next: (users) => {
-        this.users = users;
+    this.apiService.getCities().subscribe({
+      next: (cities) => {
+        this.cities = cities.data;
         this.loading = false;
-        this.loadInitialUsers();
+        this.loadInitialCities();
+        this.cdr.markForCheck();
       },
       error: (err) => {
-        console.error('Failed to load users', err);
+        console.error('Failed to load cities', err);
         this.loading = false;
+        this.cdr.markForCheck();
       }
     });
   }
 
-  ngOnDestroy() {
-    this.modalSubscription?.unsubscribe();
-  }
-
-  loadInitialUsers(): void {
+  loadInitialCities(): void {
     const filteredList = this.filtered;
     this.currentLoadedCount = Math.min(this.itemsPerLoad, filteredList.length);
-    this.displayedUsers = filteredList.slice(0, this.currentLoadedCount);
+    this.displayedCities = filteredList.slice(0, this.currentLoadedCount);
   }
 
-  loadMoreUsers(): void {
+  loadMoreCities(): void {
     if (this.currentLoadedCount >= this.filtered.length) {
       return;
     }
@@ -79,7 +68,7 @@ export class CityComponent {
       this.currentLoadedCount + this.itemsPerLoad,
       this.filtered.length
     );
-    this.displayedUsers = this.filtered.slice(0, nextCount);
+    this.displayedCities = this.filtered.slice(0, nextCount);
     this.currentLoadedCount = nextCount;
   }
 
@@ -88,13 +77,13 @@ export class CityComponent {
     const atBottom = element.scrollHeight - element.scrollTop <= element.clientHeight + 50;
 
     if (atBottom) {
-      this.loadMoreUsers();
+      this.loadMoreCities();
     }
   }
 
-  openDialog(data: { user?: User }): void {
-    const dialogRef = this.dialog.open(UserDialogComponent, {
-      width: '600px',
+  openDialog(data: { city?: City }): void {
+    const dialogRef = this.dialog.open(CityDialogComponent, {
+      width: '500px',
       maxWidth: '90vw',
       data: data,
       panelClass: 'custom-dialog-container',
@@ -103,77 +92,82 @@ export class CityComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.refreshUsers();
+        this.refreshCities();
       }
     });
   }
 
-
   get filtered() {
-    let list = [...this.users];
-    if (this.filter === 'active') list = list.filter(u => u.active === 'Active');
+    let list = this.cities;
+    if (this.filter === 'active') {
+      list = list.filter(c => c.is_active === 1);
+    }
     if (this.search) {
       const kw = this.search.toLowerCase();
-      list = list.filter(u => u.name.toLowerCase().includes(kw) || u.email.toLowerCase().includes(kw) || (u.role && u.role.toLowerCase().includes(kw)));
+      list = list.filter(c => c.name.toLowerCase().includes(kw));
     }
     return list;
   }
 
-
   openAdd() {
-    this.userSrv.openAdd();
+    this.openDialog({});
   }
 
-
-  edit(user: User) {
-    if (user) {
-      this.userSrv.openEdit(user);
+  edit(city: City) {
+    if (city) {
+      this.openDialog({ city });
     }
   }
 
-
-  delete(user: User) {
-    if (!user) return;
+  delete(city: City) {
+    if (!city) return;
     this.confirmationService.confirm({
-      title: 'Delete User',
-      message: `Are you sure you want to delete ${user.name}? This action cannot be undone.`,
+      title: 'Delete City',
+      message: `Are you sure you want to delete ${city.name}? This action cannot be undone.`,
       confirmText: 'Delete',
       type: 'danger'
     }).subscribe(confirmed => {
-      if (confirmed && user._id) {
-        this.userSrv.remove(user._id).subscribe(() => {
-          this.refreshUsers();
+      if (confirmed && city.id) {
+        this.apiService.deleteCity(city.id).subscribe({
+          next: () => this.refreshCities(),
+          error: (err) => console.error('Delete failed', err)
         });
       }
     });
   }
 
+  toggleStatus(city: City) {
+    if (!city || !city.id) return;
 
-  toggleStatus(user: User) {
-    if (!user || !user._id) return;
-
-    const order = ['Active', 'Pending', 'Inactive'];
-    const cur = user.active || 'Active'; // Default to Active
-    const next = order[(order.indexOf(cur) + 1) % order.length];
+    const previousStatus = city.is_active;
+    const newStatus = city.is_active === 1 ? 0 : 1;
 
     // Optimistic update
-    const previousStatus = user.active;
-    user.active = next as any;
+    city.is_active = newStatus;
+    this.cdr.markForCheck();
 
-    this.userSrv.update(user._id, { active: next as any }).subscribe({
+    const apiCall = newStatus
+      ? this.apiService.activateCity(city.id)
+      : this.apiService.deactivateCity(city.id);
+
+    apiCall.subscribe({
+      next: () => {
+        this.cdr.markForCheck();
+      },
       error: () => {
         // Revert on error
-        user.active = previousStatus;
+        city.is_active = previousStatus;
+        this.cdr.markForCheck();
       }
     });
   }
 
   getOriginalIndex(displayedIndex: number): number {
-    const user = this.displayedUsers[displayedIndex];
-    return this.users.findIndex(u => u === user);
+    const city = this.displayedCities[displayedIndex];
+    return this.cities.findIndex(c => c === city);
   }
 
-  getName(u: any): any {
-    return u.name.split(' ').map((n: any) => n[0]).slice(0, 2).join('').toUpperCase()
+  getInitials(city: City): string {
+    return city.name.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
   }
 }

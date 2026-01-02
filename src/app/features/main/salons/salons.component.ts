@@ -1,6 +1,6 @@
 import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { BehaviorSubject, map, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, finalize, map, switchMap, tap } from 'rxjs';
 import { SalonDialogComponent } from './components/salon-dialog/salon-dialog.component';
 import { ConfirmationService } from '../../../services/confirmation.service';
 import { Salon } from '../../../shared/models/salon';
@@ -13,10 +13,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { ApiService } from '../../../services/api.service';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
   selector: 'app-salons',
@@ -32,6 +34,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
     MatFormFieldModule,
     MatChipsModule,
     MatMenuModule,
+    MatCheckboxModule,
     LucideAngularModule
   ],
   templateUrl: './salons.component.html',
@@ -45,6 +48,9 @@ export class SalonsComponent {
   data: any[] = [];
   skeletonData: any[] = Array.from({ length: 10 });
 
+  // Selection model for multi-select
+  selection = new SelectionModel<Salon>(true, []);
+
   private readonly refreshTrigger$ = new BehaviorSubject<void>(undefined);
 
   // Use signal for salons data
@@ -54,16 +60,67 @@ export class SalonsComponent {
       tap((data) => {
         this.data = data;
         this.isLoading.set(false);
-      })
-    ))
+        this.selection.clear(); // Clear selection on refresh
+      }),
+
+    )),
+    finalize(() => this.isLoading.set(false))
   ));
 
-  displayedColumns: string[] = ['name', 'address', 'owner', 'contact', 'rating', 'status', 'actions'];
+  displayedColumns: string[] = ['select', 'name', 'address', 'owner', 'contact', 'rating', 'status', 'actions'];
 
   constructor(
     private dialog: MatDialog,
     private confirmationService: ConfirmationService
   ) { }
+
+  // Check if all rows are selected
+  isAllSelected(): boolean {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.data.length;
+    return numSelected === numRows && numRows > 0;
+  }
+
+  // Toggle all rows selection
+  toggleAllRows(): void {
+    if (this.isAllSelected()) {
+      this.selection.clear();
+    } else {
+      this.selection.select(...this.data);
+    }
+  }
+
+  // Check if some (but not all) rows are selected
+  isSomeSelected(): boolean {
+    return this.selection.selected.length > 0 && !this.isAllSelected();
+  }
+
+  // Delete selected salons
+  deleteSelectedSalons(): void {
+    const selectedSalons = this.selection.selected;
+    if (selectedSalons.length === 0) return;
+
+    this.confirmationService.confirm({
+      title: 'Delete Selected Salons',
+      message: `Are you sure you want to delete ${selectedSalons.length} salon(s)? This action cannot be undone.`,
+      confirmText: 'Delete All',
+      type: 'danger'
+    }).subscribe(confirmed => {
+      if (confirmed) {
+        this.isLoading.set(true);
+        const ids = selectedSalons.map(salon => salon.id);
+        this.apiService.deleteMultipleSalons(ids).subscribe({
+          next: () => {
+            this.refreshTrigger$.next();
+          },
+          error: (err) => {
+            console.error('Error deleting salons', err);
+            this.isLoading.set(false);
+          }
+        });
+      }
+    });
+  }
 
   // Helper to parse services JSON if needed, though we might not show it in the table
   parseServices(servicesJson: string): string[] {
@@ -119,8 +176,11 @@ export class SalonsComponent {
       type: action === 'activate' ? 'info' : 'danger'
     }).subscribe(confirmed => {
       if (confirmed) {
-        // TODO: Call API to update status
-        this.apiService.updateSalon(salon.id, { is_active: newStatus }).subscribe();
+        this.apiService.updateSalon(salon.id, { is_active: newStatus }).subscribe({
+          next: () => {
+            this.refreshTrigger$.next();
+          }
+        });
       }
     });
   }
@@ -137,7 +197,16 @@ export class SalonsComponent {
       type: 'danger'
     }).subscribe(confirmed => {
       if (confirmed) {
-        // TODO: Call API to delete salon
+        this.isLoading.set(true);
+        this.apiService.deleteSalon(salon.id).subscribe({
+          next: () => {
+            this.refreshTrigger$.next();
+          },
+          error: (err) => {
+            console.error('Error deleting salon', err);
+            this.isLoading.set(false);
+          }
+        });
       }
     });
   }
