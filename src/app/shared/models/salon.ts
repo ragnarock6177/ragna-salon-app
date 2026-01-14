@@ -13,4 +13,7 @@ export interface Salon {
     created_at: string;
     updated_at: string;
     images: string[];
+    logo?: string;
+    opening_time?: string;
+    closing_time?: string;
 }

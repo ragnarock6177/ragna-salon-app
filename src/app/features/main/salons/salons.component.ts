@@ -1,5 +1,6 @@
 import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { BehaviorSubject, finalize, map, switchMap, tap } from 'rxjs';
 import { SalonDialogComponent } from './components/salon-dialog/salon-dialog.component';
 import { ConfirmationService } from '../../../services/confirmation.service';
@@ -71,6 +72,7 @@ export class SalonsComponent {
 
   constructor(
     private dialog: MatDialog,
+    private router: Router,
     private confirmationService: ConfirmationService
   ) { }
 
@@ -141,15 +143,7 @@ export class SalonsComponent {
       if (result) {
         this.isLoading.set(true);
         if (salon) {
-          this.apiService.updateSalon(salon.id, result).subscribe({
-            next: () => {
-              this.refreshTrigger$.next();
-            },
-            error: (err) => {
-              console.error('Error updating salon', err);
-              this.isLoading.set(false);
-            }
-          });
+          // Logic for legacy dialog if used
         } else {
           this.apiService.addSalon(result).subscribe({
             next: () => {
@@ -163,6 +157,10 @@ export class SalonsComponent {
         }
       }
     });
+  }
+
+  openSalonDetails(salonId: number) {
+    this.router.navigate(['salons', salonId]);
   }
 
   toggleStatus(salon: Salon) {
@@ -186,7 +184,7 @@ export class SalonsComponent {
   }
 
   editSalon(salon: Salon) {
-    this.openSalonDialog(salon);
+    this.openSalonDetails(salon.id);
   }
 
   deleteSalon(salon: Salon) {

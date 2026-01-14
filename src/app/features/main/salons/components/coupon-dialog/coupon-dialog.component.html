@@ -1,0 +1,50 @@
+<h2 mat-dialog-title>Add New Coupon</h2>
+<mat-dialog-content>
+    <form [formGroup]="form" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
+        <mat-form-field>
+            <mat-label>Coupon Code</mat-label>
+            <input matInput formControlName="code" placeholder="SUMMER20">
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Description</mat-label>
+            <input matInput formControlName="description" placeholder="Summer Sale Discount">
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Discount Value</mat-label>
+            <input matInput type="number" formControlName="discount">
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Valid From</mat-label>
+            <input matInput [matDatepicker]="fromPicker" formControlName="valid_from">
+            <mat-datepicker-toggle matIconSuffix [for]="fromPicker"></mat-datepicker-toggle>
+            <mat-datepicker #fromPicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Valid Until</mat-label>
+            <input matInput [matDatepicker]="toPicker" formControlName="valid_to">
+            <mat-datepicker-toggle matIconSuffix [for]="toPicker"></mat-datepicker-toggle>
+            <mat-datepicker #toPicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Usage Limit</mat-label>
+            <input matInput type="number" formControlName="max_usage">
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Status</mat-label>
+            <mat-select formControlName="status">
+                <mat-option value="active">Active</mat-option>
+                <mat-option value="inactive">Inactive</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button (click)="close()">Cancel</button>
+    <button mat-flat-button color="primary" (click)="save()" [disabled]="form.invalid">Create Coupon</button>
+</mat-dialog-actions>

@@ -54,4 +54,61 @@ export class ApiService {
   deleteCity(id: number | string): Observable<any> {
     return this.http.delete(this.adminApiUrl + `/city/${id}`);
   }
+
+  // Salon Details APIs
+  getSalon(id: number | string): Observable<any> {
+    return this.http.get(this.adminApiUrl + `/salons/${id}`);
+  }
+
+  uploadSingle(file: File, salonId?: number | string): Observable<any> {
+    const formData = new FormData();
+    formData.append('image', file);
+    if (salonId) {
+      formData.append('salon_id', salonId.toString());
+    }
+    return this.http.post(this.adminApiUrl + '/upload/single', formData);
+  }
+
+  uploadMultiple(files: File[], salonId?: number | string): Observable<any> {
+    const formData = new FormData();
+    files.forEach(file => formData.append('images', file));
+    if (salonId) {
+      formData.append('salon_id', salonId.toString());
+    }
+    return this.http.post(this.adminApiUrl + '/upload/multiple', formData);
+  }
+
+  uploadSalonImage(salonId: number | string, image: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('image', image);
+    return this.http.post(this.adminApiUrl + `/salons/${salonId}/images`, formData);
+  }
+
+  uploadSalonLogo(salonId: number | string, image: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('image', image); // Assuming backend expects 'image' key for logo as well, or 'logo'? Usually standardized.
+    // Use specific endpoint for logo if exists, otherwise assume generic update or specific route
+    return this.http.post(this.adminApiUrl + `/salons/${salonId}/logo`, formData);
+  }
+
+  deleteSalonImage(salonId: number | string, imageId: number | string): Observable<any> {
+    return this.http.delete(this.adminApiUrl + `/salons/${salonId}/images/${imageId}`);
+  }
+
+  // Coupon APIs
+  getCoupons(salonId: number | string): Observable<any> {
+    return this.http.get(this.adminApiUrl + `/coupons/${salonId}`);
+  }
+
+  addCoupon(salonId: number | string, data: any): Observable<any> {
+    return this.http.post(this.adminApiUrl + `/coupons/${salonId}`, data);
+  }
+
+  updateCoupon(id: number | string, data: any): Observable<any> {
+    return this.http.put(this.adminApiUrl + `/coupons/${id}`, data);
+  }
+
+  deleteCoupon(id: number | string): Observable<any> {
+    return this.http.delete(this.adminApiUrl + `/coupons/${id}`);
+  }
 }

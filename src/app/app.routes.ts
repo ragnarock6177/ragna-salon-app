@@ -52,6 +52,17 @@ export const routes: Routes = [
                 }
             },
             {
+                path: 'salons/:id',
+                title: 'Salon Details',
+                loadComponent: () => import('./features/main/salons/components/salon-details/salon-details.component').then(m => m.SalonDetailsComponent),
+                data: {
+                    title: 'Salon Details',
+                    subtitle: 'View and edit salon information',
+                    description: 'Manage salon details, images, coupons, and settings.',
+                    keywords: 'salon details, edit salon, salon coupons, salon images'
+                }
+            },
+            {
                 path: 'users',
                 title: 'Users',
                 loadComponent: () => import('./features/main/users/users.component').then(m => m.UsersComponent),

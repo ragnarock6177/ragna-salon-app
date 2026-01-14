@@ -333,7 +333,10 @@ html {
 
   // --- Form Field Overrides (Light) ---
   @include mat.form-field-overrides((filled-container-color: $_white,
-      container-height: 52px,
+      container-height: 42px,
+      container-vertical-padding: 12px,
+      container-text-line-height: 14px,
+      filled-container-shape: 8px,
       filled-label-text-color: rgb(100 116 139),
       filled-label-text-size: 14px,
       filled-input-text-color: $_slate-900,
@@ -348,7 +351,22 @@ html {
       filled-error-focus-label-text-color: $_error-dark,
       error-text-color: $_error-dark,
       filled-with-label-container-padding-bottom: 4px,
-      filled-with-label-container-padding-top: 20px));
+      filled-with-label-container-padding-top: 20px,
+
+      // Outlined Overrides (Light)
+      outlined-label-text-size: 14px,
+      outlined-container-shape: 6px,
+      outlined-outline-color: $_slate-300,
+      outlined-focus-outline-color: $_sky-500,
+      outlined-hover-outline-color: $_slate-400,
+      outlined-disabled-outline-color: $_slate-200,
+      outlined-error-outline-color: $_error-dark,
+      outlined-label-text-color: $_slate-500,
+      outlined-focus-label-text-color: $_sky-500,
+      outlined-hover-label-text-color: $_slate-700,
+      outlined-input-text-color: $_slate-900,
+      outlined-disabled-label-text-color: $_slate-400,
+      outlined-disabled-input-text-color: $_slate-400 ));
 
   // --- Dialog Overrides (Light) ---
   @include mat.dialog-overrides((container-color: $_white,
@@ -385,6 +403,80 @@ html {
   .mat-mdc-dialog-surface {
     border: 1px solid rgba(226, 232, 240, 0.8);
   }
+
+  // --- Tabs Overrides (Light) ---
+  @include mat.tabs-overrides((active-indicator-color: $_sky-500,
+      active-indicator-height: 2px,
+      active-focus-label-text-color: $_sky-500,
+      active-hover-label-text-color: $_sky-500,
+      active-label-text-color: $_sky-500,
+      active-ripple-color: $_sky-500,
+      active-focus-indicator-color: $_sky-500,
+
+      inactive-label-text-color: $_slate-500,
+      inactive-focus-label-text-color: $_slate-700,
+      inactive-hover-label-text-color: $_slate-700,
+      inactive-ripple-color: $_slate-200,
+
+      divider-color: $_slate-200,
+      divider-height: 1px,
+
+      label-text-size: 14px,
+      label-text-weight: 500,
+    ));
+
+  // --- Slide Toggle Overrides (Light) ---
+  @include mat.slide-toggle-overrides(( // Size & Shape
+      track-width: 50px,
+      track-height: 24px,
+      handle-height: 15px,
+      handle-shape: 50%,
+      state-layer-size: 20px,
+      selected-icon-size:15px,
+      selected-handle-size:15px,
+      pressed-handle-size:20px,
+      selected-handle-horizontal-margin:1px,
+      unselected-handle-horizontal-margin:1px,
+      with-icon-handle-size:20px,
+      unselected-pressed-handle-horizontal-margin:0 2px,
+      selected-pressed-handle-horizontal-margin:0 28px,
+      selected-with-icon-handle-horizontal-margin:0 28px,
+      unselected-with-icon-handle-horizontal-margin:0 2px,
+
+      // Colors - Selected
+      selected-track-color: $_sky-500,
+      selected-handle-color: $_white,
+      selected-icon-color: $_sky-500,
+      selected-hover-track-color: $_sky-600,
+      selected-focus-track-color: $_sky-600,
+      selected-pressed-track-color: $_sky-600,
+
+      // Colors - Unselected
+      unselected-track-color: $_slate-200,
+      unselected-handle-color: $_white,
+      unselected-icon-color: $_slate-400,
+      unselected-hover-track-color: $_slate-300,
+      unselected-focus-track-color: $_slate-300,
+      unselected-pressed-track-color: $_slate-300,
+
+      // Shadows & Borders (Flat Look)
+      handle-elevation-shadow: none,
+      selected-track-outline-width: 0,
+      track-outline-width: 0,
+
+      // State Layers (Disable Ripple Effect)
+      selected-focus-state-layer-opacity: 0,
+      selected-hover-state-layer-opacity: 0,
+      selected-pressed-state-layer-opacity: 0,
+      unselected-focus-state-layer-opacity: 0,
+      unselected-hover-state-layer-opacity: 0,
+      unselected-pressed-state-layer-opacity: 0,
+
+      // Disabled
+      disabled-selected-track-color: $_slate-100,
+      disabled-unselected-track-color: $_slate-100,
+      disabled-selected-handle-color: $_slate-300,
+      disabled-unselected-handle-color: $_slate-300 ));
 }
 
 html.dark {
@@ -395,9 +487,78 @@ html.dark {
   @include mat.fab-overrides($dark-fab-overrides);
   @include mat.checkbox-overrides($checkbox-overrides);
 
+  // --- Tabs Overrides (Dark) ---
+  @include mat.tabs-overrides((active-indicator-color: $_sky-500,
+      active-indicator-height: 2px,
+      active-focus-indicator-color: $_sky-500,
+      active-focus-label-text-color: $_sky-500,
+      active-hover-label-text-color: $_sky-500,
+      active-label-text-color: $_sky-500,
+      active-ripple-color: $_sky-500,
+
+      inactive-label-text-color: $_slate-400,
+      inactive-focus-label-text-color: $_slate-200,
+      inactive-hover-label-text-color: $_slate-200,
+      inactive-ripple-color: $_slate-700,
+
+      divider-color: $_slate-800,
+      divider-height: 1px,
+    ));
+
+  // --- Slide Toggle Overrides (Dark) ---
+  @include mat.slide-toggle-overrides(( // Size & Shape
+      track-width: 50px,
+      track-height: 24px,
+      handle-height: 15px,
+      handle-shape: 50%,
+      state-layer-size: 20px,
+      selected-icon-size:15px,
+      selected-handle-size:15px,
+      pressed-handle-size:20px,
+      selected-handle-horizontal-margin:1px,
+      unselected-handle-horizontal-margin:1px,
+      with-icon-handle-size:20px,
+      unselected-pressed-handle-horizontal-margin:0 2px,
+      selected-pressed-handle-horizontal-margin:0 28px,
+      selected-with-icon-handle-horizontal-margin:0 28px,
+      unselected-with-icon-handle-horizontal-margin:0 2px,
+
+      // Colors - Selected
+      selected-track-color: $_sky-500,
+      selected-handle-color: $_white,
+      selected-hover-track-color: $_sky-500,
+      selected-focus-track-color: $_sky-500,
+
+      // Colors - Unselected
+      unselected-track-color: $_slate-700,
+      unselected-handle-color: $_slate-200,
+      unselected-hover-track-color: $_slate-600,
+      unselected-focus-track-color: $_slate-600,
+
+      // Shadows & Borders
+      handle-elevation-shadow: none,
+      selected-track-outline-width: 0,
+      track-outline-width: 0,
+
+      // State Layers
+      selected-focus-state-layer-opacity: 0,
+      selected-hover-state-layer-opacity: 0,
+      selected-pressed-state-layer-opacity: 0,
+      unselected-focus-state-layer-opacity: 0,
+      unselected-hover-state-layer-opacity: 0,
+      unselected-pressed-state-layer-opacity: 0,
+
+      // Disabled
+      disabled-selected-track-color: $_slate-800,
+      disabled-unselected-track-color: $_slate-800,
+      disabled-selected-handle-color: $_slate-600,
+      disabled-unselected-handle-color: $_slate-600 ));
+
   // --- Form Field Overrides (Dark) ---
   @include mat.form-field-overrides((filled-container-color: $_slate-950,
-      container-height: 52px,
+      container-height: 42px,
+      container-vertical-padding: 12px,
+      container-text-line-height: 14px,
       filled-label-text-color: $_slate-300,
       filled-label-text-size: 14px,
       filled-hover-label-text-color: $_slate-200,
@@ -412,7 +573,22 @@ html.dark {
       filled-error-focus-label-text-color: $_error-dark,
       error-text-color: $_error-dark,
       filled-with-label-container-padding-bottom: 4px,
-      filled-with-label-container-padding-top: 20px));
+      filled-with-label-container-padding-top: 20px,
+
+      // Outlined Overrides (Dark)
+      outlined-label-text-size: 14px,
+      outlined-container-shape: 6px,
+      outlined-outline-color: $_slate-700,
+      outlined-focus-outline-color: $_sky-500,
+      outlined-hover-outline-color: $_slate-600,
+      outlined-disabled-outline-color: $_slate-800,
+      outlined-error-outline-color: $_error-dark,
+      outlined-label-text-color: $_slate-400,
+      outlined-focus-label-text-color: $_sky-500,
+      outlined-hover-label-text-color: $_slate-300,
+      outlined-input-text-color: $_slate-200,
+      outlined-disabled-label-text-color: $_slate-600,
+      outlined-disabled-input-text-color: $_slate-600 ));
 
   // --- Dialog Overrides (Dark) ---
   @include mat.dialog-overrides((container-color: $_slate-900,
@@ -456,10 +632,14 @@ html.dark {
   }
 }
 
+.mdc-notched-outline__notch {
+  border-right: none !important;
+}
+
 // --- Form Fields ---
 .mat-mdc-text-field-wrapper {
-  border-radius: 12px !important;
-  border: 1px solid $_border-light;
+  border-radius: 4px !important;
+  // border: 1px solid $_border-light;
   overflow: hidden;
 
   &::before,

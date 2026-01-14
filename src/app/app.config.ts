@@ -1,4 +1,5 @@
 import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { PreloadAllModules, provideRouter, TitleStrategy, withPreloading } from '@angular/router';
 import {
@@ -15,7 +16,7 @@ import {
   // User/form icons
   User, Mail, Star, Sparkles,
   Ban, Eye,
-  MapPin, CheckCircle, EyeOff
+  MapPin, CheckCircle, EyeOff, ArrowLeft, Camera, Upload, Image
 } from 'lucide-angular';
 import { routes } from './app.routes';
 import { authInterceptor } from './core/auth/auth.interceptor';
@@ -26,7 +27,7 @@ const usedIcons = {
   X, EllipsisVertical, LogOut, Plus, Funnel, Loader,
   Menu, Bell, Search, Pencil, Trash2, ImagePlus, Phone,
   Sun, Moon, TrendingUp, Cpu, Activity, Shield,
-  User, Mail, Star, Sparkles, Ban, Eye, MapPin, CheckCircle, EyeOff
+  User, Mail, Star, Sparkles, Ban, Eye, MapPin, CheckCircle, EyeOff, ArrowLeft, Camera, Upload, Image
 };
 
 export const appConfig: ApplicationConfig = {
@@ -36,6 +37,8 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([authInterceptor])),
     importProvidersFrom(LucideAngularModule.pick(usedIcons)),
     // SEO: Custom title strategy for consistent page titles
-    { provide: TitleStrategy, useClass: SeoTitleStrategy }
+    { provide: TitleStrategy, useClass: SeoTitleStrategy },
+    // Global Form Field Config
+    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'outline' } }
   ]
 };
