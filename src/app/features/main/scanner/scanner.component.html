@@ -1,6 +1,6 @@
 <div class="h-full w-full flex flex-col items-center justify-center p-4 bg-gray-50 dark:bg-zinc-900">
-
-    <div *ngIf="isScanning"
+    @if (isScanning) {
+    <div
         class="w-full max-w-md relative overflow-hidden rounded-xl shadow-lg border border-gray-200 dark:border-zinc-700 bg-black">
         <div class="absolute top-4 left-0 right-0 z-10 flex justify-center">
             <div
@@ -27,16 +27,17 @@
                 </div>
             </div>
         </div>
-
-        <div *ngIf="!hasPermission"
-            class="absolute inset-0 flex items-center justify-center bg-black/80 text-white z-20">
+        @if (!hasPermission) {
+        <div class="absolute inset-0 flex items-center justify-center bg-black/80 text-white z-20">
             <div class="text-center p-6">
                 <p class="mb-4">Camera permission is required to scan QR codes.</p>
             </div>
         </div>
+        }
     </div>
+    } @else {
 
-    <div *ngIf="!isScanning && scanResult"
+    <div
         class="w-full max-w-md bg-white dark:bg-zinc-800 rounded-xl shadow-xl border border-gray-200 dark:border-zinc-700 overflow-hidden transform transition-all duration-300 ease-in-out">
         <div
             class="bg-primary/10 p-6 flex flex-col items-center justify-center border-b border-gray-100 dark:border-zinc-700/50">
@@ -57,4 +58,5 @@
             </button>
         </div>
     </div>
+    }
 </div>
