@@ -352,6 +352,8 @@ html {
       error-text-color: $_error-dark,
       filled-with-label-container-padding-bottom: 4px,
       filled-with-label-container-padding-top: 20px,
+      filled-input-text-placeholder-color: $_slate-500,
+      disabled-input-text-placeholder-color: $_slate-500,
 
       // Outlined Overrides (Light)
       outlined-label-text-size: 14px,
@@ -850,4 +852,26 @@ html.dark {
 
 .btn-xl {
   @include button-size(52px, 18px, 32px);
+}
+
+/* --- 8. Global Text Selection & Utility --- */
+html,
+body {
+  -webkit-user-select: none;
+  /* Safari */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* IE10+/Edge */
+  user-select: none;
+  /* Standard */
+}
+
+// Allow selection in inputs and textareas
+input,
+textarea {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
 }
