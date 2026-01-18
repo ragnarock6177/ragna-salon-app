@@ -9,16 +9,19 @@
             <div>
                 <div class="flex items-center gap-3">
                     <h2 class="text-xl font-semibold text-slate-900 dark:text-white">{{ salon()?.name }}</h2>
-                    <button mat-stroked-button color="primary" class="h-8! px-3! text-xs!" (click)="generateQr()">
-                        <lucide-angular name="qr-code" class="w-4 h-4 mr-1.5"></lucide-angular>
-                        Generate QR
-                    </button>
+
                 </div>
             </div>
         </div>
         <div class="flex items-center gap-2">
             <!-- Status or other actions -->
             <div class="flex items-center gap-4">
+                <button mat-stroked-button color="primary" class="h-8! px-3! text-sm!" (click)="generateQr()">
+                    <div class="flex items-center gap-1">
+                        <lucide-angular name="qr-code" class="w-4 h-4 mr-1.5"></lucide-angular>
+                        Generate QR
+                    </div>
+                </button>
                 <mat-slide-toggle formControlName="is_active" color="primary">
                     {{ form.get('is_active')?.value ? 'Active' : 'Inactive' }}
                 </mat-slide-toggle>
@@ -160,8 +163,10 @@
                     <div class="flex items-center justify-between mb-6">
                         <h3 class="text-base font-medium text-slate-900 dark:text-white">Active Coupons</h3>
                         <button mat-flat-button color="primary" (click)="openCouponDialog()">
-                            <lucide-angular name="plus" class="w-4 h-4 mr-2"></lucide-angular>
-                            Add Coupon
+                            <div class="flex items-center gap-1">
+                                <lucide-angular name="plus" class="w-4 h-4 mr-2"></lucide-angular>
+                                Add Coupon
+                            </div>
                         </button>
                     </div>
 
