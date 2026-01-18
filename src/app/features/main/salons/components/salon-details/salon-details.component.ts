@@ -19,6 +19,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatSelectModule } from '@angular/material/select';
 import { CouponDialogComponent } from '../../components/coupon-dialog/coupon-dialog.component';
 import { formatDate } from '@angular/common';
+import { QrDialogComponent } from '../../components/qr-dialog/qr-dialog.component';
 
 @Component({
   selector: 'app-salon-details',
@@ -229,5 +230,27 @@ export class SalonDetailsComponent {
         this.loadCoupons(this.salon()!.id);
       });
     }
+  }
+
+  generateQr() {
+    if (!this.salon()) return;
+
+    this.apiService.generateQrCode(this.salon()!.id).subscribe({
+      next: (res: any) => {
+        const qrUrl = res.data || res.url;
+        if (qrUrl) {
+          this.dialog.open(QrDialogComponent, {
+            data: {
+              qrUrl: qrUrl,
+              salonName: this.salon()?.name
+            },
+            width: '400px'
+          });
+        } else {
+          this.snackBar.open('Failed to generate QR code', 'Close', { duration: 3000 });
+        }
+      },
+      error: () => this.snackBar.open('Failed to generate QR code', 'Close', { duration: 3000 })
+    });
   }
 }

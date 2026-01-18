@@ -111,4 +111,9 @@ export class ApiService {
   deleteCoupon(id: number | string): Observable<any> {
     return this.http.delete(this.adminApiUrl + `/coupons/${id}`);
   }
+
+  // QR Code API
+  generateQrCode(salonId: number | string): Observable<any> {
+    return this.http.get(this.adminApiUrl + `/salons/${salonId}/qrcode`);
+  }
 }
