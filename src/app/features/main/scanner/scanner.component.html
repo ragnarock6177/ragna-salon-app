@@ -1,0 +1,60 @@
+<div class="h-full w-full flex flex-col items-center justify-center p-4 bg-gray-50 dark:bg-zinc-900">
+
+    <div *ngIf="isScanning"
+        class="w-full max-w-md relative overflow-hidden rounded-xl shadow-lg border border-gray-200 dark:border-zinc-700 bg-black">
+        <div class="absolute top-4 left-0 right-0 z-10 flex justify-center">
+            <div
+                class="bg-black/50 backdrop-blur-md text-white px-4 py-1 rounded-full text-sm font-medium border border-white/10">
+                Align QR code within frame
+            </div>
+        </div>
+
+        <zxing-scanner [formats]="allowedFormats" (scanSuccess)="onScanSuccess($event)"
+            (permissionResponse)="onPermissionResponse($event)" [tryHarder]="true"
+            class="w-full h-auto aspect-square object-cover">
+        </zxing-scanner>
+
+        <!-- Scanning Overlay/Frame -->
+        <div class="absolute inset-0 border-2 border-primary/50 z-0 pointer-events-none rounded-xl">
+            <div class="absolute inset-0 flex items-center justify-center">
+                <div class="w-64 h-64 border-2 border-white/80 rounded-lg relative">
+                    <div class="absolute top-0 left-0 w-4 h-4 border-t-4 border-l-4 border-primary -mt-1 -ml-1"></div>
+                    <div class="absolute top-0 right-0 w-4 h-4 border-t-4 border-r-4 border-primary -mt-1 -mr-1"></div>
+                    <div class="absolute bottom-0 left-0 w-4 h-4 border-b-4 border-l-4 border-primary -mb-1 -ml-1">
+                    </div>
+                    <div class="absolute bottom-0 right-0 w-4 h-4 border-b-4 border-r-4 border-primary -mb-1 -mr-1">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="!hasPermission"
+            class="absolute inset-0 flex items-center justify-center bg-black/80 text-white z-20">
+            <div class="text-center p-6">
+                <p class="mb-4">Camera permission is required to scan QR codes.</p>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="!isScanning && scanResult"
+        class="w-full max-w-md bg-white dark:bg-zinc-800 rounded-xl shadow-xl border border-gray-200 dark:border-zinc-700 overflow-hidden transform transition-all duration-300 ease-in-out">
+        <div
+            class="bg-primary/10 p-6 flex flex-col items-center justify-center border-b border-gray-100 dark:border-zinc-700/50">
+            <lucide-icon [img]="ScanIcon" class="w-12 h-12 text-primary mb-3"></lucide-icon>
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white">Scan Successful!</h2>
+        </div>
+
+        <div class="p-6">
+            <p class="text-sm text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wide font-semibold">Content</p>
+            <div
+                class="bg-gray-100 dark:bg-zinc-900/50 p-4 rounded-lg break-all text-gray-800 dark:text-gray-200 font-mono text-sm border border-gray-200 dark:border-zinc-700 mb-6">
+                {{ scanResult }}
+            </div>
+
+            <button mat-flat-button color="primary"
+                class="w-full rounded-lg! h-12! text-base! shadow-lg shadow-primary/20" (click)="resetScan()">
+                Scan Another Code
+            </button>
+        </div>
+    </div>
+</div>

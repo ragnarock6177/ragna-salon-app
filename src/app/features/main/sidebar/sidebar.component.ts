@@ -26,6 +26,7 @@ export class SidebarComponent {
     { label: 'Salons', link: '/salons', icon: 'store' },
     { label: 'Coupons', link: '/coupons', icon: 'ticket' },
     { label: 'Memberships', link: '/memberships', icon: 'crown' },
+    { label: 'Scanner', link: '/scanner', icon: 'qr-code' },
   ];
 
   isOpen = signal(false);

@@ -1,0 +1,12 @@
+:host {
+    display: block;
+    height: 100%;
+}
+
+::ng-deep zxing-scanner video {
+    object-fit: cover !important;
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 0.75rem;
+    /* rounded-xl matches tailwind */
+}

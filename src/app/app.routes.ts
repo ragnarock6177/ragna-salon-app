@@ -94,6 +94,17 @@ export const routes: Routes = [
                     description: 'Create and manage membership plans for loyal customers.',
                     keywords: 'membership plans, loyalty programs, subscription plans, VIP memberships'
                 }
+            },
+            {
+                path: 'scanner',
+                title: 'QR Scanner',
+                loadComponent: () => import('./features/main/scanner/scanner.component').then(m => m.ScannerComponent),
+                data: {
+                    title: 'QR Scanner',
+                    subtitle: 'Scan QR codes',
+                    description: 'Scan QR codes for coupons, memberships, and more.',
+                    keywords: 'qr scanner, barcode scanner, scan'
+                }
             }
         ]
     },
