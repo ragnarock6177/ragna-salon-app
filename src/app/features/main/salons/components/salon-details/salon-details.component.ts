@@ -1,4 +1,5 @@
 import { Component, inject, signal, computed } from '@angular/core';
+import { provideNativeDateAdapter } from '@angular/material/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -20,6 +21,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { CouponDialogComponent } from '../../components/coupon-dialog/coupon-dialog.component';
 import { formatDate } from '@angular/common';
 import { QrDialogComponent } from '../../components/qr-dialog/qr-dialog.component';
+import { MatTimepickerModule } from '@angular/material/timepicker';
 
 @Component({
   selector: 'app-salon-details',
@@ -38,11 +40,13 @@ import { QrDialogComponent } from '../../components/qr-dialog/qr-dialog.componen
     MatChipsModule,
     MatSelectModule,
     MatSelectModule,
+    MatTimepickerModule,
     LucideAngularModule,
     RouterLink
   ],
   templateUrl: './salon-details.component.html',
-  styleUrl: './salon-details.component.scss'
+  styleUrl: './salon-details.component.scss',
+  providers: [provideNativeDateAdapter()]
 })
 export class SalonDetailsComponent {
   private fb = inject(FormBuilder);
@@ -59,6 +63,10 @@ export class SalonDetailsComponent {
   activeTab = signal(0);
 
   form: FormGroup;
+
+  get isActiveControl() {
+    return this.form.get('is_active') as any;
+  }
 
   constructor() {
     this.form = this.fb.group({

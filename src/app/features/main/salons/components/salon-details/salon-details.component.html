@@ -22,8 +22,8 @@
                         Generate QR
                     </div>
                 </button>
-                <mat-slide-toggle formControlName="is_active" color="primary">
-                    {{ form.get('is_active')?.value ? 'Active' : 'Inactive' }}
+                <mat-slide-toggle [formControl]="isActiveControl" color="primary">
+                    {{ isActiveControl?.value ? 'Active' : 'Inactive' }}
                 </mat-slide-toggle>
             </div>
         </div>
@@ -36,86 +36,95 @@
             <!-- Details Tab -->
             <mat-tab label="Overview">
                 <div class="py-4">
-                    <form [formGroup]="form" (ngSubmit)="saveDetails()" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="col-span-1 md:col-span-2 flex items-center gap-4 mb-4">
-                            <!-- Logo Avatar -->
-                            <div class="relative group">
-                                <div
-                                    class="w-18 h-18 rounded-full overflow-hidden border-2 border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
-                                    <img *ngIf="salon()?.logo" [src]="salon()?.logo" class="w-full h-full object-cover">
-                                    <lucide-angular *ngIf="!salon()?.logo" name="image"
-                                        class="w-6 h-6 text-slate-400"></lucide-angular>
+                    <div class="w-full md:w-1/2">
+                        <form [formGroup]="form" (ngSubmit)="saveDetails()"
+                            class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="col-span-1 md:col-span-2 flex items-center gap-4 mb-4">
+                                <!-- Logo Avatar -->
+                                <div class="relative group">
+                                    <div
+                                        class="w-18 h-18 rounded-full overflow-hidden border-2 border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+                                        <img *ngIf="salon()?.logo" [src]="salon()?.logo"
+                                            class="w-full h-full object-cover">
+                                        <lucide-angular *ngIf="!salon()?.logo" name="image"
+                                            class="w-6 h-6 text-slate-400"></lucide-angular>
+                                    </div>
+                                    <label
+                                        class="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-full cursor-pointer">
+                                        <lucide-angular name="camera" class="w-6 h-6 text-white"></lucide-angular>
+                                        <input type="file" class="hidden" accept="image/*"
+                                            (change)="onLogoSelected($event)">
+                                    </label>
                                 </div>
-                                <label
-                                    class="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-full cursor-pointer">
-                                    <lucide-angular name="camera" class="w-6 h-6 text-white"></lucide-angular>
-                                    <input type="file" class="hidden" accept="image/*"
-                                        (change)="onLogoSelected($event)">
-                                </label>
+                                <div>
+                                    <h3 class="text-base font-medium text-slate-900 dark:text-white">Salon Logo</h3>
+                                    <p class="text-sm text-slate-500">Click to upload a new logo</p>
+                                </div>
                             </div>
-                            <div>
-                                <h3 class="text-base font-medium text-slate-900 dark:text-white">Salon Logo</h3>
-                                <p class="text-sm text-slate-500">Click to upload a new logo</p>
+
+                            <div class="col-span-1 md:col-span-2">
+                                <h3 class="text-base font-medium text-slate-900 dark:text-white mb-2">Basic
+                                    Information</h3>
                             </div>
-                        </div>
 
-                        <div class="col-span-1 md:col-span-2">
-                            <h3 class="text-base font-medium text-slate-900 dark:text-white mb-2">Basic Information</h3>
-                        </div>
-
-                        <mat-form-field class="w-full" appearance="outline">
-                            <mat-label>Salon Name</mat-label>
-                            <input matInput formControlName="name">
-                        </mat-form-field>
-
-                        <mat-form-field class="w-full">
-                            <mat-label>Owner Name</mat-label>
-                            <input matInput formControlName="owner_name">
-                        </mat-form-field>
-
-                        <div class="col-span-1 md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <mat-form-field class="w-full">
-                                <mat-label>Email</mat-label>
-                                <input matInput formControlName="email">
+                            <mat-form-field class="w-full" appearance="outline">
+                                <mat-label>Salon Name</mat-label>
+                                <input matInput formControlName="name">
                             </mat-form-field>
 
                             <mat-form-field class="w-full">
-                                <mat-label>Phone</mat-label>
-                                <input matInput formControlName="phone">
+                                <mat-label>Owner Name</mat-label>
+                                <input matInput formControlName="owner_name">
                             </mat-form-field>
 
-                            <mat-form-field class="w-full">
-                                <mat-label>Rating</mat-label>
-                                <input matInput type="number" formControlName="rating" min="0" max="5" step="0.1">
+                            <div class="col-span-1 md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <mat-form-field class="w-full">
+                                    <mat-label>Email</mat-label>
+                                    <input matInput formControlName="email">
+                                </mat-form-field>
+
+                                <mat-form-field class="w-full">
+                                    <mat-label>Phone</mat-label>
+                                    <input matInput formControlName="phone">
+                                </mat-form-field>
+
+                                <mat-form-field class="w-full">
+                                    <mat-label>Rating</mat-label>
+                                    <input matInput type="number" formControlName="rating" min="0" max="5" step="0.1">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-span-1 md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <mat-form-field class="w-full">
+                                    <mat-label>Opening Time</mat-label>
+                                    <input matInput [matTimepicker]="openingPicker" formControlName="opening_time">
+                                    <mat-timepicker-toggle matIconSuffix [for]="openingPicker" />
+                                    <mat-timepicker #openingPicker />
+                                </mat-form-field>
+
+                                <mat-form-field class="w-full">
+                                    <mat-label>Closing Time</mat-label>
+                                    <input matInput [matTimepicker]="closingPicker" formControlName="closing_time">
+                                    <mat-timepicker-toggle matIconSuffix [for]="closingPicker" />
+                                    <mat-timepicker #closingPicker />
+                                </mat-form-field>
+                            </div>
+
+                            <mat-form-field class="col-span-1 md:col-span-2 w-full">
+                                <mat-label>Address</mat-label>
+                                <textarea matInput formControlName="address" rows="3"></textarea>
                             </mat-form-field>
-                        </div>
 
-                        <div class="col-span-1 md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <mat-form-field class="w-full">
-                                <mat-label>Opening Time</mat-label>
-                                <input matInput type="time" formControlName="opening_time">
-                            </mat-form-field>
-
-                            <mat-form-field class="w-full">
-                                <mat-label>Closing Time</mat-label>
-                                <input matInput type="time" formControlName="closing_time">
-                            </mat-form-field>
-                        </div>
-
-                        <mat-form-field class="col-span-1 md:col-span-2 w-full">
-                            <mat-label>Address</mat-label>
-                            <textarea matInput formControlName="address" rows="3"></textarea>
-                        </mat-form-field>
-
-                        <div
-                            class="col-span-1 md:col-span-2 pt-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                            <div
+                                class="col-span-1 md:col-span-2 pt-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
 
 
-                            <button mat-flat-button color="primary" type="submit" [disabled]="isSaving()">
-                                {{ isSaving() ? 'Saving...' : 'Save Changes' }}
-                            </button>
-                        </div>
-                    </form>
+                                <button mat-flat-button color="primary" type="submit" [disabled]="isSaving()">
+                                    {{ isSaving() ? 'Saving...' : 'Save Changes' }}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </mat-tab>
 

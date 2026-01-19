@@ -391,6 +391,11 @@ html {
       container-elevation-shadow:$_shadow-sm,
       item-hover-state-layer-color:$_gray_100 ));
 
+  // --- Timepicker Overrides (Light) ---
+  @include mat.timepicker-overrides((container-shape: 16px,
+      container-background-color: $_white,
+    ));
+
   // --- Table Overrides (Light) ---
   @include mat.table-overrides((background-color: $_white,
       header-headline-color: $_slate-700,
@@ -612,6 +617,11 @@ html.dark {
       item-icon-color: $_slate-200,
       container-elevation-shadow:$_shadow-sm,
       item-hover-state-layer-color:$_slate-800 ));
+
+  // --- Timepicker Overrides (Dark) ---
+  @include mat.timepicker-overrides((container-shape: 16px,
+      container-background-color: $_slate-900,
+    ));
 
   // --- Table Overrides (Dark) ---
   @include mat.table-overrides((background-color: var(--color-slate-950),
