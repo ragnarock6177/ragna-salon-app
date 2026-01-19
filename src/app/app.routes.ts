@@ -1,8 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/auth/auth.guard';
 import { guestGuard } from './core/auth/guest.guard';
-import { HomeLayoutComponent } from './features/home/home-layout.component';
-import { HomeComponent } from './features/home/home.component';
 
 export const routes: Routes = [
     {
@@ -12,12 +10,11 @@ export const routes: Routes = [
     },
     {
         path: '',
-        component: HomeLayoutComponent,
-        // loadComponent: () => import('./features/home/home-layout.component').then(m => m.HomeLayoutComponent),
+        loadComponent: () => import('./features/home/home-layout.component').then(m => m.HomeLayoutComponent),
         children: [
             {
                 path: '',
-                component: HomeComponent,
+                loadComponent: () => import('./features/home/home.component').then(m => m.HomeComponent),
                 title: 'Home - Salons'
             },
             {
