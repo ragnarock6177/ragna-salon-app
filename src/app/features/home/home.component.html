@@ -24,13 +24,14 @@
                     <lucide-icon name="search"
                         class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5"></lucide-icon>
                     <input [formControl]="searchControl" type="text" placeholder="Search salons, services..."
+                        aria-label="Search salons"
                         class="w-full pl-12 pr-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border-none focus:ring-2 focus:ring-violet-500 text-slate-900 dark:text-white outline-none placeholder:text-slate-400">
                 </div>
 
                 <div class="relative w-full md:w-48">
                     <lucide-icon name="map-pin"
                         class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5"></lucide-icon>
-                    <select [formControl]="cityControl"
+                    <select [formControl]="cityControl" aria-label="Filter by city"
                         class="w-full pl-12 pr-8 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border-none focus:ring-2 focus:ring-violet-500 text-slate-900 dark:text-white outline-none appearance-none cursor-pointer">
                         <option value="">All Cities</option>
                         @for (city of cities(); track $index) {

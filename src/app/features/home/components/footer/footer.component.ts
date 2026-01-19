@@ -25,13 +25,13 @@ import { LucideAngularModule } from 'lucide-angular';
               Discover the best salons and spas in your city. Book appointments, get exclusive offers, and look your best.
             </p>
             <div class="flex gap-4">
-              <a href="#" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-900 flex items-center justify-center text-slate-500 hover:bg-violet-100 hover:text-violet-600 dark:hover:bg-violet-900/30 dark:hover:text-violet-400 transition-colors">
+              <a href="#" aria-label="Instagram" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-900 flex items-center justify-center text-slate-500 hover:bg-violet-100 hover:text-violet-600 dark:hover:bg-violet-900/30 dark:hover:text-violet-400 transition-colors">
                 <lucide-icon name="instagram" class="w-5 h-5"></lucide-icon>
               </a>
-              <a href="#" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-900 flex items-center justify-center text-slate-500 hover:bg-violet-100 hover:text-violet-600 dark:hover:bg-violet-900/30 dark:hover:text-violet-400 transition-colors">
+              <a href="#" aria-label="Twitter" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-900 flex items-center justify-center text-slate-500 hover:bg-violet-100 hover:text-violet-600 dark:hover:bg-violet-900/30 dark:hover:text-violet-400 transition-colors">
                 <lucide-icon name="twitter" class="w-5 h-5"></lucide-icon>
               </a>
-              <a href="#" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-900 flex items-center justify-center text-slate-500 hover:bg-violet-100 hover:text-violet-600 dark:hover:bg-violet-900/30 dark:hover:text-violet-400 transition-colors">
+              <a href="#" aria-label="Facebook" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-900 flex items-center justify-center text-slate-500 hover:bg-violet-100 hover:text-violet-600 dark:hover:bg-violet-900/30 dark:hover:text-violet-400 transition-colors">
                 <lucide-icon name="facebook" class="w-5 h-5"></lucide-icon>
               </a>
             </div>
@@ -65,7 +65,7 @@ import { LucideAngularModule } from 'lucide-angular';
             <p class="text-slate-500 dark:text-slate-400 mb-4">Subscribe to our newsletter for the latest updates and offers.</p>
             <div class="flex gap-2">
               <input type="email" placeholder="Enter your email" class="flex-1 px-4 py-2 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-violet-500 text-slate-900 dark:text-white">
-              <button class="bg-violet-600 hover:bg-violet-700 text-white p-2 rounded-lg transition-colors">
+              <button aria-label="Subscribe" class="bg-violet-600 hover:bg-violet-700 text-white p-2 rounded-lg transition-colors">
                 <lucide-icon name="arrow-right" class="w-5 h-5"></lucide-icon>
               </button>
             </div>
