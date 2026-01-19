@@ -1,0 +1,120 @@
+@if (cartService.totalCount() > 0) {
+<!-- Floating Button -->
+<button (click)="toggle()"
+    class="fixed bottom-6 right-6 z-50 bg-violet-600 hover:bg-violet-700 text-white p-4 rounded-full shadow-lg flex items-center gap-2 transition-transform hover:scale-105">
+    <div class="relative">
+        <lucide-icon name="shopping-bag" class="w-6 h-6"></lucide-icon>
+        <span class="absolute -top-2 -right-2 bg-rose-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
+            {{ cartService.totalCount() }}
+        </span>
+    </div>
+    <span class="font-medium hidden md:inline">View Cart</span>
+</button>
+}
+
+<!-- Sidebar Overlay -->
+@if (isOpen()) {
+<div class="fixed inset-0 z-50 overflow-hidden" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
+    <div class="absolute inset-0 overflow-hidden">
+        <!-- Background overlay -->
+        <div class="absolute inset-0 bg-gray-500 bg-opacity-75 transition-opacity" (click)="toggle()"></div>
+
+        <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
+            <div
+                class="pointer-events-auto w-screen max-w-md transform transition ease-in-out duration-500 sm:duration-700">
+                <div class="flex h-full flex-col overflow-y-scroll bg-white dark:bg-slate-900 shadow-xl">
+                    <div class="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
+                        <div class="flex items-start justify-between">
+                            <h2 class="text-lg font-medium text-slate-900 dark:text-white" id="slide-over-title">
+                                Shopping Cart</h2>
+                            <div class="ml-3 flex h-7 items-center">
+                                <button type="button" class="relative -m-2 p-2 text-slate-400 hover:text-slate-500"
+                                    (click)="toggle()">
+                                    <span class="absolute -inset-0.5"></span>
+                                    <span class="sr-only">Close panel</span>
+                                    <lucide-icon name="x" class="w-6 h-6"></lucide-icon>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="mt-8">
+                            <div class="flow-root">
+                                <ul role="list" class="-my-6 divide-y divide-slate-200 dark:divide-slate-700">
+                                    @for (item of cartService.items(); track item.id) {
+                                    <li class="flex py-6">
+                                        <div
+                                            class="h-24 w-24 shrink-0 overflow-hidden rounded-md border border-slate-200 dark:border-slate-800">
+                                            <!-- Placeholder image for coupon -->
+                                            <div
+                                                class="flex items-center justify-center h-full bg-violet-100 dark:bg-violet-900/20 text-violet-600 dark:text-violet-400 font-bold text-xl">
+                                                {{ item.discount }}%
+                                            </div>
+                                        </div>
+
+                                        <div class="ml-4 flex flex-1 flex-col">
+                                            <div>
+                                                <div
+                                                    class="flex justify-between text-base font-medium text-slate-900 dark:text-white">
+                                                    <h3>
+                                                        <a href="#">{{ item.description }}</a>
+                                                    </h3>
+                                                    <!-- <p class="ml-4">$32.00</p> -->
+                                                </div>
+                                                <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">{{
+                                                    item.salonName }}</p>
+                                            </div>
+                                            <div class="flex flex-1 items-end justify-between text-sm">
+                                                <div
+                                                    class="flex items-center border border-slate-300 dark:border-slate-700 rounded-lg">
+                                                    <button
+                                                        (click)="cartService.updateQuantity(item.id, item.quantity - 1)"
+                                                        class="px-2 py-1 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-l-lg">-</button>
+                                                    <p class="px-2 text-slate-900 dark:text-white font-medium">{{
+                                                        item.quantity }}</p>
+                                                    <button
+                                                        (click)="cartService.updateQuantity(item.id, item.quantity + 1)"
+                                                        class="px-2 py-1 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-r-lg">+</button>
+                                                </div>
+
+                                                <div class="flex">
+                                                    <button type="button" (click)="cartService.removeItem(item.id)"
+                                                        class="font-medium text-rose-600 hover:text-rose-500">Remove</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-slate-200 dark:border-slate-800 px-4 py-6 sm:px-6">
+                        <div class="flex justify-between text-base font-medium text-slate-900 dark:text-white">
+                            <p>Subtotal</p>
+                            <p>{{ cartService.totalCount() }} items</p>
+                            <!-- No price yet, just count -->
+                        </div>
+                        <p class="mt-0.5 text-sm text-slate-500 dark:text-slate-400">Shipping and taxes calculated at
+                            checkout.</p>
+                        <div class="mt-6">
+                            <button (click)="checkout()"
+                                class="flex w-full items-center justify-center rounded-md border border-transparent bg-violet-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-violet-700">Checkout</button>
+                        </div>
+                        <div class="mt-6 flex justify-center text-center text-sm text-slate-500 dark:text-slate-400">
+                            <p>
+                                or
+                                <button type="button" (click)="toggle()"
+                                    class="font-medium text-violet-600 hover:text-violet-500">
+                                    Continue Shopping
+                                    <span aria-hidden="true"> &rarr;</span>
+                                </button>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+}

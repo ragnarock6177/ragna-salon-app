@@ -1,0 +1,113 @@
+<div class="min-h-screen bg-slate-50 dark:bg-slate-950">
+    <!-- Hero Section -->
+    <section class="relative h-[500px] flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=1974&auto=format&fit=crop"
+                class="w-full h-full object-cover opacity-60 dark:opacity-40" alt="Salon Background">
+            <div class="absolute inset-0 bg-linear-to-b from-transparent to-slate-50 dark:to-slate-950"></div>
+        </div>
+
+        <div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
+            <h1
+                class="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-linear-to-r from-violet-600 to-indigo-600 dark:from-violet-400 dark:to-indigo-400 mb-6 animate-fade-in-up">
+                Find Your Perfect Style
+            </h1>
+            <p
+                class="text-lg md:text-xl text-slate-700 dark:text-slate-300 mb-8 max-w-2xl mx-auto animate-fade-in-up delay-100">
+                Discover top-rated salons, book appointments, and grab exclusive deals in your city.
+            </p>
+
+            <!-- Search & Filter Bar -->
+            <div
+                class="bg-white dark:bg-slate-900 p-2 rounded-2xl shadow-xl flex flex-col md:flex-row gap-2 max-w-2xl mx-auto border border-slate-200 dark:border-slate-800 animate-scale-in delay-200">
+                <div class="flex-1 relative">
+                    <lucide-icon name="search"
+                        class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5"></lucide-icon>
+                    <input [formControl]="searchControl" type="text" placeholder="Search salons, services..."
+                        class="w-full pl-12 pr-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border-none focus:ring-2 focus:ring-violet-500 text-slate-900 dark:text-white outline-none placeholder:text-slate-400">
+                </div>
+
+                <div class="relative w-full md:w-48">
+                    <lucide-icon name="map-pin"
+                        class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5"></lucide-icon>
+                    <select [formControl]="cityControl"
+                        class="w-full pl-12 pr-8 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border-none focus:ring-2 focus:ring-violet-500 text-slate-900 dark:text-white outline-none appearance-none cursor-pointer">
+                        <option value="">All Cities</option>
+                        @for (city of cities(); track $index) {
+                        <option [value]="city._id">{{ city.name }}</option>
+                        }
+                    </select>
+                    <lucide-icon name="chevron-down"
+                        class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4 pointer-events-none"></lucide-icon>
+                </div>
+
+                <button
+                    class="bg-violet-600 hover:bg-violet-700 text-white px-8 py-3 rounded-xl font-medium transition-colors duration-200">
+                    Search
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Salon Grid -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="flex items-center justify-between mb-8">
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Top Rated Salons</h2>
+            <!-- Optional: Add sorting or view all link -->
+        </div>
+
+        <!-- Loading State -->
+        <!-- <div *ngIf="isLoading()" ...></div> -->
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            @for (salon of filteredSalons().length ? filteredSalons() : salons(); track salon.id; let i = $index) {
+            <a [routerLink]="['/detail', salon.id]"
+                class="group bg-white dark:bg-slate-900 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl hover:border-violet-500/50 transition-all duration-300 transform hover:-translate-y-1 block">
+                <!-- Image -->
+                <div class="relative h-48 overflow-hidden">
+                    <img [src]="salon.images && salon.images.length ? salon.images[0] : 'https://images.unsplash.com/photo-1521590832896-135932617485?w=800&auto=format&fit=crop'"
+                        [alt]="salon.name"
+                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div
+                        class="absolute top-3 right-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm px-2 py-1 rounded-lg flex items-center gap-1 text-xs font-semibold shadow-sm">
+                        <lucide-icon name="star" class="w-3 h-3 text-amber-500 fill-amber-500"></lucide-icon>
+                        <span class="text-slate-900 dark:text-white">{{ salon.rating || 'New' }}</span>
+                    </div>
+                    @if(salon.discount) {
+                    <div
+                        class="absolute top-3 left-3 bg-rose-500 text-white px-2 py-1 rounded-lg text-xs font-bold shadow-sm">
+                        {{ salon.discount }}% OFF
+                    </div>
+                    }
+                </div>
+
+                <!-- Content -->
+                <div class="p-5">
+                    <h3
+                        class="text-lg font-bold text-slate-900 dark:text-white mb-2 group-hover:text-violet-600 transition-colors">
+                        {{ salon.name }}</h3>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm mb-4 line-clamp-2">{{ salon.address }}</p>
+
+                    <div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800">
+                        <div class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                            <lucide-icon name="map-pin" class="w-4 h-4"></lucide-icon>
+                            <span>{{ salon.city_name || 'City' }}</span>
+                        </div>
+                        <span class="text-violet-600 dark:text-violet-400 text-sm font-medium flex items-center gap-1">
+                            View Details <lucide-icon name="arrow-right" class="w-4 h-4"></lucide-icon>
+                        </span>
+                    </div>
+                </div>
+            </a>
+            }
+            @empty {
+            <div
+                class="col-span-full h-64 flex flex-col items-center justify-center text-slate-500 dark:text-slate-400">
+                <lucide-icon name="search-x" class="w-12 h-12 mb-4 opacity-50"></lucide-icon>
+                <p>No salons found matching your criteria.</p>
+            </div>
+            }
+        </div>
+    </section>
+    <app-side-cart></app-side-cart>
+</div>

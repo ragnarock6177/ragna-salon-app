@@ -90,6 +90,16 @@ export class SalonDetailsComponent {
     });
   }
 
+  private parseTime(time: string | undefined | null): Date | null {
+    if (!time) return null;
+    const [hours, minutes, seconds] = time.split(':').map(Number);
+    const date = new Date();
+    date.setHours(hours || 0);
+    date.setMinutes(minutes || 0);
+    date.setSeconds(seconds || 0);
+    return date;
+  }
+
   patchForm(salon: Salon) {
     this.form.patchValue({
       name: salon.name,
@@ -99,8 +109,8 @@ export class SalonDetailsComponent {
       address: salon.address,
       rating: salon.rating,
       total_reviews: salon.total_reviews,
-      opening_time: salon.opening_time,
-      closing_time: salon.closing_time,
+      opening_time: this.parseTime(salon.opening_time),
+      closing_time: this.parseTime(salon.closing_time),
       is_active: salon.is_active === 1
     });
   }
@@ -125,13 +135,26 @@ export class SalonDetailsComponent {
     ).subscribe();
   }
 
+  private formatTime(date: Date): string | null {
+    if (!date) return null;
+    return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:00`;
+  }
+
   saveDetails() {
     if (this.form.invalid || !this.salon()) return;
 
     this.isSaving.set(true);
+    const formValue = this.form.value;
+
+    // Check if time is a Date object (from picker) or string (if untouched, though patch converts it)
+    // Actually patch converts to Date, so form value should be Date if touched or untouched.
+    // Safely handle if it's already a string or null.
+
     const updates = {
-      ...this.form.value,
-      is_active: this.form.value.is_active ? 1 : 0
+      ...formValue,
+      opening_time: formValue.opening_time instanceof Date ? this.formatTime(formValue.opening_time) : formValue.opening_time,
+      closing_time: formValue.closing_time instanceof Date ? this.formatTime(formValue.closing_time) : formValue.closing_time,
+      is_active: formValue.is_active ? 1 : 0
     };
 
     this.apiService.updateSalon(this.salon()!.id, updates).pipe(

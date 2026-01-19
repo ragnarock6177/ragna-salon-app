@@ -10,9 +10,26 @@ export const routes: Routes = [
     },
     {
         path: '',
+        loadComponent: () => import('./features/home/home-layout.component').then(m => m.HomeLayoutComponent),
+        children: [
+            {
+                path: '',
+                loadComponent: () => import('./features/home/home.component').then(m => m.HomeComponent),
+                title: 'Home - Ragna Salons'
+            },
+            {
+                path: 'detail/:id',
+                loadComponent: () => import('./features/home/salon-details/salon-details.component').then(m => m.SalonDetailsComponent),
+                title: 'Salon Detail'
+            }
+        ]
+    },
+    {
+        path: 'admin',
         loadComponent: () => import('./features/main/main.component').then(m => m.MainComponent),
         canActivate: [authGuard],
         children: [
+
             {
                 path: '',
                 redirectTo: 'dashboard',
