@@ -1,0 +1,92 @@
+<div class="min-h-screen bg-slate-50 dark:bg-slate-950 pt-32 pb-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto space-y-8">
+
+        <!-- Profile Header -->
+        <div
+            class="bg-white dark:bg-slate-900 rounded-2xl p-8 shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row items-center gap-8">
+            <div class="relative">
+                <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-slate-100 dark:border-slate-800">
+                    @if(authService.currentUser()?.avatar) {
+                    <img [src]="authService.currentUser()?.avatar" class="w-full h-full object-cover">
+                    } @else {
+                    <div
+                        class="w-full h-full bg-violet-600 flex items-center justify-center text-4xl text-white font-bold">
+                        {{ authService.currentUser()?.name?.charAt(0) }}
+                    </div>
+                    }
+                </div>
+                <button
+                    class="absolute bottom-0 right-0 bg-violet-600 text-white p-2 rounded-full shadow-lg hover:bg-violet-700 transition-colors">
+                    <lucide-icon name="pencil" class="w-4 h-4"></lucide-icon>
+                </button>
+            </div>
+
+            <div class="text-center md:text-left flex-1">
+                <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">{{ authService.currentUser()?.name }}
+                </h1>
+                <p class="text-slate-500 dark:text-slate-400 mb-4">{{ authService.currentUser()?.email }}</p>
+                <div class="flex flex-wrap justify-center md:justify-start gap-3">
+                    <span
+                        class="px-3 py-1 rounded-full bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 text-sm font-medium">Member</span>
+                    <span
+                        class="px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-sm font-medium">Verified</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats / Dashboard -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div
+                class="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800">
+                <h3 class="text-sm font-medium text-slate-500 dark:text-slate-400 mb-2">Total Bookings</h3>
+                <p class="text-3xl font-bold text-slate-900 dark:text-white">12</p>
+            </div>
+            <div
+                class="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800">
+                <h3 class="text-sm font-medium text-slate-500 dark:text-slate-400 mb-2">Reviews Given</h3>
+                <p class="text-3xl font-bold text-slate-900 dark:text-white">5</p>
+            </div>
+            <div
+                class="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800">
+                <h3 class="text-sm font-medium text-slate-500 dark:text-slate-400 mb-2">Points Earned</h3>
+                <p class="text-3xl font-bold text-slate-900 dark:text-white">450</p>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div
+            class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
+            <div class="p-6 border-b border-slate-200 dark:border-slate-800">
+                <h2 class="text-xl font-bold text-slate-900 dark:text-white">Recent Bookings</h2>
+            </div>
+            <div class="divide-y divide-slate-200 dark:divide-slate-800">
+                @for (booking of bookings; track booking.id) {
+                <div
+                    class="p-6 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center text-violet-600 dark:text-violet-400">
+                            <lucide-icon name="ticket" class="w-6 h-6"></lucide-icon>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-900 dark:text-white">{{ booking.salonName }}</h4>
+                            <p class="text-sm text-slate-500 dark:text-slate-400">{{ booking.service }} • {{
+                                booking.date | date }}</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="font-bold text-slate-900 dark:text-white">\${{ booking.price }}</div>
+                        <span class="inline-block mt-1 px-2 py-0.5 rounded text-xs font-medium"
+                            [class.bg-emerald-100]="booking.status === 'Completed'"
+                            [class.text-emerald-700]="booking.status === 'Completed'"
+                            [class.bg-blue-100]="booking.status === 'Upcoming'"
+                            [class.text-blue-700]="booking.status === 'Upcoming'">
+                            {{ booking.status }}
+                        </span>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

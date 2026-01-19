@@ -21,6 +21,12 @@ export const routes: Routes = [
                 path: 'detail/:id',
                 loadComponent: () => import('./features/home/salon-details/salon-details.component').then(m => m.SalonDetailsComponent),
                 title: 'Salon Detail'
+            },
+            {
+                path: 'profile',
+                loadComponent: () => import('./features/home/profile/profile.component').then(m => m.ProfileComponent),
+                canActivate: [authGuard],
+                title: 'My Profile'
             }
         ]
     },

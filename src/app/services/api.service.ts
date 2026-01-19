@@ -116,4 +116,10 @@ export class ApiService {
   generateQrCode(salonId: number | string): Observable<any> {
     return this.http.get(this.adminApiUrl + `/salons/${salonId}/qrcode`);
   }
+
+  // Utilities
+  getReverseGeocoding(lat: number, lng: number): Observable<any> {
+    // using free API for demo purposes
+    return this.http.get(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`);
+  }
 }

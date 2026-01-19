@@ -7,17 +7,62 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { catchError, map, of, startWith } from 'rxjs';
 import { SideCartComponent } from './components/side-cart/side-cart.component';
 import { ApiService } from '../../services/api.service';
+import { AuthService } from '../../core/auth/auth.service';
+import { MatDialog } from '@angular/material/dialog';
+import { LoginDialogComponent } from '../../features/auth/components/login-dialog/login-dialog.component';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
     selector: 'app-home',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, RouterLink, LucideAngularModule, SideCartComponent],
+    imports: [CommonModule, ReactiveFormsModule, RouterLink, LucideAngularModule, SideCartComponent, MatMenuModule],
     templateUrl: './home.component.html',
     styleUrl: './home.component.scss'
 })
 export class HomeComponent {
     private apiService = inject(ApiService);
     private fb = inject(FormBuilder);
+    authService = inject(AuthService);
+    dialog = inject(MatDialog);
+
+    currentLocation = signal<string>('Detecting location...');
+
+    constructor() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    const { latitude, longitude } = pos.coords;
+                    this.apiService.getReverseGeocoding(latitude, longitude).subscribe({
+                        next: (res: any) => {
+                            const city = res.city || res.locality || res.principalSubdivision || 'Unknown Location';
+                            this.currentLocation.set(city);
+                        },
+                        error: () => {
+                            this.currentLocation.set('Location Unavailable');
+                        }
+                    });
+                },
+                (err) => {
+                    console.error('Geolocation error:', err);
+                    this.currentLocation.set('Location Permission Denied');
+                }
+            );
+        } else {
+            this.currentLocation.set('Geolocation Not Supported');
+        }
+    }
+
+    openLoginDialog() {
+        this.dialog.open(LoginDialogComponent, {
+            width: '400px',
+            disableClose: true,
+            panelClass: 'custom-dialog-container'
+        });
+    }
+
+    logout() {
+        this.authService.logout();
+    }
 
     searchControl = this.fb.control('');
     cityControl = this.fb.control('');

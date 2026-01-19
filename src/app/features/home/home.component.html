@@ -7,6 +7,52 @@
             <div class="absolute inset-0 bg-linear-to-b from-transparent to-slate-50 dark:to-slate-950"></div>
         </div>
 
+        <!-- Top Navigation Bar -->
+        <div class="absolute top-0 left-0 right-0 z-50 p-6 flex justify-between items-center text-white">
+            <div
+                class="flex items-center gap-2 bg-black/30 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 shadow-sm">
+                <lucide-icon name="map-pin" class="w-4 h-4 text-violet-200"></lucide-icon>
+                <span class="text-sm font-medium text-white">{{ currentLocation() }}</span>
+            </div>
+
+            <div class="flex items-center gap-4">
+                @if (authService.isAuthenticated()) {
+                <div [matMenuTriggerFor]="userMenu"
+                    class="flex items-center gap-3 bg-black/30 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 cursor-pointer hover:bg-black/40 transition-colors shadow-sm">
+                    @if (authService.currentUser()?.avatar) {
+                    <img [src]="authService.currentUser()?.avatar"
+                        class="w-8 h-8 rounded-full border-2 border-white/50">
+                    } @else {
+                    <div class="w-8 h-8 rounded-full bg-violet-600 flex items-center justify-center text-xs font-bold">
+                        {{ authService.currentUser()?.name?.charAt(0) }}
+                    </div>
+                    }
+                    <div class="hidden md:block text-left">
+                        <p class="text-xs text-white/70">Welcome back,</p>
+                        <p class="text-sm font-bold leading-none">{{ authService.currentUser()?.name }}</p>
+                    </div>
+                    <lucide-icon name="chevron-down" class="w-4 h-4 text-white/70"></lucide-icon>
+                </div>
+
+                <mat-menu #userMenu="matMenu" xPosition="before">
+                    <button mat-menu-item routerLink="/profile">
+                        <lucide-icon name="user" class="w-4 h-4 mr-2 inline"></lucide-icon>
+                        <span>Profile</span>
+                    </button>
+                    <button mat-menu-item (click)="logout()">
+                        <lucide-icon name="log-out" class="w-4 h-4 mr-2 inline"></lucide-icon>
+                        <span>Logout</span>
+                    </button>
+                </mat-menu>
+                } @else {
+                <button (click)="openLoginDialog()"
+                    class="bg-violet-600 hover:bg-violet-700 text-white px-6 py-2 rounded-full font-medium transition-colors shadow-lg shadow-violet-600/20">
+                    Login
+                </button>
+                }
+            </div>
+        </div>
+
         <div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
             <h1
                 class="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-linear-to-r from-violet-600 to-indigo-600 dark:from-violet-400 dark:to-indigo-400 mb-6 animate-fade-in-up">
