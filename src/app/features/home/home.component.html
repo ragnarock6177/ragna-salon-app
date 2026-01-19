@@ -9,8 +9,9 @@
 
         <!-- Top Navigation Bar -->
         <div class="absolute top-0 left-0 right-0 z-50 p-6 flex justify-between items-center text-white">
-            <div
-                class="flex items-center gap-2 bg-black/30 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 shadow-sm">
+            <div (click)="getLocation()"
+                class="flex items-center gap-2 bg-black/30 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 shadow-sm cursor-pointer hover:bg-black/40 transition-colors"
+                title="Click to detect location">
                 <lucide-icon name="map-pin" class="w-4 h-4 text-violet-200"></lucide-icon>
                 <span class="text-sm font-medium text-white">{{ currentLocation() }}</span>
             </div>

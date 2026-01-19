@@ -28,28 +28,37 @@ export class HomeComponent {
     currentLocation = signal<string>('Detecting location...');
 
     constructor() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (pos) => {
-                    const { latitude, longitude } = pos.coords;
-                    this.apiService.getReverseGeocoding(latitude, longitude).subscribe({
-                        next: (res: any) => {
-                            const city = res.city || res.locality || res.principalSubdivision || 'Unknown Location';
-                            this.currentLocation.set(city);
-                        },
-                        error: () => {
-                            this.currentLocation.set('Location Unavailable');
-                        }
-                    });
-                },
-                (err) => {
-                    console.error('Geolocation error:', err);
-                    this.currentLocation.set('Location Permission Denied');
-                }
-            );
-        } else {
+        this.getLocation();
+    }
+
+    getLocation() {
+        if (!navigator.geolocation) {
             this.currentLocation.set('Geolocation Not Supported');
+            return;
         }
+
+        this.currentLocation.set('Detecting location...');
+
+        navigator.geolocation.getCurrentPosition(
+            (pos) => {
+                const { latitude, longitude } = pos.coords;
+                this.apiService.getReverseGeocoding(latitude, longitude).subscribe({
+                    next: (res: any) => {
+                        const city = res.city || res.locality || res.principalSubdivision || 'Unknown Location';
+                        this.currentLocation.set(city);
+                    },
+                    error: () => {
+                        this.currentLocation.set('Location Unavailable');
+                    }
+                });
+            },
+            (err) => {
+                console.error('Geolocation error:', err);
+                // If denied, we set a message. Clicking this message (via the template binding we will add) will call this function again.
+                this.currentLocation.set('Enable Location');
+            },
+            { timeout: 10000 }
+        );
     }
 
     openLoginDialog() {
