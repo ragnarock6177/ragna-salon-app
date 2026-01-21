@@ -8,7 +8,7 @@ import { FooterComponent } from './components/footer/footer.component';
   standalone: true,
   imports: [CommonModule, RouterOutlet, FooterComponent],
   template: `
-    <div class="min-h-screen flex flex-col">
+    <div class="min-h-screen flex flex-col font-fancy">
       <div class="flex-1">
         <router-outlet></router-outlet>
       </div>
