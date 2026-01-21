@@ -4,6 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { ApiService } from '../../../services/api.service'; // Adjust path
 import { CartService } from '../../../core/services/cart.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ImagePreviewDialogComponent } from '../../main/salons/components/image-preview-dialog/image-preview-dialog.component';
 
 @Component({
     selector: 'app-salon-details',
@@ -17,6 +19,7 @@ export class SalonDetailsComponent {
     private apiService = inject(ApiService);
     private location = inject(Location);
     private cartService = inject(CartService);
+    private dialog = inject(MatDialog);
 
     salonId = this.route.snapshot.paramMap.get('id');
 
@@ -72,5 +75,16 @@ export class SalonDetailsComponent {
         if (!coupon || !this.salon()) return;
         this.cartService.addItem(coupon, this.salon());
         // Feedback to user (optional: simple alert or snackbar, but cart update is reactive)
+    }
+
+    openImagePreview(imageUrl: string) {
+        if (!imageUrl) return;
+        this.dialog.open(ImagePreviewDialogComponent, {
+            data: { imageUrl },
+            maxWidth: '95vw',
+            maxHeight: '95vh',
+            panelClass: 'image-preview-dialog-container',
+            backdropClass: 'image-preview-backdrop'
+        });
     }
 }

@@ -23,6 +23,8 @@ import { formatDate } from '@angular/common';
 import { QrDialogComponent } from '../../components/qr-dialog/qr-dialog.component';
 import { MatTimepickerModule } from '@angular/material/timepicker';
 import { ConfirmationService } from '../../../../../services/confirmation.service';
+import { ImageCompressionService } from '../../../../../services/image-compression.service';
+import { ImagePreviewDialogComponent } from '../image-preview-dialog/image-preview-dialog.component';
 
 @Component({
   selector: 'app-salon-details',
@@ -57,6 +59,7 @@ export class SalonDetailsComponent {
   private router = inject(Router);
   private dialog = inject(MatDialog);
   private confirmationService = inject(ConfirmationService);
+  private imageCompressionService = inject(ImageCompressionService);
 
   salon = signal<Salon | null>(null);
   coupons = signal<Coupon[]>([]);
@@ -148,10 +151,6 @@ export class SalonDetailsComponent {
     this.isSaving.set(true);
     const formValue = this.form.value;
 
-    // Check if time is a Date object (from picker) or string (if untouched, though patch converts it)
-    // Actually patch converts to Date, so form value should be Date if touched or untouched.
-    // Safely handle if it's already a string or null.
-
     const updates = {
       ...formValue,
       opening_time: formValue.opening_time instanceof Date ? this.formatTime(formValue.opening_time) : formValue.opening_time,
@@ -173,36 +172,60 @@ export class SalonDetailsComponent {
     ).subscribe();
   }
 
-  onFileSelected(event: any) {
+  async onFileSelected(event: any) {
     const file = event.target.files[0];
     const salon = this.salon();
     if (file && salon) {
-      this.apiService.uploadSingle(file, salon.id, salon.name).subscribe({
-        next: () => {
-          this.snackBar.open('Image uploaded', 'Close', { duration: 3000 });
-          this.loadSalonDetails(salon.id);
-        },
-        error: () => this.snackBar.open('Upload failed', 'Close', { duration: 3000 })
-      });
+      this.isLoading.set(true);
+      try {
+        const compressedFile = await this.imageCompressionService.compressImage(file);
+        this.apiService.uploadSingle(compressedFile, salon.id, salon.name).subscribe({
+          next: () => {
+            this.snackBar.open('Image uploaded', 'Close', { duration: 3000 });
+            this.loadSalonDetails(salon.id);
+            this.isLoading.set(false);
+          },
+          error: () => {
+            this.snackBar.open('Upload failed', 'Close', { duration: 3000 });
+            this.isLoading.set(false);
+          }
+        });
+      } catch (error) {
+        console.error('Compression or upload error:', error);
+        this.isLoading.set(false);
+        this.snackBar.open('Upload failed', 'Close', { duration: 3000 });
+      }
     }
   }
 
-  onLogoSelected(event: any) {
+  async onLogoSelected(event: any) {
     const file = event.target.files[0];
     const salon = this.salon();
     if (file && salon) {
-      this.apiService.uploadSingle(file, salon.id, salon.name).pipe(
-        switchMap((res: any) => {
-          const newUrl = res.url || res.data;
-          return this.apiService.updateSalon(salon.id, { logo: newUrl });
-        })
-      ).subscribe({
-        next: () => {
-          this.snackBar.open('Logo uploaded successfully', 'Close', { duration: 3000 });
-          this.loadSalonDetails(salon.id);
-        },
-        error: () => this.snackBar.open('Logo upload failed', 'Close', { duration: 3000 })
-      });
+      this.isLoading.set(true);
+      try {
+        const compressedFile = await this.imageCompressionService.compressImage(file);
+        this.apiService.uploadSingle(compressedFile, salon.id, salon.name).pipe(
+          switchMap((res: any) => {
+            const newUrl = res.url || res.data;
+            return this.apiService.updateSalon(salon.id, { logo: newUrl });
+          })
+        ).subscribe({
+          next: () => {
+            this.snackBar.open('Logo uploaded successfully', 'Close', { duration: 3000 });
+            this.loadSalonDetails(salon.id);
+            this.isLoading.set(false);
+          },
+          error: () => {
+            this.snackBar.open('Logo upload failed', 'Close', { duration: 3000 });
+            this.isLoading.set(false);
+          }
+        });
+      } catch (error) {
+        console.error('Compression or upload error:', error);
+        this.isLoading.set(false);
+        this.snackBar.open('Logo upload failed', 'Close', { duration: 3000 });
+      }
     }
   }
 
@@ -233,6 +256,17 @@ export class SalonDetailsComponent {
           this.snackBar.open('Cannot delete image: Missing URL', 'Close', { duration: 3000 });
         }
       }
+    });
+  }
+
+  openImagePreview(imageUrl: string) {
+    if (!imageUrl) return;
+    this.dialog.open(ImagePreviewDialogComponent, {
+      data: { imageUrl },
+      maxWidth: '95vw',
+      maxHeight: '95vh',
+      panelClass: 'image-preview-dialog-container',
+      backdropClass: 'image-preview-backdrop'
     });
   }
 

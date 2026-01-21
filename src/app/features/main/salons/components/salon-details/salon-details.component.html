@@ -149,7 +149,8 @@
                         @for (img of salon()?.images || []; track $index) {
                         <div
                             class="group relative aspect-square rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-800">
-                            <img [src]="img?.image_url" class="w-full h-full object-cover">
+                            <img [src]="img?.image_url" class="w-full h-full object-cover cursor-pointer"
+                                (click)="openImagePreview(img?.image_url)">
                             <button
                                 class="absolute top-2 right-2 p-1.5 bg-red-600 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                                 (click)="deleteImage(img)">
