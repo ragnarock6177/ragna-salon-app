@@ -12,7 +12,7 @@ export interface Salon {
     is_active: number;
     created_at: string;
     updated_at: string;
-    images: string[];
+    images: any[];
     logo?: string;
     opening_time?: string;
     closing_time?: string;

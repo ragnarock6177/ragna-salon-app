@@ -22,6 +22,7 @@ import { CouponDialogComponent } from '../../components/coupon-dialog/coupon-dia
 import { formatDate } from '@angular/common';
 import { QrDialogComponent } from '../../components/qr-dialog/qr-dialog.component';
 import { MatTimepickerModule } from '@angular/material/timepicker';
+import { ConfirmationService } from '../../../../../services/confirmation.service';
 
 @Component({
   selector: 'app-salon-details',
@@ -55,6 +56,7 @@ export class SalonDetailsComponent {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private dialog = inject(MatDialog);
+  private confirmationService = inject(ConfirmationService);
 
   salon = signal<Salon | null>(null);
   coupons = signal<Coupon[]>([]);
@@ -175,14 +177,7 @@ export class SalonDetailsComponent {
     const file = event.target.files[0];
     const salon = this.salon();
     if (file && salon) {
-      this.apiService.uploadSingle(file, salon.id).pipe(
-        switchMap((res: any) => {
-          // Assuming response has { url: '...' }
-          const newUrl = res.url || res.data; // adjust based on actual API response
-          const updatedImages = [...salon.images, newUrl];
-          return this.apiService.updateSalon(salon.id, { images: updatedImages });
-        })
-      ).subscribe({
+      this.apiService.uploadSingle(file, salon.id, salon.name).subscribe({
         next: () => {
           this.snackBar.open('Image uploaded', 'Close', { duration: 3000 });
           this.loadSalonDetails(salon.id);
@@ -196,7 +191,7 @@ export class SalonDetailsComponent {
     const file = event.target.files[0];
     const salon = this.salon();
     if (file && salon) {
-      this.apiService.uploadSingle(file, salon.id).pipe(
+      this.apiService.uploadSingle(file, salon.id, salon.name).pipe(
         switchMap((res: any) => {
           const newUrl = res.url || res.data;
           return this.apiService.updateSalon(salon.id, { logo: newUrl });
@@ -211,8 +206,34 @@ export class SalonDetailsComponent {
     }
   }
 
-  deleteImage(imageId: number) {
-    // Implement delete logic if backend supports it
+  deleteImage(img: any) {
+    const salon = this.salon();
+    if (!salon || !img) return;
+
+    this.confirmationService.confirm({
+      title: 'Delete Image',
+      message: 'Are you sure you want to delete this image?',
+      confirmText: 'Delete',
+      type: 'danger'
+    }).subscribe(confirmed => {
+      if (confirmed) {
+        // User requested to use image URL for deletion
+        const imageUrl = img.image_url;
+
+        if (imageUrl) {
+          this.apiService.deleteSalonImage(salon.id, imageUrl).subscribe({
+            next: () => {
+              this.snackBar.open('Image deleted', 'Close', { duration: 3000 });
+              this.loadSalonDetails(salon.id);
+            },
+            error: () => this.snackBar.open('Failed to delete image', 'Close', { duration: 3000 })
+          });
+        } else {
+          console.error('Image object missing URL', img);
+          this.snackBar.open('Cannot delete image: Missing URL', 'Close', { duration: 3000 });
+        }
+      }
+    });
   }
 
   openCouponDialog() {

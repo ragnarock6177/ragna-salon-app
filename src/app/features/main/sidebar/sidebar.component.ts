@@ -20,13 +20,13 @@ export class SidebarComponent {
   currentUser = this.authService.currentUser;
 
   navItems = [
-    { label: 'Dashboard', link: '/dashboard', icon: 'layout-dashboard' },
-    { label: 'City', link: '/city', icon: 'building-2' },
-    { label: 'Users', link: '/users', icon: 'users' },
-    { label: 'Salons', link: '/salons', icon: 'store' },
-    { label: 'Coupons', link: '/coupons', icon: 'ticket' },
-    { label: 'Memberships', link: '/memberships', icon: 'crown' },
-    { label: 'Scanner', link: '/scanner', icon: 'qr-code' },
+    { label: 'Dashboard', link: '/admin/dashboard', icon: 'layout-dashboard' },
+    { label: 'City', link: '/admin/city', icon: 'building-2' },
+    { label: 'Users', link: '/admin/users', icon: 'users' },
+    { label: 'Salons', link: '/admin/salons', icon: 'store' },
+    { label: 'Coupons', link: '/admin/coupons', icon: 'ticket' },
+    { label: 'Memberships', link: '/admin/memberships', icon: 'crown' },
+    { label: 'Scanner', link: '/admin/scanner', icon: 'qr-code' },
   ];
 
   isOpen = signal(false);

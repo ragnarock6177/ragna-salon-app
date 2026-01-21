@@ -160,7 +160,7 @@ export class SalonsComponent {
   }
 
   openSalonDetails(salonId: number) {
-    this.router.navigate(['salons', salonId]);
+    this.router.navigate(['admin', 'salons', salonId]);
   }
 
   toggleStatus(salon: Salon) {

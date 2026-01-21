@@ -3,7 +3,7 @@
     <!-- Header -->
     <div class="flex items-center justify-between py-4 border-b border-slate-200 dark:border-slate-800 shrink-0">
         <div class="flex items-center gap-4">
-            <button mat-icon-button routerLink="/salons">
+            <button mat-icon-button routerLink="/admin/salons">
                 <lucide-angular name="arrow-left" class="w-5 h-5"></lucide-angular>
             </button>
             <div>
@@ -145,14 +145,14 @@
                     </div>
 
                     <!-- Gallery -->
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
                         @for (img of salon()?.images || []; track $index) {
                         <div
                             class="group relative aspect-square rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-800">
-                            <img [src]="img" class="w-full h-full object-cover">
+                            <img [src]="img?.image_url" class="w-full h-full object-cover">
                             <button
                                 class="absolute top-2 right-2 p-1.5 bg-red-600 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                                (click)="deleteImage($index)">
+                                (click)="deleteImage(img)">
                                 <lucide-angular name="trash-2" class="w-4 h-4"></lucide-angular>
                             </button>
                         </div>

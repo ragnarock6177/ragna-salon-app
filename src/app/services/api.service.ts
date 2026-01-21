@@ -60,20 +60,26 @@ export class ApiService {
     return this.http.get(this.adminApiUrl + `/salons/${id}`);
   }
 
-  uploadSingle(file: File, salonId?: number | string): Observable<any> {
+  uploadSingle(file: File, salonId?: number | string, salonName?: string): Observable<any> {
     const formData = new FormData();
     formData.append('image', file);
     if (salonId) {
       formData.append('salon_id', salonId.toString());
     }
+    if (salonName) {
+      formData.append('salon_name', salonName);
+    }
     return this.http.post(this.adminApiUrl + '/upload/single', formData);
   }
 
-  uploadMultiple(files: File[], salonId?: number | string): Observable<any> {
+  uploadMultiple(files: File[], salonId?: number | string, salonName?: string): Observable<any> {
     const formData = new FormData();
     files.forEach(file => formData.append('images', file));
     if (salonId) {
       formData.append('salon_id', salonId.toString());
+    }
+    if (salonName) {
+      formData.append('salon_name', salonName);
     }
     return this.http.post(this.adminApiUrl + '/upload/multiple', formData);
   }
@@ -91,8 +97,8 @@ export class ApiService {
     return this.http.post(this.adminApiUrl + `/salons/${salonId}/logo`, formData);
   }
 
-  deleteSalonImage(salonId: number | string, imageId: number | string): Observable<any> {
-    return this.http.delete(this.adminApiUrl + `/salons/${salonId}/images/${imageId}`);
+  deleteSalonImage(salonId: number | string, imageUrl: string): Observable<any> {
+    return this.http.post(this.adminApiUrl + '/upload/delete', { salon_id: salonId, image_url: imageUrl });
   }
 
   // Coupon APIs
