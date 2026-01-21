@@ -4,7 +4,7 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { catchError, map, of, startWith } from 'rxjs';
+import { catchError, map, of, startWith, tap } from 'rxjs';
 import { SideCartComponent } from './components/side-cart/side-cart.component';
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../core/auth/auth.service';
@@ -80,6 +80,8 @@ export class HomeComponent {
     private searchControlValue = toSignal(this.searchControl.valueChanges.pipe(startWith('')), { initialValue: '' });
     private cityControlValue = toSignal(this.cityControl.valueChanges.pipe(startWith('')), { initialValue: '' });
 
+    isLoading = signal(true);
+
     cities = toSignal(this.apiService.getCities().pipe(
         map((res: any) => (res.data || []) as any[]),
         catchError(() => of([] as any[]))
@@ -87,7 +89,11 @@ export class HomeComponent {
 
     salons = toSignal(this.apiService.getSalons().pipe(
         map((res: any) => (res.data || []) as any[]),
-        catchError(() => of([] as any[]))
+        tap(() => this.isLoading.set(false)),
+        catchError(() => {
+            this.isLoading.set(false);
+            return of([] as any[]);
+        })
     ), { initialValue: [] as any[] });
 
     // Computed filtered salons based on search and city controls
