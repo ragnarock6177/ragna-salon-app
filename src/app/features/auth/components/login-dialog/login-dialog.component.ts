@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogRef, MatDialogModule } from '@angular/material/dialog';
@@ -7,10 +7,10 @@ import { LucideAngularModule } from 'lucide-angular';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
-    selector: 'app-login-dialog',
-    standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, MatDialogModule, LucideAngularModule, MatSnackBarModule],
-    template: `
+  selector: 'app-login-dialog',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, MatDialogModule, LucideAngularModule, MatSnackBarModule],
+  template: `
     <div class="p-6 max-w-sm mx-auto bg-white dark:bg-slate-900 rounded-xl">
       <div class="text-center mb-6">
         <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Welcome Back</h2>
@@ -35,36 +35,37 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
       </form>
     </div>
   `,
-    styles: []
+  styles: [],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginDialogComponent {
-    private fb = inject(FormBuilder);
-    private authService = inject(AuthService);
-    private dialogRef = inject(MatDialogRef<LoginDialogComponent>);
-    private snackBar = inject(MatSnackBar);
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private dialogRef = inject(MatDialogRef<LoginDialogComponent>);
+  private snackBar = inject(MatSnackBar);
 
-    form = this.fb.group({
-        email: ['', [Validators.required, Validators.email]],
-        password: ['', Validators.required]
+  form = this.fb.group({
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', Validators.required]
+  });
+
+  isLoading = signal(false);
+
+  login() {
+    if (this.form.invalid) return;
+
+    this.isLoading.set(true);
+    const { email, password } = this.form.value;
+
+    this.authService.login({ email: email!, password: password! }).subscribe({
+      next: () => {
+        this.snackBar.open('Welcome back!', 'Close', { duration: 3000 });
+        this.dialogRef.close(true);
+      },
+      error: () => {
+        this.snackBar.open('Invalid credentials', 'Close', { duration: 3000 });
+        this.isLoading.set(false);
+      }
     });
-
-    isLoading = signal(false);
-
-    login() {
-        if (this.form.invalid) return;
-
-        this.isLoading.set(true);
-        const { email, password } = this.form.value;
-
-        this.authService.login({ email: email!, password: password! }).subscribe({
-            next: () => {
-                this.snackBar.open('Welcome back!', 'Close', { duration: 3000 });
-                this.dialogRef.close(true);
-            },
-            error: () => {
-                this.snackBar.open('Invalid credentials', 'Close', { duration: 3000 });
-                this.isLoading.set(false);
-            }
-        });
-    }
+  }
 }

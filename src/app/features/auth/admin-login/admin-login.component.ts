@@ -1,4 +1,4 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, signal, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -23,7 +23,8 @@ import { AuthService } from '../../../core/auth/auth.service';
         LucideAngularModule
     ],
     templateUrl: './admin-login.component.html',
-    styleUrl: './admin-login.component.scss'
+    styleUrl: './admin-login.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AdminLoginComponent {
     loginForm: FormGroup;

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ZXingScannerComponent, ZXingScannerModule } from '@zxing/ngx-scanner';
 import { BarcodeFormat } from '@zxing/library';
@@ -19,7 +19,8 @@ import { LucideAngularModule, Scan, X } from 'lucide-angular';
         LucideAngularModule
     ],
     templateUrl: './scanner.component.html',
-    styleUrls: ['./scanner.component.scss']
+    styleUrls: ['./scanner.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ScannerComponent implements OnInit {
     allowedFormats = [BarcodeFormat.QR_CODE];

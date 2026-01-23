@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CartService } from '../../../../core/services/cart.service';
 import { AuthService } from '../../../../core/auth/auth.service';
@@ -12,7 +12,8 @@ import { LoginDialogComponent } from '../../../../features/auth/components/login
     standalone: true,
     imports: [CommonModule, LucideAngularModule],
     templateUrl: './side-cart.component.html',
-    styleUrl: './side-cart.component.scss'
+    styleUrl: './side-cart.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SideCartComponent {
     cartService = inject(CartService);

@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -17,7 +17,8 @@ export interface ConfirmationDialogData {
     standalone: true,
     imports: [CommonModule, MatDialogModule, MatButtonModule, LucideAngularModule],
     templateUrl: './confirmation-dialog.component.html',
-    styles: []
+    styles: [],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ConfirmationDialogComponent {
     readonly AlertTriangle = AlertTriangle;

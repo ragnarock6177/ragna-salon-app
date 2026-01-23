@@ -16,7 +16,7 @@ import {
   // User/form icons
   User, Mail, Star, Sparkles,
   Ban, Eye,
-  MapPin, CheckCircle, EyeOff, ArrowLeft, Camera, Upload, Image, Download, QrCode, SearchX, ArrowRight, ChevronDown, Facebook, Instagram, Twitter, Youtube, Clock
+  MapPin, CheckCircle, EyeOff, ArrowLeft, Camera, Upload, Image, Download, QrCode, SearchX, ArrowRight, ChevronDown, Facebook, Instagram, Twitter, Youtube, Clock, Check
 } from 'lucide-angular';
 import { routes } from './app.routes';
 import { authInterceptor } from './core/auth/auth.interceptor';
@@ -27,7 +27,7 @@ const usedIcons = {
   X, EllipsisVertical, LogOut, Plus, Funnel, Loader,
   Menu, Bell, Search, Pencil, Trash2, ImagePlus, Phone,
   Sun, Moon, TrendingUp, Cpu, Activity, Shield,
-  User, Mail, Star, Sparkles, Ban, Eye, MapPin, CheckCircle, EyeOff, ArrowLeft, Camera, Upload, Image, Download, QrCode, SearchX, ArrowRight, ChevronDown, Facebook, Instagram, Twitter, Youtube, Clock
+  User, Mail, Star, Sparkles, Ban, Eye, MapPin, CheckCircle, EyeOff, ArrowLeft, Camera, Upload, Image, Download, QrCode, SearchX, ArrowRight, ChevronDown, Facebook, Instagram, Twitter, Youtube, Clock, Check
 };
 
 export const appConfig: ApplicationConfig = {

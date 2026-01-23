@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
@@ -23,6 +23,7 @@ import { LucideAngularModule } from 'lucide-angular';
     ],
     templateUrl: './city-dialog.component.html',
     styleUrl: './city-dialog.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CityDialogComponent {
     cityForm: FormGroup;

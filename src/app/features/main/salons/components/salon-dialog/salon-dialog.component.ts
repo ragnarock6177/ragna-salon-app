@@ -1,4 +1,4 @@
-import { Component, Inject, inject, OnInit } from '@angular/core';
+import { Component, Inject, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
@@ -32,7 +32,8 @@ interface UploadedImage {
         LucideAngularModule
     ],
     templateUrl: './salon-dialog.component.html',
-    styles: []
+    styles: [],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SalonDialogComponent implements OnInit {
     form: FormGroup;

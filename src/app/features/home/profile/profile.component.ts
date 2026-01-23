@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService, User } from '../../../core/auth/auth.service';
 import { LucideAngularModule } from 'lucide-angular';
@@ -9,7 +9,8 @@ import { computed } from '@angular/core';
   standalone: true,
   imports: [CommonModule, LucideAngularModule],
   templateUrl: './profile.component.html',
-  styleUrl: './profile.component.scss'
+  styleUrl: './profile.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileComponent {
   authService = inject(AuthService);

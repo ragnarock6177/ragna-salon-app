@@ -1,7 +1,7 @@
 <div class="min-h-screen bg-slate-50 dark:bg-slate-950">
     <!-- Hero Section -->
-    <section class="relative h-[500px] flex items-center justify-center overflow-hidden">
-        <div class="absolute inset-0 z-0">
+    <section class="relative h-[500px] flex items-center justify-center">
+        <div class="absolute inset-0 z-0 overflow-hidden">
             <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=1974&auto=format&fit=crop"
                 class="w-full h-full object-cover opacity-60 dark:opacity-40" alt="Salon Background">
             <div class="absolute inset-0 bg-linear-to-b from-transparent to-slate-50 dark:to-slate-950"></div>
@@ -10,7 +10,7 @@
         <!-- Top Navigation Bar -->
         <div class="absolute top-0 left-0 right-0 z-50 p-6 flex justify-between items-center text-white">
             <div (click)="getLocation()"
-                class="flex items-center gap-2 bg-black/30 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 shadow-sm cursor-pointer hover:bg-black/40 transition-colors"
+                class="flex items-center gap-2 bg-black/40 backdrop-blur-md px-4 py-2 rounded-full border-white/10  cursor-pointer hover:bg-black/40 transition-colors"
                 title="Click to detect location">
                 <lucide-icon name="map-pin" class="w-4 h-4 text-violet-200"></lucide-icon>
                 <span class="text-sm font-medium text-white">{{ currentLocation() }}</span>
@@ -19,7 +19,7 @@
             <div class="flex items-center gap-4">
                 @if (authService.isAuthenticated()) {
                 <div [matMenuTriggerFor]="userMenu"
-                    class="flex items-center gap-3 bg-black/30 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 cursor-pointer hover:bg-black/40 transition-colors shadow-sm">
+                    class="flex items-center gap-3 bg-black/40 backdrop-blur-md px-2 py-2 rounded-full border-white/10 cursor-pointer hover:bg-black/40 transition-colors shadow-sm">
                     @if (authService.currentUser()?.avatar) {
                     <img [src]="authService.currentUser()?.avatar"
                         class="w-8 h-8 rounded-full border-2 border-white/50">
@@ -29,10 +29,12 @@
                     </div>
                     }
                     <div class="hidden md:block text-left">
-                        <p class="text-xs text-white/70">Welcome back,</p>
+                        <p class="text-xs text-white">Welcome back,</p>
                         <p class="text-sm font-bold leading-none">{{ authService.currentUser()?.name }}</p>
                     </div>
-                    <lucide-icon name="chevron-down" class="w-4 h-4 text-white/70"></lucide-icon>
+                    <div class="pr-2">
+                        <lucide-icon name="chevron-down" class="w-4 h-4 text-white/70"></lucide-icon>
+                    </div>
                 </div>
 
                 <mat-menu #userMenu="matMenu" xPosition="before">
@@ -66,7 +68,7 @@
 
             <!-- Search & Filter Bar -->
             <div
-                class="bg-white dark:bg-slate-900 p-2 rounded-2xl shadow-xl flex flex-col md:flex-row gap-2 max-w-2xl mx-auto border border-slate-200 dark:border-slate-800 animate-scale-in delay-200">
+                class="bg-white dark:bg-slate-900 p-2 rounded-2xl shadow flex flex-col md:flex-row gap-2 max-w-2xl mx-auto border border-slate-200 dark:border-slate-800 animate-scale-in delay-100">
                 <div class="flex-1 relative">
                     <lucide-icon name="search"
                         class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5"></lucide-icon>
@@ -75,18 +77,43 @@
                         class="w-full pl-12 pr-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border-none focus:ring-2 focus:ring-violet-500 text-slate-900 dark:text-white outline-none placeholder:text-slate-400">
                 </div>
 
-                <div class="relative w-full md:w-48">
-                    <lucide-icon name="map-pin"
-                        class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5"></lucide-icon>
-                    <select [formControl]="cityControl" aria-label="Filter by city"
-                        class="w-full pl-12 pr-8 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border-none focus:ring-2 focus:ring-violet-500 text-slate-900 dark:text-white outline-none appearance-none cursor-pointer">
-                        <option value="">All Cities</option>
-                        @for (city of cities(); track $index) {
-                        <option [value]="city._id">{{ city.name }}</option>
-                        }
-                    </select>
-                    <lucide-icon name="chevron-down"
-                        class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4 pointer-events-none"></lucide-icon>
+                <div class="relative w-full md:w-48" #cityDropdownContainer>
+                    <!-- Trigger -->
+                    <div (click)="toggleCityDropdown()"
+                        class="w-full pl-12 pr-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border-none cursor-pointer flex items-center justify-between group"
+                        [class.ring-2]="isCityDropdownOpen()" [class.ring-violet-500]="isCityDropdownOpen()">
+                        <lucide-icon name="map-pin"
+                            class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5 group-hover:text-violet-500"></lucide-icon>
+                        <span class="text-slate-900 dark:text-white truncate select-none">{{ selectedCityName }}</span>
+                        <lucide-icon name="chevron-down"
+                            class="text-slate-400 w-4 h-4 transition-transform duration-200"
+                            [class.rotate-180]="isCityDropdownOpen()"></lucide-icon>
+                    </div>
+
+                    <!-- Dropdown Menu -->
+                    @if (isCityDropdownOpen()) {
+                    <div
+                        class="absolute top-full left-0 right-0 mt-2 z-20 bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-slate-100 dark:border-slate-800 overflow-hidden origin-top">
+                        <div class="max-h-60 overflow-y-auto custom-scrollbar p-1">
+                            <button (click)="selectCity('')"
+                                class="w-full text-left px-4 py-2 rounded-lg text-sm text-slate-700 dark:text-slate-300 hover:bg-violet-50 dark:hover:bg-violet-900/20 hover:text-violet-600 dark:hover:text-violet-400 transition-colors flex items-center justify-between group">
+                                <span>All Cities</span>
+                                @if (cityControl.value === '') {
+                                <lucide-icon name="check" class="w-4 h-4 text-violet-600"></lucide-icon>
+                                }
+                            </button>
+                            @for (city of cities(); track city.id) {
+                            <button (click)="selectCity(city.id)"
+                                class="w-full text-left px-4 py-2 rounded-lg text-sm text-slate-700 dark:text-slate-300 hover:bg-violet-50 dark:hover:bg-violet-900/20 hover:text-violet-600 dark:hover:text-violet-400 transition-colors flex items-center justify-between group">
+                                <span>{{ city.name }}</span>
+                                @if (cityControl.value === city.id) {
+                                <lucide-icon name="check" class="w-4 h-4 text-violet-600"></lucide-icon>
+                                }
+                            </button>
+                            }
+                        </div>
+                    </div>
+                    }
                 </div>
 
                 <button
@@ -106,12 +133,12 @@
 
         <!-- Loading State -->
         @if (isLoading()) {
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
             @for (i of [1,2,3,4,5,6,7,8,9]; track i) {
             <div
                 class="bg-white dark:bg-slate-900 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm animate-pulse">
                 <!-- Image Placeholder -->
-                <div class="h-48 bg-slate-200 dark:bg-slate-800 w-full relative">
+                <div class="h-40 bg-slate-200 dark:bg-slate-800 w-full relative">
                     <div class="absolute top-3 right-3 w-12 h-6 bg-slate-300 dark:bg-slate-700 rounded-lg"></div>
                 </div>
 
@@ -131,10 +158,10 @@
         </div>
         }
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             @for (salon of filteredSalons().length ? filteredSalons() : salons(); track salon.id; let i = $index) {
             <a [routerLink]="['/detail', salon.id]"
-                class="group bg-white dark:bg-slate-900 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl hover:border-violet-500/50 transition-all duration-300 transform hover:-translate-y-1 block">
+                class="group bg-white dark:bg-slate-900 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 block">
                 <!-- Image -->
                 <div class="relative h-48 overflow-hidden">
                     <img [src]="salon.images && salon.images.length ? salon.images[0] : 'https://images.unsplash.com/photo-1521590832896-135932617485?w=800&auto=format&fit=crop'"

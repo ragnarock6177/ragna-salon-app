@@ -1,4 +1,4 @@
-import { Component, inject, signal, computed } from '@angular/core';
+import { Component, inject, signal, computed, effect, untracked, ElementRef, ViewChild, HostListener, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -17,7 +17,8 @@ import { MatMenuModule } from '@angular/material/menu';
     standalone: true,
     imports: [CommonModule, ReactiveFormsModule, RouterLink, LucideAngularModule, SideCartComponent, MatMenuModule],
     templateUrl: './home.component.html',
-    styleUrl: './home.component.scss'
+    styleUrl: './home.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeComponent {
     private apiService = inject(ApiService);
@@ -25,10 +26,36 @@ export class HomeComponent {
     authService = inject(AuthService);
     dialog = inject(MatDialog);
 
+    @ViewChild('cityDropdownContainer') cityDropdownContainer!: ElementRef;
+
     currentLocation = signal<string>('Detecting location...');
 
     constructor() {
         this.getLocation();
+
+        // Auto-select city based on location
+        effect(() => {
+            const currentLoc = this.currentLocation().toLowerCase();
+            const cities = this.cities();
+
+            if (!currentLoc || currentLoc.includes('detecting') || currentLoc.includes('unavailable') || !cities.length) {
+                return;
+            }
+
+            const matchedCity = cities.find((city: any) =>
+                city.name.toLowerCase() === currentLoc ||
+                currentLoc.includes(city.name.toLowerCase())
+            );
+
+            if (matchedCity) {
+                untracked(() => {
+                    // Only select if not already selected (optional, but cleaner)
+                    if (this.cityControl.value !== matchedCity.id) {
+                        this.selectCity(matchedCity.id);
+                    }
+                });
+            }
+        });
     }
 
     getLocation() {
@@ -96,6 +123,32 @@ export class HomeComponent {
         })
     ), { initialValue: [] as any[] });
 
+    // Custom Dropdown State
+    isCityDropdownOpen = signal(false);
+
+    toggleCityDropdown() {
+        this.isCityDropdownOpen.update(v => !v);
+    }
+
+    selectCity(cityId: any) {
+        this.cityControl.setValue(cityId);
+        this.isCityDropdownOpen.set(false);
+    }
+
+    get selectedCityName() {
+        const cityId = this.cityControlValue();
+        if (!cityId) return 'All Cities';
+        const city = this.cities().find((c: any) => c.id === cityId);
+        return city ? city.name : 'All Cities';
+    }
+
+    @HostListener('document:click', ['$event'])
+    onDocumentClick(event: MouseEvent) {
+        if (this.isCityDropdownOpen() && this.cityDropdownContainer && !this.cityDropdownContainer.nativeElement.contains(event.target)) {
+            this.isCityDropdownOpen.set(false);
+        }
+    }
+
     // Computed filtered salons based on search and city controls
     filteredSalons = computed(() => {
         const salons = this.salons();
@@ -105,7 +158,7 @@ export class HomeComponent {
         if (!salons) return [];
 
         return salons.filter((salon: any) => {
-            const matchesCity = cityId ? salon.city_id === cityId : true;
+            const matchesCity = cityId ? salon.city_id == cityId : true;
             const matchesSearch = !searchTerm ||
                 salon.name.toLowerCase().includes(searchTerm) ||
                 salon.address.toLowerCase().includes(searchTerm);

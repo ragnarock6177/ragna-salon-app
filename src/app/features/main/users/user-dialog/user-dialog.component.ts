@@ -1,4 +1,4 @@
-import { Component, Inject, AfterViewInit } from '@angular/core';
+import { Component, Inject, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
@@ -25,6 +25,7 @@ import { LucideAngularModule } from 'lucide-angular';
     ],
     templateUrl: './user-dialog.component.html',
     styleUrl: './user-dialog.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserDialogComponent implements AfterViewInit {
     userForm: FormGroup;

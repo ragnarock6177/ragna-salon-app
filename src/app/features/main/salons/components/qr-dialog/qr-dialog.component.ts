@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,7 +9,8 @@ import { LucideAngularModule } from 'lucide-angular';
     standalone: true,
     imports: [CommonModule, MatDialogModule, MatButtonModule, LucideAngularModule],
     templateUrl: './qr-dialog.component.html',
-    styleUrl: './qr-dialog.component.scss'
+    styleUrl: './qr-dialog.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class QrDialogComponent {
     constructor(

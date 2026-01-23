@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
@@ -84,6 +84,7 @@ import { LucideAngularModule } from 'lucide-angular';
         </div>
       </div>
     </footer>
-  `
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FooterComponent { }

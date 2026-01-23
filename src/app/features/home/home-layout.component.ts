@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { FooterComponent } from './components/footer/footer.component';
@@ -12,12 +12,9 @@ import { FooterComponent } from './components/footer/footer.component';
       <div class="flex-1">
         <router-outlet></router-outlet>
       </div>
-      @defer (on viewport) {
-        <app-footer></app-footer>
-      } @placeholder {
-        <div style="min-height: 50px"></div>
-      }
+      <app-footer></app-footer>
     </div>
-  `
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeLayoutComponent { }

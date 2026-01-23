@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
@@ -12,7 +12,8 @@ import { ImagePreviewDialogComponent } from '../../main/salons/components/image-
     standalone: true,
     imports: [CommonModule, LucideAngularModule],
     templateUrl: './salon-details.component.html',
-    styleUrl: './salon-details.component.scss'
+    styleUrl: './salon-details.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SalonDetailsComponent {
     private route = inject(ActivatedRoute);

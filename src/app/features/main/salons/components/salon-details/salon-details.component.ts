@@ -1,4 +1,4 @@
-import { Component, inject, signal, computed } from '@angular/core';
+import { Component, inject, signal, computed, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -49,7 +49,8 @@ import { ImagePreviewDialogComponent } from '../image-preview-dialog/image-previ
   ],
   templateUrl: './salon-details.component.html',
   styleUrl: './salon-details.component.scss',
-  providers: [provideNativeDateAdapter()]
+  providers: [provideNativeDateAdapter()],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SalonDetailsComponent {
   private fb = inject(FormBuilder);
