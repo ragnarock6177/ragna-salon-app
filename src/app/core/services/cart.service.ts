@@ -2,11 +2,12 @@ import { Injectable, computed, signal, inject } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../auth/auth.service';
 import { finalize } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 export interface CartItem {
     id: number;
     description: string;
-    price: number; // calculated from discount/base price if needed, or raw amount
+    price: number;
     discount: number;
     quantity: number;
     salonId: number;
@@ -19,6 +20,7 @@ export interface CartItem {
 export class CartService {
     private apiService = inject(ApiService);
     private authService = inject(AuthService);
+    private snackBar = inject(MatSnackBar);
 
     // Use a map or array. Array is easier for iteration.
     private cartItems = signal<CartItem[]>([]);
@@ -53,14 +55,9 @@ export class CartService {
 
         // Check if we are adding from a different salon
         if (currentItems.length > 0 && currentItems[0].salonId !== salon.id) {
-            // For now, auto-clear. In future, we could confirm.
             this.clearCart();
         }
 
-        // Re-fetch potentially cleared items (though it will be empty if cleared above)
-        // But if we just cleared, we started fresh. 
-        // Logic: if cleared, currentItems is technically stale in this scope, but next set call fixes it.
-        // Better:
         let updatedItems = currentItems.length > 0 && currentItems[0].salonId !== salon.id ? [] : currentItems;
 
         const existingItem = updatedItems.find(i => i.id === coupon.id);
@@ -71,7 +68,7 @@ export class CartService {
             this.cartItems.set([...updatedItems, {
                 id: coupon.id,
                 description: coupon.description,
-                price: 0, // Placeholder
+                price: 0,
                 discount: coupon.discount,
                 quantity: 1,
                 salonId: salon.id,
@@ -122,12 +119,12 @@ export class CartService {
             .pipe(finalize(() => this.isCheckingOut.set(false)))
             .subscribe({
                 next: (res) => {
-                    alert('Purchase Successful!');
+                    this.snackBar.open('Purchase Successful!', 'Close', { duration: 3000 });
                     this.clearCart();
                     this.closeCart();
                 },
                 error: (err) => {
-                    alert('Purchase Failed: ' + (err.error?.message || 'Unknown error'));
+                    this.snackBar.open('Purchase Failed: ' + (err.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
                     console.error(err);
                 }
             });

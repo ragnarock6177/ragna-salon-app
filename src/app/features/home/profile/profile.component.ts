@@ -8,6 +8,7 @@ import { ScannerDialogComponent } from '../components/scanner-dialog/scanner-dia
 import { RedemptionSuccessDialogComponent } from '../components/redemption-success-dialog/redemption-success-dialog.component';
 import { RedemptionProcessingDialogComponent } from '../components/redemption-processing-dialog/redemption-processing-dialog.component';
 import { finalize } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-profile',
@@ -21,6 +22,7 @@ export class ProfileComponent {
   authService = inject(AuthService);
   private apiService = inject(ApiService);
   private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
 
   user = computed(() => this.authService.currentUser() as User | null);
 
@@ -78,11 +80,11 @@ export class ProfileComponent {
           if (data.type === 'salon' && data.id && data.name) {
             this.processRedemption(coupon, data);
           } else {
-            alert('Invalid QR Code. Please scan a valid Salon QR.');
+            this.snackBar.open('Invalid QR Code. Please scan a valid Salon QR.', 'Close', { duration: 3000 });
           }
         } catch (e) {
           console.error(e);
-          alert('Invalid QR Code format.');
+          this.snackBar.open('Invalid QR Code format.', 'Close', { duration: 3000 });
         }
       }
     });
@@ -93,7 +95,7 @@ export class ProfileComponent {
     // Optional: Check if coupon.salon_id matches salonData.id
     // Assuming user wants strict check:
     if (String(coupon.salon_id) !== String(salonData.id)) {
-      alert(`This coupon is only valid for ${coupon.salon_name || 'a different salon'}. You scanned ${salonData.name}.`);
+      this.snackBar.open(`This coupon is only valid for ${coupon.salon_name || 'a different salon'}. You scanned ${salonData.name}.`, 'Close', { duration: 5000 });
       return;
     }
     const userId = this.authService.currentUser()?.id;
@@ -125,7 +127,7 @@ export class ProfileComponent {
           if (userId) this.loadPurchases(userId);
         },
         error: (err) => {
-          alert(err.error?.message || 'Redemption failed. Please try again.');
+          this.snackBar.open(err.error?.message || 'Redemption failed. Please try again.', 'Close', { duration: 3000 });
         }
       });
   }

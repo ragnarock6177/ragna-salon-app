@@ -22,6 +22,7 @@ import {
 import { routes } from './app.routes';
 import { authInterceptor } from './core/auth/auth.interceptor';
 import { SeoTitleStrategy } from './core/seo/seo-title-strategy';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 const usedIcons = {
   LayoutDashboard, Building2, Users, Store, Ticket, Crown,
@@ -37,7 +38,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes, withPreloading(PreloadAllModules)),
     provideHttpClient(withInterceptors([authInterceptor])),
-    importProvidersFrom(LucideAngularModule.pick(usedIcons)),
+    importProvidersFrom(LucideAngularModule.pick(usedIcons), MatSnackBarModule),
     // SEO: Custom title strategy for consistent page titles
     { provide: TitleStrategy, useClass: SeoTitleStrategy },
     // Global Form Field Config
