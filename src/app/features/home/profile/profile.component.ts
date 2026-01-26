@@ -1,4 +1,4 @@
-import { Component, inject, ChangeDetectionStrategy, signal, computed } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, signal, computed, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService, User } from '../../../core/auth/auth.service';
 import { LucideAngularModule } from 'lucide-angular';
@@ -28,12 +28,12 @@ export class ProfileComponent {
 
   purchasedCoupons = signal<any[]>([]);
 
-  constructor() {
+  effectRef = effect(() => {
     const userId = this.authService.currentUser()?.id;
     if (userId) {
       this.loadPurchases(userId);
     }
-  }
+  });
 
   loadPurchases(userId: string) {
     this.apiService.getCustomerPurchases(userId).subscribe({
