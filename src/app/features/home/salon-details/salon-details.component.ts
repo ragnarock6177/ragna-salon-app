@@ -6,11 +6,12 @@ import { ApiService } from '../../../services/api.service'; // Adjust path
 import { CartService } from '../../../core/services/cart.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ImagePreviewDialogComponent } from '../../main/salons/components/image-preview-dialog/image-preview-dialog.component';
+import { SideCartComponent } from '../components/side-cart/side-cart.component';
 
 @Component({
     selector: 'app-salon-details',
     standalone: true,
-    imports: [CommonModule, LucideAngularModule],
+    imports: [CommonModule, LucideAngularModule, SideCartComponent],
     templateUrl: './salon-details.component.html',
     styleUrl: './salon-details.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush

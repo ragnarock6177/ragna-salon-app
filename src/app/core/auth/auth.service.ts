@@ -5,7 +5,7 @@ import { catchError, map, Observable, of, tap, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 export interface User {
-    _id: string;
+    id: string;
     name: string;
     email: string;
     role: string;
@@ -58,6 +58,24 @@ export class AuthService {
             }),
             catchError(error => {
                 console.error('Login failed', error);
+                return throwError(() => error);
+            }),
+            tap(() => this.isLoading.set(false))
+        );
+    }
+
+    register(credentials: { name: string, email: string, password: string }): Observable<any> {
+        this.isLoading.set(true);
+        return this.http.post<any>(`${this.AUTH_API}/register`, credentials).pipe(
+            tap(response => {
+                if (response.data.token) {
+                    localStorage.setItem('token', response.data.token);
+                    this.currentUser.set(response.data.user);
+                    this.isAuthenticated.set(true);
+                }
+            }),
+            catchError(error => {
+                console.error('Registration failed', error);
                 return throwError(() => error);
             }),
             tap(() => this.isLoading.set(false))

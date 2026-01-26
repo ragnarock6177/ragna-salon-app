@@ -118,12 +118,25 @@ export class ApiService {
     return this.http.delete(this.adminApiUrl + `/coupons/${id}`);
   }
 
+  // Purchase API
+  purchaseCoupons(salonId: number | string, payload: any): Observable<any> {
+    return this.http.post(this.adminApiUrl + `/coupons/${salonId}/purchase`, payload);
+  }
+
+  getCustomerPurchases(customerId: number | string): Observable<any> {
+    return this.http.get(this.adminApiUrl + `/coupons/customer/${customerId}`);
+  }
+
   // QR Code API
   generateQrCode(salonId: number | string): Observable<any> {
     return this.http.get(this.adminApiUrl + `/salons/${salonId}/qrcode`);
   }
 
-  // Utilities
+  // Coupon APIs
+  redeemCoupon(salonId: any, userId: any, couponCode: any): Observable<any> {
+    return this.http.post(this.adminApiUrl + `/coupons/${salonId}/redeem`, { customerId: userId, couponCode: couponCode });
+  }
+
   getReverseGeocoding(lat: number, lng: number): Observable<any> {
     // using free API for demo purposes
     return this.http.get(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`);

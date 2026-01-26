@@ -32,11 +32,7 @@ export class SideCartComponent {
         if (!this.authService.isAuthenticated()) {
             this.openLoginDialog();
         } else {
-            // Proceed to buy (Mocked)
-            console.log('Buying items...');
-            alert('Purchase Successful! (Mock)');
-            this.cartService.clearCart();
-            this.cartService.closeCart();
+            this.cartService.checkout();
         }
     }
 

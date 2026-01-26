@@ -5,7 +5,6 @@ import { RouterLink } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { catchError, map, of, startWith, tap } from 'rxjs';
-import { SideCartComponent } from './components/side-cart/side-cart.component';
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../core/auth/auth.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -15,7 +14,7 @@ import { MatMenuModule } from '@angular/material/menu';
 @Component({
     selector: 'app-home',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, RouterLink, LucideAngularModule, SideCartComponent, MatMenuModule],
+    imports: [CommonModule, ReactiveFormsModule, RouterLink, LucideAngularModule, MatMenuModule],
     templateUrl: './home.component.html',
     styleUrl: './home.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
