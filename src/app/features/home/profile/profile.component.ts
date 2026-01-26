@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { AuthService, User } from '../../../core/auth/auth.service';
 import { LucideAngularModule } from 'lucide-angular';
 import { ApiService } from '../../../services/api.service';
-
 import { MatDialog } from '@angular/material/dialog';
 import { ScannerDialogComponent } from '../components/scanner-dialog/scanner-dialog.component';
 import { RedemptionSuccessDialogComponent } from '../components/redemption-success-dialog/redemption-success-dialog.component';
+import { RedemptionProcessingDialogComponent } from '../components/redemption-processing-dialog/redemption-processing-dialog.component';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
@@ -72,8 +73,6 @@ export class ProfileComponent {
       if (result) {
         try {
           // Expected format: { "type": "salon", "id": 12, "name": "Salon Name" }
-          // The scanned result purely needs to be parsed. 
-          // However, zxing sometimes returns the string directly.
           const data = JSON.parse(result);
 
           if (data.type === 'salon' && data.id && data.name) {
@@ -98,26 +97,36 @@ export class ProfileComponent {
       return;
     }
     const userId = this.authService.currentUser()?.id;
-    this.apiService.redeemCoupon(salonData.id, userId, coupon.code).subscribe({
-      next: () => {
-        // Show Success Dialog
-        this.dialog.open(RedemptionSuccessDialogComponent, {
-          width: '90%',
-          maxWidth: '400px',
-          disableClose: true,
-          data: {
-            salonName: salonData.name,
-            transactionId: `TXN-${Date.now()}` // Mock or from response
-          }
-        });
 
-        // Helper to refresh list
-        const userId = this.authService.currentUser()?.id;
-        if (userId) this.loadPurchases(userId);
-      },
-      error: (err) => {
-        alert(err.error?.message || 'Redemption failed. Please try again.');
-      }
+    // Open Processing Dialog
+    const processingDialogRef = this.dialog.open(RedemptionProcessingDialogComponent, {
+      width: '90%',
+      maxWidth: '320px',
+      disableClose: true,
+      panelClass: 'processing-dialog-container'
     });
+
+    this.apiService.redeemCoupon(salonData.id, userId, coupon.code)
+      .pipe(finalize(() => processingDialogRef.close()))
+      .subscribe({
+        next: () => {
+          // Show Success Dialog
+          this.dialog.open(RedemptionSuccessDialogComponent, {
+            width: '90%',
+            maxWidth: '400px',
+            disableClose: true,
+            data: {
+              salonName: salonData.name,
+              transactionId: `TXN-${Date.now()}` // Mock or from response
+            }
+          });
+
+          // Helper to refresh list
+          if (userId) this.loadPurchases(userId);
+        },
+        error: (err) => {
+          alert(err.error?.message || 'Redemption failed. Please try again.');
+        }
+      });
   }
 }
