@@ -1,4 +1,4 @@
-import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CartService } from '../../../../core/services/cart.service';
 import { AuthService } from '../../../../core/auth/auth.service';
@@ -24,6 +24,13 @@ export class SideCartComponent {
     // isOpen is now managed by service for global access
     isOpen = this.cartService.isOpen;
 
+    // Computed signal for max discount in cart
+    maxDiscount = computed(() => {
+        const items = this.cartService.items();
+        if (!items.length) return 0;
+        return Math.max(...items.map(item => item.discount || 0));
+    });
+
     toggle() {
         this.cartService.toggleCart();
     }
@@ -40,9 +47,10 @@ export class SideCartComponent {
         if (this.isOpen()) this.toggle();
 
         const dialogRef = this.dialog.open(LoginDialogComponent, {
-            width: '400px',
-            disableClose: true,
-            panelClass: 'custom-dialog-container'
+            maxWidth: '95vw',
+            width: 'auto',
+            disableClose: false,
+            panelClass: 'login-dialog-container'
         });
 
         dialogRef.afterClosed().subscribe(result => {
@@ -55,3 +63,4 @@ export class SideCartComponent {
         });
     }
 }
+

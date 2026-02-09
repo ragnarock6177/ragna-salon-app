@@ -901,3 +901,13 @@ textarea {
     font-family: 'Nunito', sans-serif !important;
   }
 }
+
+/* --- Login Dialog Container --- */
+.login-dialog-container .mat-mdc-dialog-container .mat-mdc-dialog-surface {
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  /* Allow component shadow to show */
+  border: none !important;
+}

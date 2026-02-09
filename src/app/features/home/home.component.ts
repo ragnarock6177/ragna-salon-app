@@ -89,9 +89,10 @@ export class HomeComponent {
 
     openLoginDialog() {
         this.dialog.open(LoginDialogComponent, {
-            width: '400px',
-            disableClose: true,
-            panelClass: 'custom-dialog-container'
+            maxWidth: '95vw',
+            width: 'auto',
+            disableClose: false,
+            panelClass: 'login-dialog-container'
         });
     }
 

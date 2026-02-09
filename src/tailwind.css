@@ -22,3 +22,18 @@
         font-family: 'Inter', ui-sans-serif, system-ui;
     }
 }
+
+/* Hide scrollbar utility */
+@layer utilities {
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        /* IE and Edge */
+        scrollbar-width: none;
+        /* Firefox */
+    }
+
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+        /* Chrome, Safari and Opera */
+    }
+}

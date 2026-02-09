@@ -1,204 +1,227 @@
-<div class="min-h-screen bg-slate-50 dark:bg-slate-950">
+<div class="min-h-screen bg-slate-50 dark:bg-slate-950 pb-20 md:pb-10">
     <!-- Top Navigation Bar -->
     <div
-        class="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg border-b border-slate-200 dark:border-slate-800">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        class="sticky top-0 z-30 bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg border-b border-slate-200 dark:border-slate-800">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-14 md:h-16">
                 <button routerLink="/"
-                    class="flex items-center gap-1.5 md:gap-2 text-slate-600 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
-                    <lucide-icon name="arrow-left" class="w-4 h-4 md:w-5 md:h-5"></lucide-icon>
-                    <span class="text-sm md:text-base font-medium">Back</span>
+                    class="flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors group">
+                    <div
+                        class="p-1.5 rounded-full group-hover:bg-slate-100 dark:group-hover:bg-slate-800 transition-colors">
+                        <lucide-icon name="arrow-left" class="w-5 h-5"></lucide-icon>
+                    </div>
+                    <span class="text-sm font-medium hidden md:block">Back to Home</span>
                 </button>
                 <h1 class="text-base md:text-lg font-bold text-slate-900 dark:text-white">My Profile</h1>
                 <button
-                    class="p-1.5 md:p-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-                    <lucide-icon name="settings" class="w-4 h-4 md:w-5 md:h-5"></lucide-icon>
+                    class="p-2 rounded-full text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                    <lucide-icon name="settings" class="w-5 h-5"></lucide-icon>
                 </button>
             </div>
         </div>
     </div>
 
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10 space-y-5 md:space-y-8">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 space-y-6 md:space-y-8">
 
-        <!-- Profile Header -->
-        <div
-            class="bg-white dark:bg-slate-900 rounded-xl md:rounded-2xl p-4 md:p-8 shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row items-center gap-4 md:gap-8">
-            <div class="relative">
-                <div
-                    class="w-20 h-20 md:w-32 md:h-32 rounded-full overflow-hidden border-3 md:border-4 border-slate-100 dark:border-slate-800">
-                    @if(authService.currentUser()?.avatar) {
-                    <img [src]="authService.currentUser()?.avatar" class="w-full h-full object-cover">
-                    } @else {
+        <!-- Profile Header & Wallet Card -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- User Info -->
+            <div
+                class="md:col-span-2 bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 flex items-center gap-6">
+                <div class="relative shrink-0">
                     <div
-                        class="w-full h-full bg-primary-600 flex items-center justify-center text-2xl md:text-4xl text-white font-bold">
-                        {{ authService.currentUser()?.name?.charAt(0) }}
-                    </div>
-                    }
-                </div>
-                <button
-                    class="absolute bottom-0 right-0 bg-primary-600 text-white p-1.5 md:p-2 rounded-full shadow-lg hover:bg-primary-700 transition-colors">
-                    <lucide-icon name="pencil" class="w-3 h-3 md:w-4 md:h-4"></lucide-icon>
-                </button>
-            </div>
-
-            <div class="text-center md:text-left flex-1">
-                <h1 class="text-xl md:text-3xl font-bold text-slate-900 dark:text-white mb-1 md:mb-2">{{
-                    authService.currentUser()?.name }}
-                </h1>
-                <p class="text-sm md:text-base text-slate-500 dark:text-slate-400 mb-3 md:mb-4">{{
-                    authService.currentUser()?.email }}</p>
-                <div class="flex flex-wrap justify-center md:justify-start gap-2 md:gap-3">
-                    <span
-                        class="px-2.5 py-0.5 md:px-3 md:py-1 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-xs md:text-sm font-medium">Member</span>
-                    <span
-                        class="px-2.5 py-0.5 md:px-3 md:py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-xs md:text-sm font-medium">Verified</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Stats / Dashboard -->
-        <div class="grid grid-cols-3 gap-3 md:gap-6">
-            <div
-                class="bg-white dark:bg-slate-900 p-3 md:p-6 rounded-xl md:rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 text-center">
-                <div
-                    class="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-primary-600 dark:text-primary-400 mx-auto mb-2">
-                    <lucide-icon name="tag" class="w-4 h-4 md:w-5 md:h-5"></lucide-icon>
-                </div>
-                <p class="text-lg md:text-2xl font-bold text-slate-900 dark:text-white">{{ activeCoupons().length }}</p>
-                <h3 class="text-[10px] md:text-xs font-medium text-slate-500 dark:text-slate-400">Active Coupons</h3>
-            </div>
-            <div
-                class="bg-white dark:bg-slate-900 p-3 md:p-6 rounded-xl md:rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 text-center">
-                <div
-                    class="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 mx-auto mb-2">
-                    <lucide-icon name="check-circle" class="w-4 h-4 md:w-5 md:h-5"></lucide-icon>
-                </div>
-                <p class="text-lg md:text-2xl font-bold text-slate-900 dark:text-white">{{ usedCoupons().length }}</p>
-                <h3 class="text-[10px] md:text-xs font-medium text-slate-500 dark:text-slate-400">Used Coupons</h3>
-            </div>
-            <div
-                class="bg-white dark:bg-slate-900 p-3 md:p-6 rounded-xl md:rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 text-center">
-                <div
-                    class="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center text-amber-600 dark:text-amber-400 mx-auto mb-2">
-                    <lucide-icon name="star" class="w-4 h-4 md:w-5 md:h-5"></lucide-icon>
-                </div>
-                <p class="text-lg md:text-2xl font-bold text-slate-900 dark:text-white">450</p>
-                <h3 class="text-[10px] md:text-xs font-medium text-slate-500 dark:text-slate-400">Points</h3>
-            </div>
-        </div>
-
-        <!-- Active Coupons -->
-        <div
-            class="bg-white dark:bg-slate-900 rounded-xl md:rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
-            <div class="p-4 md:p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
-                <div class="flex items-center gap-2">
-                    <div
-                        class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-primary-600 dark:text-primary-400">
-                        <lucide-icon name="tag" class="w-4 h-4"></lucide-icon>
-                    </div>
-                    <h2 class="text-base md:text-xl font-bold text-slate-900 dark:text-white">Active Coupons</h2>
-                </div>
-                <span
-                    class="text-xs md:text-sm text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full">{{
-                    activeCoupons().length }}</span>
-            </div>
-            <div class="divide-y divide-slate-200 dark:divide-slate-800">
-                @for (purchase of activeCoupons(); track purchase.purchase_id) {
-                <div
-                    class="p-3 md:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <div class="flex items-center gap-3 md:gap-4">
+                        class="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-4 border-slate-50 dark:border-slate-800 shadow-inner">
+                        @if(authService.currentUser()?.avatar) {
+                        <img [src]="authService.currentUser()?.avatar" class="w-full h-full object-cover">
+                        } @else {
                         <div
-                            class="w-10 h-10 md:w-12 md:h-12 rounded-lg md:rounded-xl bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-primary-600 dark:text-primary-400 shrink-0">
-                            <span class="text-sm md:text-lg font-bold">{{ purchase.discount }}%</span>
+                            class="w-full h-full bg-linear-to-br from-primary-500 to-primary-700 flex items-center justify-center text-3xl text-white font-bold">
+                            {{ authService.currentUser()?.name?.charAt(0) }}
                         </div>
-                        <div class="min-w-0">
-                            <h4 class="font-bold text-sm md:text-base text-slate-900 dark:text-white truncate">{{
-                                purchase.description }}</h4>
-                            <p class="text-xs md:text-sm text-slate-500 dark:text-slate-400">
-                                Code: <span class="font-mono font-medium">{{ purchase.code }}</span>
-                            </p>
+                        }
+                    </div>
+                    <button
+                        class="absolute bottom-0 right-0 bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-200 p-1.5 rounded-full shadow-md border border-slate-100 dark:border-slate-600 hover:text-primary-600 transition-colors">
+                        <lucide-icon name="pencil" class="w-3.5 h-3.5"></lucide-icon>
+                    </button>
+                </div>
+                <div>
+                    <h2 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-1">{{
+                        authService.currentUser()?.name }}</h2>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-3">{{ authService.currentUser()?.email }}
+                    </p>
+                    <div class="flex gap-2">
+                        <span
+                            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300 text-xs font-semibold border border-primary-100 dark:border-primary-800">
+                            <lucide-icon name="crown" class="w-3 h-3"></lucide-icon>
+                            Gold Member
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Wallet/Points Card -->
+            <div
+                class="bg-linear-to-br from-slate-900 to-slate-800 dark:from-slate-800 dark:to-slate-950 rounded-2xl p-6 text-white shadow-xl relative overflow-hidden group">
+                <div
+                    class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-110 transition-transform duration-500">
+                </div>
+                <div
+                    class="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/2 group-hover:scale-110 transition-transform duration-500">
+                </div>
+
+                <div class="relative z-10 flex flex-col justify-between h-full min-h-[140px]">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-slate-400 text-xs font-medium uppercase tracking-wider mb-1">Total Points</p>
+                            <h3 class="text-3xl font-bold">450 <span
+                                    class="text-sm font-normal text-slate-400">pts</span></h3>
+                        </div>
+                        <div class="p-2 bg-white/10 rounded-lg backdrop-blur-sm">
+                            <lucide-icon name="sparkles" class="w-5 h-5 text-yellow-400"></lucide-icon>
                         </div>
                     </div>
-                    <div class="flex items-center justify-between sm:justify-end gap-3 sm:text-right pl-13 sm:pl-0">
-                        <div>
-                            <div class="text-xs text-slate-500 mb-0.5">
-                                Valid till {{ purchase.valid_to | date:'shortDate' }}
-                            </div>
-                            <span
-                                class="inline-block px-2 py-0.5 rounded text-[10px] md:text-xs font-medium bg-emerald-100 text-emerald-700">
-                                Active
-                            </span>
+
+                    <div class="mt-4 pt-4 border-t border-white/10 flex justify-between items-center">
+                        <div class="text-xs text-slate-400">
+                            Next Reward: <span class="text-white font-medium">$5 Off</span>
                         </div>
-                        <button (click)="redeemCoupon(purchase)"
-                            class="text-xs md:text-sm bg-primary-600 text-white px-3 py-1.5 md:px-4 md:py-2 rounded-lg hover:bg-primary-700 transition-colors font-medium shrink-0">
+                        <button
+                            class="text-xs bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-lg transition-colors font-medium">
                             Redeem
                         </button>
                     </div>
                 </div>
-                }
-                @empty {
-                <div class="p-6 md:p-8 text-center text-slate-500 dark:text-slate-400">
-                    <lucide-icon name="tag" class="w-10 h-10 md:w-12 md:h-12 mx-auto mb-3 opacity-30"></lucide-icon>
-                    <p class="text-sm md:text-base">No active coupons available.</p>
-                    <p class="text-xs text-slate-400 mt-1">Purchase coupons from salons to see them here.</p>
-                </div>
-                }
             </div>
         </div>
 
-        <!-- Used Coupons -->
-        <div
-            class="bg-white dark:bg-slate-900 rounded-xl md:rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
-            <div class="p-4 md:p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
-                <div class="flex items-center gap-2">
+        <!-- Dashboard Filters -->
+        <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
+            <button
+                class="px-4 py-2 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-medium text-sm shadow-md whitespace-nowrap">
+                Active Coupons
+            </button>
+            <button
+                class="px-4 py-2 rounded-xl bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium text-sm border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 whitespace-nowrap transition-colors">
+                Used History
+            </button>
+            <button
+                class="px-4 py-2 rounded-xl bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium text-sm border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 whitespace-nowrap transition-colors">
+                Saved Salons
+            </button>
+        </div>
+
+        <!-- Active Coupons Grid -->
+        <div>
+            @if (activeCoupons().length > 0) {
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                @for (purchase of activeCoupons(); track purchase.purchase_id) {
+                <!-- Coupon Ticket Card -->
+                <div
+                    class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 flex overflow-hidden group hover:shadow-md transition-shadow">
+                    <!-- Left: Discount Side -->
                     <div
-                        class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400">
-                        <lucide-icon name="check-circle" class="w-4 h-4"></lucide-icon>
-                    </div>
-                    <h2 class="text-base md:text-xl font-bold text-slate-900 dark:text-white">Used Coupons</h2>
-                </div>
-                <span
-                    class="text-xs md:text-sm text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full">{{
-                    usedCoupons().length }}</span>
-            </div>
-            <div class="divide-y divide-slate-200 dark:divide-slate-800">
-                @for (purchase of usedCoupons(); track purchase.purchase_id) {
-                <div class="p-3 md:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 opacity-70">
-                    <div class="flex items-center gap-3 md:gap-4">
+                        class="relative w-24 sm:w-32 bg-linear-to-b from-primary-500 to-primary-700 text-white flex flex-col items-center justify-center p-3 shrink-0">
+                        <span class="text-2xl sm:text-3xl font-bold">{{ purchase.discount }}%</span>
+                        <span
+                            class="text-[10px] sm:text-xs font-semibold uppercase tracking-widest opacity-90">OFF</span>
+
+                        <!-- Decorative Circles for "Ticket" effect -->
                         <div
-                            class="w-10 h-10 md:w-12 md:h-12 rounded-lg md:rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400 shrink-0">
-                            <span class="text-sm md:text-lg font-bold">{{ purchase.discount }}%</span>
+                            class="absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 bg-white dark:bg-slate-900 rounded-full">
                         </div>
-                        <div class="min-w-0">
-                            <h4 class="font-bold text-sm md:text-base text-slate-900 dark:text-white truncate">{{
-                                purchase.description }}</h4>
-                            <p class="text-xs md:text-sm text-slate-500 dark:text-slate-400">
-                                Code: <span class="font-mono font-medium">{{ purchase.code }}</span>
-                            </p>
+                        <div
+                            class="absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 bg-slate-50 dark:bg-slate-950 rounded-full">
                         </div>
                     </div>
-                    <div class="flex items-center justify-between sm:justify-end gap-3 sm:text-right pl-13 sm:pl-0">
-                        <div>
-                            <div class="text-xs text-slate-500 mb-0.5">
-                                Used on {{ purchase.redeemed_at | date:'shortDate' }}
+
+                    <!-- Right: Details Side -->
+                    <div class="flex-1 p-4 flex flex-col justify-between min-w-0 relative">
+                        <!-- Decorative Cutout match -->
+                        <div class="absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 bg-primary-600/0 rounded-full">
+                        </div>
+
+                        <div class="mb-2">
+                            <h4 class="font-bold text-slate-900 dark:text-white truncate text-base md:text-lg">{{
+                                purchase.description }}</h4>
+                            <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mt-1">
+                                <lucide-icon name="store" class="w-3.5 h-3.5"></lucide-icon>
+                                <span>Ragna Salon</span>
                             </div>
-                            <span
-                                class="inline-block px-2 py-0.5 rounded text-[10px] md:text-xs font-medium bg-slate-100 text-slate-600">
-                                Redeemed
+                        </div>
+
+                        <div class="flex items-end justify-between gap-2">
+                            <div>
+                                <p class="text-[10px] text-slate-400 uppercase font-semibold mb-0.5">Code</p>
+                                <div
+                                    class="font-mono text-sm md:text-base font-bold text-slate-700 dark:text-slate-200 tracking-wide bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700 border-dashed">
+                                    {{ purchase.code }}
+                                </div>
+                            </div>
+                            <button (click)="redeemCoupon(purchase)"
+                                class="px-4 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-xs md:text-sm font-bold rounded-lg hover:opacity-90 transition-opacity">
+                                Redeem
+                            </button>
+                        </div>
+
+                        <div
+                            class="mt-3 pt-2 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center text-[10px] text-slate-400">
+                            <span>Valid until {{ purchase.valid_to | date:'mediumDate' }}</span>
+                            <span class="text-emerald-500 font-medium flex items-center gap-1">
+                                <lucide-icon name="check-circle" class="w-3 h-3"></lucide-icon> Active
                             </span>
                         </div>
                     </div>
                 </div>
                 }
-                @empty {
-                <div class="p-6 md:p-8 text-center text-slate-500 dark:text-slate-400">
-                    <lucide-icon name="check-circle"
-                        class="w-10 h-10 md:w-12 md:h-12 mx-auto mb-3 opacity-30"></lucide-icon>
-                    <p class="text-sm md:text-base">No used coupons yet.</p>
-                    <p class="text-xs text-slate-400 mt-1">Redeemed coupons will appear here.</p>
+            </div>
+            } @else {
+            <!-- Empty State -->
+            <div
+                class="bg-white dark:bg-slate-900 rounded-2xl p-8 md:p-12 text-center border border-slate-200 dark:border-slate-800 border-dashed">
+                <div
+                    class="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-400">
+                    <lucide-icon name="ticket" class="w-8 h-8"></lucide-icon>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">No active coupons</h3>
+                <p class="text-slate-500 dark:text-slate-400 text-sm max-w-xs mx-auto mb-6">Explore salons and purchase
+                    coupons to see them here.</p>
+                <button routerLink="/"
+                    class="px-6 py-2.5 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-xl transition-colors inline-flex items-center gap-2">
+                    Start Exploring
+                    <lucide-icon name="arrow-right" class="w-4 h-4"></lucide-icon>
+                </button>
+            </div>
+            }
+        </div>
+
+        <!-- Used Coupons Section (Collapsed/Secondary) -->
+        @if (usedCoupons().length > 0) {
+        <div class="pt-4">
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                <lucide-icon name="history" class="w-5 h-5 text-slate-400"></lucide-icon>
+                History
+            </h3>
+            <div class="space-y-3 opacity-60 hover:opacity-100 transition-opacity">
+                @for (purchase of usedCoupons(); track purchase.purchase_id) {
+                <div
+                    class="bg-slate-50 dark:bg-slate-900/50 rounded-xl p-4 border border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="w-12 h-12 bg-slate-200 dark:bg-slate-800 rounded-lg flex items-center justify-center text-slate-500 font-bold">
+                            {{ purchase.discount }}%
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-700 dark:text-slate-300">{{ purchase.description }}</h4>
+                            <p class="text-xs text-slate-500">Used on {{ purchase.redeemed_at | date:'mediumDate' }}</p>
+                        </div>
+                    </div>
+                    <span
+                        class="text-xs font-medium px-2 py-1 bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded">Redeemed</span>
                 </div>
                 }
             </div>
         </div>
+        }
     </div>
 </div>

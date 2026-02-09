@@ -1,4 +1,4 @@
-import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
@@ -25,12 +25,26 @@ export class SalonDetailsComponent {
 
     salonId = this.route.snapshot.paramMap.get('id');
 
-    // Should fetch logic be signal based or standard rx?
-    // Using signals for consistency
-
     salon = signal<any>(null);
     coupons = signal<any[]>([]);
     isLoading = signal(true);
+
+    // Computed signal to check if salon is currently open
+    isOpen = computed(() => {
+        const s = this.salon();
+        if (!s || !s.opening_time || !s.closing_time) return false;
+
+        const now = new Date();
+        const currentTime = now.getHours() * 60 + now.getMinutes();
+
+        const [openH, openM] = s.opening_time.split(':').map(Number);
+        const [closeH, closeM] = s.closing_time.split(':').map(Number);
+
+        const openTime = openH * 60 + openM;
+        const closeTime = closeH * 60 + closeM;
+
+        return currentTime >= openTime && currentTime <= closeTime;
+    });
 
     constructor() {
         if (this.salonId) {
@@ -76,7 +90,6 @@ export class SalonDetailsComponent {
     addToCart(coupon: any) {
         if (!coupon || !this.salon()) return;
         this.cartService.addItem(coupon, this.salon());
-        // Feedback to user (optional: simple alert or snackbar, but cart update is reactive)
     }
 
     openImagePreview(imageUrl: string) {
@@ -90,3 +103,4 @@ export class SalonDetailsComponent {
         });
     }
 }
+
