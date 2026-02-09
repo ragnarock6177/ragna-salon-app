@@ -324,6 +324,7 @@ $checkbox-overrides: (
 
 /* --- 3. Apply Themes & Overrides --- */
 html {
+  scroll-behavior: smooth;
   @include mat.all-component-themes($light-theme);
 
   @include mat.button-overrides($button-theme-overrides);

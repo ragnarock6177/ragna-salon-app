@@ -1,7 +1,7 @@
 import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { PreloadAllModules, provideRouter, TitleStrategy, withPreloading } from '@angular/router';
+import { PreloadAllModules, provideRouter, TitleStrategy, withPreloading, withInMemoryScrolling } from '@angular/router';
 import {
   LucideAngularModule,
   // Sidebar navigation icons
@@ -53,7 +53,10 @@ const usedIcons = {
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes, withPreloading(PreloadAllModules)),
+    provideRouter(routes, withPreloading(PreloadAllModules), withInMemoryScrolling({
+      scrollPositionRestoration: 'enabled',
+      anchorScrolling: 'enabled',
+    })),
     provideHttpClient(withInterceptors([authInterceptor])),
     importProvidersFrom(LucideAngularModule.pick(usedIcons), MatSnackBarModule),
     // SEO: Custom title strategy for consistent page titles
