@@ -1,7 +1,7 @@
 import { Component, Inject, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
-import { LucideAngularModule, Check } from 'lucide-angular';
+import { LucideAngularModule } from 'lucide-angular';
 import confetti from 'canvas-confetti';
 
 @Component({
@@ -14,7 +14,7 @@ import confetti from 'canvas-confetti';
       <div class="relative mb-6">
         <div class="w-24 h-24 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center mx-auto animate-scale-in">
              <div class="w-16 h-16 bg-emerald-500 rounded-full flex items-center justify-center shadow-lg shadow-emerald-500/30">
-                <lucide-icon [name]="'check'" class="w-8 h-8 text-white stroke-[3]"></lucide-icon>
+                <lucide-icon [name]="'check'" class="w-8 h-8 text-white stroke-3"></lucide-icon>
              </div>
         </div>
       </div>
