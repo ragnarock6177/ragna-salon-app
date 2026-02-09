@@ -272,103 +272,193 @@
 
                 <!-- Reviews Section -->
                 <section
-                    class="bg-white dark:bg-slate-900 rounded-xl p-4 md:p-6 border border-slate-100 dark:border-slate-800">
-                    <div class="flex items-center justify-between mb-4">
-                        <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    class="bg-white dark:bg-slate-900 rounded-xl p-4 md:p-6 border border-slate-100 dark:border-slate-800"
+                    id="reviews">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
                             <lucide-icon name="message-square" class="w-5 h-5 text-primary-600"></lucide-icon>
-                            Reviews
+                            Reviews ({{ reviewStats()?.totalReviews || 0 }})
                         </h2>
-                        <span class="text-xs text-slate-500">120 reviews</span>
+
+                        @if (!userReview() && !showReviewForm()) {
+                        <button (click)="showReviewForm.set(true)"
+                            class="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg text-sm font-medium transition-colors shadow-sm shadow-primary-600/20">
+                            Write a Review
+                        </button>
+                        } @else if (userReview() && !showReviewForm()) {
+                        <button (click)="showReviewForm.set(true)"
+                            class="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg text-sm font-medium transition-colors">
+                            Edit Your Review
+                        </button>
+                        }
                     </div>
 
                     <!-- Rating Summary -->
-                    <div class="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-800 rounded-xl mb-4">
-                        <div class="text-center">
-                            <div class="text-3xl font-bold text-slate-900 dark:text-white">{{ salon().rating || '4.5' }}
-                            </div>
-                            <div class="flex items-center gap-0.5 justify-center my-1">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 mb-8">
+                        <div
+                            class="flex flex-col items-center justify-center p-6 bg-slate-50 dark:bg-slate-800/50 rounded-2xl">
+                            <div class="text-5xl font-bold text-slate-900 dark:text-white mb-2">
+                                {{ (reviewStats()?.averageRating || 0) | number:'1.1-1' }}</div>
+                            <div class="flex items-center gap-1 mb-2">
                                 @for (i of [1,2,3,4,5]; track i) {
-                                <lucide-icon name="star" class="w-4 h-4 text-amber-500 fill-amber-500"></lucide-icon>
+                                <lucide-icon name="star"
+                                    [class]="'w-6 h-6 ' + (i <= (reviewStats()?.averageRating || 0) ? 'text-amber-500 fill-amber-500' : 'text-slate-300 dark:text-slate-600')">
+                                </lucide-icon>
                                 }
                             </div>
-                            <div class="text-xs text-slate-500">Based on 120 reviews</div>
+                            <p class="text-slate-500 text-sm">{{ reviewStats()?.totalReviews || 0 }} verified ratings
+                            </p>
                         </div>
-                        <div class="flex-1 space-y-1.5">
-                            <div class="flex items-center gap-2">
-                                <span class="text-xs text-slate-500 w-3">5</span>
-                                <div class="flex-1 h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-                                    <div class="h-full bg-amber-500 rounded-full" style="width: 70%"></div>
+
+                        <div class="space-y-2 justify-center flex flex-col">
+                            @for (star of [5,4,3,2,1]; track star) {
+                            <div class="flex items-center gap-3">
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300 w-3">{{ star
+                                    }}</span>
+                                <lucide-icon name="star" class="w-3 h-3 text-slate-400"></lucide-icon>
+                                <div class="flex-1 h-2.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                                    <div class="h-full bg-amber-500 rounded-full transition-all duration-500"
+                                        [style.width.%]="(reviewStats()?.distribution?.[star] || 0) / (reviewStats()?.totalReviews || 1) * 100">
+                                    </div>
                                 </div>
+                                <span class="text-xs text-slate-500 w-8 text-right">{{
+                                    reviewStats()?.distribution?.[star] || 0 }}</span>
                             </div>
-                            <div class="flex items-center gap-2">
-                                <span class="text-xs text-slate-500 w-3">4</span>
-                                <div class="flex-1 h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-                                    <div class="h-full bg-amber-500 rounded-full" style="width: 20%"></div>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <span class="text-xs text-slate-500 w-3">3</span>
-                                <div class="flex-1 h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-                                    <div class="h-full bg-amber-500 rounded-full" style="width: 7%"></div>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <span class="text-xs text-slate-500 w-3">2</span>
-                                <div class="flex-1 h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-                                    <div class="h-full bg-amber-500 rounded-full" style="width: 2%"></div>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <span class="text-xs text-slate-500 w-3">1</span>
-                                <div class="flex-1 h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-                                    <div class="h-full bg-amber-500 rounded-full" style="width: 1%"></div>
-                                </div>
-                            </div>
+                            }
                         </div>
                     </div>
 
-                    <!-- Sample Reviews -->
-                    <div class="space-y-4">
-                        <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
-                            <div class="flex items-center gap-3 mb-2">
-                                <div
-                                    class="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-primary-600 dark:text-primary-400 font-bold text-sm">
-                                    A</div>
-                                <div>
-                                    <h4 class="font-semibold text-sm text-slate-900 dark:text-white">Anita S.</h4>
-                                    <div class="flex items-center gap-1">
-                                        @for (i of [1,2,3,4,5]; track i) {
-                                        <lucide-icon name="star"
-                                            class="w-3 h-3 text-amber-500 fill-amber-500"></lucide-icon>
-                                        }
-                                        <span class="text-[10px] text-slate-500 ml-1">2 days ago</span>
+                    <!-- Write/Edit Review Form -->
+                    @if (showReviewForm()) {
+                    <div
+                        class="bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl mb-8 border border-slate-200 dark:border-slate-700 animate-in fade-in slide-in-from-top-4 duration-300">
+                        <h3 class="font-bold text-slate-900 dark:text-white mb-4">
+                            {{ userReview() ? 'Edit your review' : 'Write a review' }}
+                        </h3>
+
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Rate your
+                                experience</label>
+                            <div class="flex gap-2">
+                                @for (i of [1,2,3,4,5]; track i) {
+                                <button (click)="setRating(i)"
+                                    class="focus:outline-hidden transition-transform active:scale-90 hover:scale-110">
+                                    <lucide-icon name="star"
+                                        [class]="'w-8 h-8 ' + (i <= newReviewRating() ? 'text-amber-500 fill-amber-500' : 'text-slate-300 dark:text-slate-600 hover:text-amber-400')">
+                                    </lucide-icon>
+                                </button>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Tell us
+                                more</label>
+                            <textarea [(ngModel)]="newReviewComment" rows="4"
+                                class="w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-hidden transition-all resize-none"
+                                placeholder="What did you like or dislike? What was the service like?"></textarea>
+                        </div>
+
+                        <div class="flex gap-3 justify-end">
+                            <button (click)="showReviewForm.set(false)"
+                                class="px-4 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg text-sm font-medium transition-colors">
+                                Cancel
+                            </button>
+                            @if (userReview()) {
+                            <button (click)="deleteReview()"
+                                class="px-4 py-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg text-sm font-medium transition-colors mr-auto">
+                                Delete Review
+                            </button>
+                            }
+                            <button (click)="submitReview()"
+                                [disabled]="!newReviewRating() || !newReviewComment() || isSubmittingReview()"
+                                class="px-6 py-2 bg-primary-600 hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg text-sm font-medium transition-colors shadow-sm shadow-primary-600/20 flex items-center gap-2">
+                                @if (isSubmittingReview()) {
+                                <lucide-icon name="loader-2" class="w-4 h-4 animate-spin"></lucide-icon>
+                                }
+                                {{ userReview() ? 'Update Review' : 'Submit Review' }}
+                            </button>
+                        </div>
+                    </div>
+                    }
+
+                    <!-- Reviews List -->
+                    <div class="space-y-6">
+                        @for (review of reviews(); track review.id) {
+                        <div class="border-b border-slate-100 dark:border-slate-800 pb-6 last:border-0 last:pb-0">
+                            <div class="flex items-start justify-between mb-3">
+                                <div class="flex items-center gap-3">
+                                    @if(review.user?.avatar) {
+                                    <img [src]="review.user.avatar" class="w-10 h-10 rounded-full object-cover">
+                                    } @else {
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-linear-to-br from-primary-100 to-primary-200 dark:from-primary-900/50 dark:to-primary-800/50 flex items-center justify-center text-primary-700 dark:text-primary-300 font-bold text-sm">
+                                        {{ review.user?.name?.charAt(0) || 'U' }}
+                                    </div>
+                                    }
+
+                                    <div>
+                                        <h4
+                                            class="font-semibold text-sm text-slate-900 dark:text-white flex items-center gap-2">
+                                            {{ review.user?.name || 'Unknown User' }}
+                                            @if(review.verified) {
+                                            <span
+                                                class="text-[10px] px-1.5 py-0.5 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-full flex items-center gap-0.5"
+                                                title="Verified Purchase">
+                                                <lucide-icon name="check-circle-2" class="w-3 h-3"></lucide-icon>
+                                                Verified
+                                            </span>
+                                            }
+                                        </h4>
+                                        <div class="flex items-center gap-2 mt-0.5">
+                                            <div class="flex items-center gap-0.5">
+                                                @for (i of [1,2,3,4,5]; track i) {
+                                                <lucide-icon name="star"
+                                                    [class]="'w-3 h-3 ' + (i <= review.rating ? 'text-amber-500 fill-amber-500' : 'text-slate-300 dark:text-slate-600')">
+                                                </lucide-icon>
+                                                }
+                                            </div>
+                                            <span class="text-xs text-slate-500">{{ review.created_at |
+                                                date:'mediumDate' }}</span>
+                                        </div>
                                     </div>
                                 </div>
+
+                                <!-- Review Actions Menu could go here -->
                             </div>
-                            <p class="text-sm text-slate-600 dark:text-slate-400">Amazing experience! The staff was very
-                                professional and the ambiance was lovely. Highly recommend for anyone looking for
-                                quality services.</p>
-                        </div>
-                        <div>
-                            <div class="flex items-center gap-3 mb-2">
-                                <div
-                                    class="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-bold text-sm">
-                                    R</div>
-                                <div>
-                                    <h4 class="font-semibold text-sm text-slate-900 dark:text-white">Rahul K.</h4>
-                                    <div class="flex items-center gap-1">
-                                        @for (i of [1,2,3,4]; track i) {
-                                        <lucide-icon name="star"
-                                            class="w-3 h-3 text-amber-500 fill-amber-500"></lucide-icon>
-                                        }
-                                        <lucide-icon name="star" class="w-3 h-3 text-slate-300"></lucide-icon>
-                                        <span class="text-[10px] text-slate-500 ml-1">1 week ago</span>
-                                    </div>
+
+                            <div class="pl-[52px]">
+                                <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed mb-3">
+                                    {{ review.comment }}
+                                </p>
+
+                                <div class="flex items-center gap-4">
+                                    <button (click)="toggleLike(review)"
+                                        class="flex items-center gap-1.5 text-xs font-medium text-slate-500 hover:text-slate-900 dark:hover:text-slate-300 transition-colors group">
+                                        <lucide-icon name="thumbs-up"
+                                            [class]="'w-4 h-4 transition-transform group-active:scale-125 ' + (review.is_liked ? 'text-primary-600 fill-primary-600' : '')">
+                                        </lucide-icon>
+                                        Helpful <span class="text-slate-400">({{ review.likes_count || 0 }})</span>
+                                    </button>
+                                    <button
+                                        class="text-xs text-slate-400 hover:text-red-500 transition-colors">Report</button>
                                 </div>
                             </div>
-                            <p class="text-sm text-slate-600 dark:text-slate-400">Good service and fair pricing. The
-                                only downside was the waiting time, but overall a great experience.</p>
                         </div>
+                        } @empty {
+                        <div class="text-center py-12">
+                            <div
+                                class="bg-slate-50 dark:bg-slate-800 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <lucide-icon name="message-square"
+                                    class="w-8 h-8 text-slate-300 dark:text-slate-600"></lucide-icon>
+                            </div>
+                            <h3 class="text-slate-900 dark:text-white font-medium mb-1">No reviews yet</h3>
+                            <p class="text-slate-500 text-sm mb-4">Be the first to share your experience!</p>
+                            <button (click)="showReviewForm.set(true)"
+                                class="text-primary-600 hover:text-primary-700 text-sm font-medium">Write a
+                                Review</button>
+                        </div>
+                        }
                     </div>
                 </section>
             </div>

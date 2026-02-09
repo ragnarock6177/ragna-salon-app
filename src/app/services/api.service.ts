@@ -141,4 +141,41 @@ export class ApiService {
     // using free API for demo purposes
     return this.http.get(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`);
   }
+
+  // Review APIs
+  getReviews(salonId: string | number, params?: any): Observable<any> {
+    return this.http.get(this.adminApiUrl + `/reviews/salon/${salonId}`, { params });
+  }
+
+  getReviewStats(salonId: string | number): Observable<any> {
+    return this.http.get(this.adminApiUrl + `/reviews/salon/${salonId}/stats`);
+  }
+
+  getSingleReview(id: string | number): Observable<any> {
+    return this.http.get(this.adminApiUrl + `/reviews/${id}`);
+  }
+
+  createReview(data: any): Observable<any> {
+    return this.http.post(this.adminApiUrl + '/reviews', data);
+  }
+
+  updateReview(id: string | number, data: any): Observable<any> {
+    return this.http.put(this.adminApiUrl + `/reviews/${id}`, data);
+  }
+
+  deleteReview(id: string | number): Observable<any> {
+    return this.http.delete(this.adminApiUrl + `/reviews/${id}`);
+  }
+
+  getUserReviews(): Observable<any> {
+    return this.http.get(this.adminApiUrl + '/reviews/user/me');
+  }
+
+  toggleLikeReview(id: string | number): Observable<any> {
+    return this.http.post(this.adminApiUrl + `/reviews/${id}/like`, {});
+  }
+
+  reportReview(id: string | number, reason: string): Observable<any> {
+    return this.http.post(this.adminApiUrl + `/reviews/${id}/report`, { reason });
+  }
 }
