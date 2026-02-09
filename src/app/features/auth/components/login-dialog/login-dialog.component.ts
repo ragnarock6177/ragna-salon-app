@@ -13,12 +13,12 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
   template: `
     <div class="p-6 max-w-sm mx-auto bg-white dark:bg-slate-900 rounded-xl overflow-hidden relative">
       <!-- Background Decorations -->
-      <div class="absolute -top-10 -right-10 w-32 h-32 bg-violet-500/10 rounded-full blur-2xl"></div>
-      <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-violet-500/10 rounded-full blur-2xl"></div>
+      <div class="absolute -top-10 -right-10 w-32 h-32 bg-primary-500/10 rounded-full blur-2xl"></div>
+      <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-primary-500/10 rounded-full blur-2xl"></div>
 
       <div class="relative z-10">
         <div class="text-center mb-8">
-          <div class="w-12 h-12 bg-violet-100 dark:bg-violet-900/30 rounded-full flex items-center justify-center mx-auto mb-4 text-violet-600 dark:text-violet-400">
+          <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4 text-primary-600 dark:text-primary-400">
              <lucide-icon [name]="isLoginMode() ? 'log-in' : 'user-plus'" [size]="24"></lucide-icon>
           </div>
           <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">
@@ -34,7 +34,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
             <label class="block text-xs font-medium text-slate-700 dark:text-slate-300 uppercase tracking-wider">Full Name</label>
             <div class="relative">
               <input formControlName="name" type="text" placeholder="John Doe"
-                     class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white placeholder-slate-400 focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500 outline-none transition-all">
+                     class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white placeholder-slate-400 focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 outline-none transition-all">
               <lucide-icon name="user" [size]="18" class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></lucide-icon>
             </div>
           </div>
@@ -43,7 +43,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
             <label class="block text-xs font-medium text-slate-700 dark:text-slate-300 uppercase tracking-wider">Email Address</label>
             <div class="relative">
               <input formControlName="email" type="email" placeholder="you@example.com"
-                     class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white placeholder-slate-400 focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500 outline-none transition-all">
+                     class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white placeholder-slate-400 focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 outline-none transition-all">
               <lucide-icon name="mail" [size]="18" class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></lucide-icon>
             </div>
           </div>
@@ -52,7 +52,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
             <label class="block text-xs font-medium text-slate-700 dark:text-slate-300 uppercase tracking-wider">Password</label>
             <div class="relative">
               <input formControlName="password" [type]="showPassword() ? 'text' : 'password'" placeholder="••••••••"
-                     class="w-full pl-10 pr-10 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white placeholder-slate-400 focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500 outline-none transition-all">
+                     class="w-full pl-10 pr-10 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white placeholder-slate-400 focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 outline-none transition-all">
               <lucide-icon name="lock" [size]="18" class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></lucide-icon>
               <button type="button" (click)="togglePassword()" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
                 <lucide-icon [name]="showPassword() ? 'eye-off' : 'eye'" [size]="18"></lucide-icon>
@@ -61,7 +61,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
           </div>
 
           <button type="submit" [disabled]="form.invalid || isLoading()" 
-                  class="w-full bg-violet-600 hover:bg-violet-700 text-white font-bold py-3 rounded-lg transition-all transform active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed shadow-lg shadow-violet-500/30 flex items-center justify-center gap-2 mt-6">
+                  class="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 rounded-lg transition-all transform active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed shadow-lg shadow-primary-500/30 flex items-center justify-center gap-2 mt-6">
               <span *ngIf="!isLoading()">{{ isLoginMode() ? 'Sign In' : 'Create Account' }}</span>
               <lucide-icon *ngIf="!isLoading()" [name]="isLoginMode() ? 'arrow-right' : 'user-plus'" [size]="18"></lucide-icon>
               <div *ngIf="isLoading()" class="animate-spin h-5 w-5 border-2 border-white/30 border-t-white rounded-full"></div>
@@ -71,7 +71,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
         <div class="mt-6 text-center">
           <p class="text-sm text-slate-500 dark:text-slate-400">
             {{ isLoginMode() ? "Don't have an account?" : "Already have an account?" }}
-            <button (click)="toggleMode()" class="font-semibold text-violet-600 dark:text-violet-400 hover:text-violet-700 dark:hover:text-violet-300 ml-1 hover:underline outline-none">
+            <button (click)="toggleMode()" class="font-semibold text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 ml-1 hover:underline outline-none">
               {{ isLoginMode() ? 'Sign up' : 'Sign in' }}
             </button>
           </p>

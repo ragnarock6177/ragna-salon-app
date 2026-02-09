@@ -1,224 +1,412 @@
 <div class="min-h-screen bg-slate-50 dark:bg-slate-950">
-    <!-- Hero Section -->
-    <section class="relative h-[500px] flex items-center justify-center">
-        <div class="absolute inset-0 z-0 overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=1974&auto=format&fit=crop"
-                class="w-full h-full object-cover opacity-60 dark:opacity-40" alt="Salon Background">
-            <div class="absolute inset-0 bg-linear-to-b from-transparent to-slate-50 dark:to-slate-950"></div>
-        </div>
-
-        <!-- Top Navigation Bar -->
-        <div class="absolute top-0 left-0 right-0 z-50 p-3 md:p-6 flex justify-between items-center text-white">
-            <div (click)="getLocation()"
-                class="flex items-center gap-1.5 md:gap-2 bg-black/40 backdrop-blur-md px-2.5 py-1.5 md:px-4 md:py-2 rounded-full border-white/10 cursor-pointer hover:bg-black/40 transition-colors"
-                title="Click to detect location">
-                <lucide-icon name="map-pin" class="w-3.5 h-3.5 md:w-4 md:h-4 text-violet-200"></lucide-icon>
-                <span class="text-xs md:text-sm font-medium text-white max-w-[100px] md:max-w-none truncate">{{
-                    currentLocation() }}</span>
-            </div>
-
-            <div class="flex items-center gap-2 md:gap-4">
-                @if (authService.isAuthenticated()) {
-                <div [matMenuTriggerFor]="userMenu"
-                    class="flex items-center gap-1.5 md:gap-3 bg-black/40 backdrop-blur-md px-1.5 py-1.5 md:px-2 md:py-2 rounded-full border-white/10 cursor-pointer hover:bg-black/40 transition-colors shadow-sm">
-                    @if (authService.currentUser()?.avatar) {
-                    <img [src]="authService.currentUser()?.avatar"
-                        class="w-7 h-7 md:w-8 md:h-8 rounded-full border-2 border-white/50">
-                    } @else {
-                    <div
-                        class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-violet-600 flex items-center justify-center text-[10px] md:text-xs font-bold">
-                        {{ authService.currentUser()?.name?.charAt(0) }}
+    <!-- Sticky Header -->
+    <header
+        class="sticky top-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-lg border-b border-slate-200 dark:border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-14 md:h-16">
+                <!-- Logo & Location -->
+                <div class="flex items-center gap-3 md:gap-4">
+                    <div class="flex items-center gap-2">
+                        <div class="bg-primary-600 p-1.5 md:p-2 rounded-lg">
+                            <lucide-icon name="sparkles" class="w-4 h-4 md:w-5 md:h-5 text-white"></lucide-icon>
+                        </div>
+                        <span
+                            class="hidden sm:block text-lg md:text-xl font-bold bg-clip-text text-transparent bg-linear-to-r from-primary-600 to-primary-400">Ragna</span>
                     </div>
-                    }
-                    <div class="hidden md:block text-left">
-                        <p class="text-xs text-white">Welcome back,</p>
-                        <p class="text-sm font-bold leading-none">{{ authService.currentUser()?.name }}</p>
-                    </div>
-                    <div class="pr-1 md:pr-2">
-                        <lucide-icon name="chevron-down" class="w-3 h-3 md:w-4 md:h-4 text-white/70"></lucide-icon>
+                    <div class="h-6 w-px bg-slate-200 dark:bg-slate-700 hidden sm:block"></div>
+                    <button (click)="getLocation()"
+                        class="flex items-center gap-1 text-slate-600 dark:text-slate-400 hover:text-primary-600 transition-colors">
+                        <lucide-icon name="map-pin" class="w-3.5 h-3.5 md:w-4 md:h-4"></lucide-icon>
+                        <span class="text-xs md:text-sm font-medium max-w-[80px] md:max-w-[120px] truncate">{{
+                            currentLocation() }}</span>
+                        <lucide-icon name="chevron-down" class="w-3 h-3"></lucide-icon>
+                    </button>
+                </div>
+
+                <!-- Search Bar (Desktop) -->
+                <div class="hidden md:flex flex-1 max-w-md mx-8">
+                    <div class="relative w-full">
+                        <lucide-icon name="search"
+                            class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4"></lucide-icon>
+                        <input [formControl]="searchControl" type="text" placeholder="Search salons, services..."
+                            class="w-full pl-10 pr-4 py-2 rounded-full bg-slate-100 dark:bg-slate-800 border-none focus:ring-2 focus:ring-primary-500 text-sm text-slate-900 dark:text-white outline-none placeholder:text-slate-400">
                     </div>
                 </div>
 
-                <mat-menu #userMenu="matMenu" xPosition="before">
-                    <button mat-menu-item routerLink="/profile">
-                        <lucide-icon name="user" class="w-4 h-4 mr-2 inline"></lucide-icon>
-                        <span>Profile</span>
+                <!-- Actions -->
+                <div class="flex items-center gap-2 md:gap-3">
+                    @if (authService.isAuthenticated()) {
+                    <button routerLink="/profile"
+                        class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors relative">
+                        <lucide-icon name="tag" class="w-5 h-5 text-slate-600 dark:text-slate-400"></lucide-icon>
+                        <span
+                            class="absolute -top-0.5 -right-0.5 w-4 h-4 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">3</span>
                     </button>
-                    <button mat-menu-item (click)="logout()">
-                        <lucide-icon name="log-out" class="w-4 h-4 mr-2 inline"></lucide-icon>
-                        <span>Logout</span>
+                    <div [matMenuTriggerFor]="userMenu"
+                        class="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
+                        @if (authService.currentUser()?.avatar) {
+                        <img [src]="authService.currentUser()?.avatar"
+                            class="w-8 h-8 rounded-full border-2 border-primary-200">
+                        } @else {
+                        <div
+                            class="w-8 h-8 rounded-full bg-primary-600 flex items-center justify-center text-xs font-bold text-white">
+                            {{ authService.currentUser()?.name?.charAt(0) }}
+                        </div>
+                        }
+                    </div>
+                    <mat-menu #userMenu="matMenu" xPosition="before">
+                        <button mat-menu-item routerLink="/profile">
+                            <lucide-icon name="user" class="w-4 h-4 mr-2 inline"></lucide-icon>
+                            <span>My Profile</span>
+                        </button>
+                        <button mat-menu-item routerLink="/profile">
+                            <lucide-icon name="tag" class="w-4 h-4 mr-2 inline"></lucide-icon>
+                            <span>My Coupons</span>
+                        </button>
+                        <button mat-menu-item (click)="logout()">
+                            <lucide-icon name="log-out" class="w-4 h-4 mr-2 inline"></lucide-icon>
+                            <span>Logout</span>
+                        </button>
+                    </mat-menu>
+                    } @else {
+                    <button (click)="openLoginDialog()"
+                        class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors">
+                        Login
                     </button>
-                </mat-menu>
-                } @else {
-                <button (click)="openLoginDialog()"
-                    class="bg-violet-600 hover:bg-violet-700 text-white px-4 py-1.5 md:px-6 md:py-2 rounded-full text-sm md:text-base font-medium transition-colors shadow-lg shadow-violet-600/20">
-                    Login
+                    }
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Search -->
+    <div class="md:hidden px-4 py-3 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800">
+        <div class="relative">
+            <lucide-icon name="search"
+                class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4"></lucide-icon>
+            <input [formControl]="searchControl" type="text" placeholder="Search salons, services..."
+                class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border-none focus:ring-2 focus:ring-primary-500 text-sm text-slate-900 dark:text-white outline-none placeholder:text-slate-400">
+        </div>
+    </div>
+
+    <!-- Hero Banner -->
+    <section class="relative overflow-hidden bg-linear-to-r from-primary-600 to-primary-500">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute inset-0"
+                style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.4\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');">
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-8">
+                <div class="text-center md:text-left text-white">
+                    <p class="text-primary-100 text-xs md:text-sm font-medium mb-1">LIMITED TIME OFFER</p>
+                    <h2 class="text-xl md:text-3xl font-bold mb-2">Up to 50% Off on First Booking</h2>
+                    <p class="text-primary-100 text-sm md:text-base mb-4">Use code <span
+                            class="font-mono font-bold bg-white/20 px-2 py-0.5 rounded">FIRST50</span></p>
+                    <button
+                        class="bg-white text-primary-600 px-5 py-2 rounded-full text-sm font-bold hover:bg-primary-50 transition-colors shadow-lg">
+                        Explore Offers
+                    </button>
+                </div>
+                <div class="hidden md:block">
+                    <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=400&auto=format&fit=crop"
+                        class="w-64 h-40 object-cover rounded-2xl shadow-2xl border-4 border-white/20"
+                        alt="Salon Offer">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex gap-2 md:gap-3 overflow-x-auto pb-2 scrollbar-hide">
+                <button (click)="selectedCategory.set('all')"
+                    class="shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all"
+                    [class.bg-primary-600]="selectedCategory() === 'all'"
+                    [class.text-white]="selectedCategory() === 'all'"
+                    [class.bg-slate-100]="selectedCategory() !== 'all'"
+                    [class.dark:bg-slate-800]="selectedCategory() !== 'all'"
+                    [class.text-slate-700]="selectedCategory() !== 'all'"
+                    [class.dark:text-slate-300]="selectedCategory() !== 'all'">
+                    All
+                </button>
+                @for (category of categories; track category.id) {
+                <button (click)="selectedCategory.set(category.id)"
+                    class="shrink-0 flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all"
+                    [class.bg-primary-600]="selectedCategory() === category.id"
+                    [class.text-white]="selectedCategory() === category.id"
+                    [class.bg-slate-100]="selectedCategory() !== category.id"
+                    [class.dark:bg-slate-800]="selectedCategory() !== category.id"
+                    [class.text-slate-700]="selectedCategory() !== category.id"
+                    [class.dark:text-slate-300]="selectedCategory() !== category.id">
+                    <lucide-icon [name]="category.icon" class="w-4 h-4"></lucide-icon>
+                    {{ category.name }}
                 </button>
                 }
             </div>
         </div>
+    </section>
 
-        <div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
-            <h1
-                class="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-linear-to-r from-violet-600 to-indigo-600 dark:from-violet-400 dark:to-indigo-400 mb-6 animate-fade-in-up">
-                Find Your Perfect Style
-            </h1>
-            <p
-                class="text-lg md:text-xl text-slate-700 dark:text-slate-300 mb-8 max-w-2xl mx-auto animate-fade-in-up delay-100">
-                Discover top-rated salons, book appointments, and grab exclusive deals in your city.
-            </p>
+    <!-- City Filter Pills -->
+    <section class="bg-slate-50 dark:bg-slate-950 pt-4">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                <button (click)="selectCity('')"
+                    class="shrink-0 px-3 py-1.5 rounded-full text-xs font-medium border transition-all"
+                    [class.bg-primary-600]="cityControl.value === ''" [class.text-white]="cityControl.value === ''"
+                    [class.border-primary-600]="cityControl.value === ''" [class.bg-white]="cityControl.value !== ''"
+                    [class.dark:bg-slate-900]="cityControl.value !== ''"
+                    [class.border-slate-200]="cityControl.value !== ''"
+                    [class.dark:border-slate-700]="cityControl.value !== ''"
+                    [class.text-slate-600]="cityControl.value !== ''"
+                    [class.dark:text-slate-400]="cityControl.value !== ''">
+                    All Cities
+                </button>
+                @for (city of cities(); track city.id) {
+                <button (click)="selectCity(city.id)"
+                    class="shrink-0 px-3 py-1.5 rounded-full text-xs font-medium border transition-all"
+                    [class.bg-primary-600]="cityControl.value === city.id"
+                    [class.text-white]="cityControl.value === city.id"
+                    [class.border-primary-600]="cityControl.value === city.id"
+                    [class.bg-white]="cityControl.value !== city.id"
+                    [class.dark:bg-slate-900]="cityControl.value !== city.id"
+                    [class.border-slate-200]="cityControl.value !== city.id"
+                    [class.dark:border-slate-700]="cityControl.value !== city.id"
+                    [class.text-slate-600]="cityControl.value !== city.id"
+                    [class.dark:text-slate-400]="cityControl.value !== city.id">
+                    {{ city.name }}
+                </button>
+                }
+            </div>
+        </div>
+    </section>
 
-            <!-- Search & Filter Bar -->
-            <div
-                class="bg-white dark:bg-slate-900 p-2 rounded-2xl shadow flex flex-col md:flex-row gap-2 max-w-2xl mx-auto border border-slate-200 dark:border-slate-800 animate-scale-in delay-100">
-                <div class="flex-1 relative">
-                    <lucide-icon name="search"
-                        class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5"></lucide-icon>
-                    <input [formControl]="searchControl" type="text" placeholder="Search salons, services..."
-                        aria-label="Search salons"
-                        class="w-full pl-12 pr-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border-none focus:ring-2 focus:ring-violet-500 text-slate-900 dark:text-white outline-none placeholder:text-slate-400">
-                </div>
-
-                <div class="relative w-full md:w-48" #cityDropdownContainer>
-                    <!-- Trigger -->
-                    <div (click)="toggleCityDropdown()"
-                        class="w-full pl-12 pr-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border-none cursor-pointer flex items-center justify-between group"
-                        [class.ring-2]="isCityDropdownOpen()" [class.ring-violet-500]="isCityDropdownOpen()">
-                        <lucide-icon name="map-pin"
-                            class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5 group-hover:text-violet-500"></lucide-icon>
-                        <span class="text-slate-900 dark:text-white truncate select-none">{{ selectedCityName }}</span>
-                        <lucide-icon name="chevron-down"
-                            class="text-slate-400 w-4 h-4 transition-transform duration-200"
-                            [class.rotate-180]="isCityDropdownOpen()"></lucide-icon>
-                    </div>
-
-                    <!-- Dropdown Menu -->
-                    @if (isCityDropdownOpen()) {
+    <!-- Quick Stats -->
+    <section class="bg-slate-50 dark:bg-slate-950 py-4">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-3 gap-3">
+                <div
+                    class="bg-white dark:bg-slate-900 rounded-xl p-3 md:p-4 border border-slate-100 dark:border-slate-800 text-center">
                     <div
-                        class="absolute top-full left-0 right-0 mt-2 z-20 bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-slate-100 dark:border-slate-800 overflow-hidden origin-top">
-                        <div class="max-h-60 overflow-y-auto custom-scrollbar p-1">
-                            <button (click)="selectCity('')"
-                                class="w-full text-left px-4 py-2 rounded-lg text-sm text-slate-700 dark:text-slate-300 hover:bg-violet-50 dark:hover:bg-violet-900/20 hover:text-violet-600 dark:hover:text-violet-400 transition-colors flex items-center justify-between group">
-                                <span>All Cities</span>
-                                @if (cityControl.value === '') {
-                                <lucide-icon name="check" class="w-4 h-4 text-violet-600"></lucide-icon>
-                                }
-                            </button>
-                            @for (city of cities(); track city.id) {
-                            <button (click)="selectCity(city.id)"
-                                class="w-full text-left px-4 py-2 rounded-lg text-sm text-slate-700 dark:text-slate-300 hover:bg-violet-50 dark:hover:bg-violet-900/20 hover:text-violet-600 dark:hover:text-violet-400 transition-colors flex items-center justify-between group">
-                                <span>{{ city.name }}</span>
-                                @if (cityControl.value === city.id) {
-                                <lucide-icon name="check" class="w-4 h-4 text-violet-600"></lucide-icon>
-                                }
-                            </button>
-                            }
+                        class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-primary-600 dark:text-primary-400 mx-auto mb-2">
+                        <lucide-icon name="store" class="w-4 h-4 md:w-5 md:h-5"></lucide-icon>
+                    </div>
+                    <p class="text-lg md:text-2xl font-bold text-slate-900 dark:text-white">{{ salons().length }}+</p>
+                    <p class="text-[10px] md:text-xs text-slate-500">Partner Salons</p>
+                </div>
+                <div
+                    class="bg-white dark:bg-slate-900 rounded-xl p-3 md:p-4 border border-slate-100 dark:border-slate-800 text-center">
+                    <div
+                        class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center text-amber-600 dark:text-amber-400 mx-auto mb-2">
+                        <lucide-icon name="star" class="w-4 h-4 md:w-5 md:h-5"></lucide-icon>
+                    </div>
+                    <p class="text-lg md:text-2xl font-bold text-slate-900 dark:text-white">4.8</p>
+                    <p class="text-[10px] md:text-xs text-slate-500">Avg Rating</p>
+                </div>
+                <div
+                    class="bg-white dark:bg-slate-900 rounded-xl p-3 md:p-4 border border-slate-100 dark:border-slate-800 text-center">
+                    <div
+                        class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 mx-auto mb-2">
+                        <lucide-icon name="tag" class="w-4 h-4 md:w-5 md:h-5"></lucide-icon>
+                    </div>
+                    <p class="text-lg md:text-2xl font-bold text-slate-900 dark:text-white">500+</p>
+                    <p class="text-[10px] md:text-xs text-slate-500">Active Offers</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Salons -->
+    <section class="bg-slate-50 dark:bg-slate-950 py-6 md:py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between mb-4 md:mb-6">
+                <div>
+                    <h2 class="text-lg md:text-2xl font-bold text-slate-900 dark:text-white">Featured Salons</h2>
+                    <p class="text-xs md:text-sm text-slate-500 dark:text-slate-400">Handpicked by our experts</p>
+                </div>
+                <a routerLink="/"
+                    class="text-primary-600 dark:text-primary-400 text-sm font-medium flex items-center gap-1 hover:underline">
+                    See All
+                    <lucide-icon name="arrow-right" class="w-4 h-4"></lucide-icon>
+                </a>
+            </div>
+
+            <!-- Loading State -->
+            @if (isLoading()) {
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
+                @for (i of [1,2,3,4]; track i) {
+                <div
+                    class="bg-white dark:bg-slate-900 rounded-xl md:rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-800 animate-pulse">
+                    <div class="h-32 md:h-44 bg-slate-200 dark:bg-slate-800"></div>
+                    <div class="p-3 md:p-4">
+                        <div class="h-4 bg-slate-200 dark:bg-slate-800 rounded w-3/4 mb-2"></div>
+                        <div class="h-3 bg-slate-200 dark:bg-slate-800 rounded w-full mb-3"></div>
+                        <div class="flex gap-2">
+                            <div class="h-5 bg-slate-200 dark:bg-slate-800 rounded w-12"></div>
+                            <div class="h-5 bg-slate-200 dark:bg-slate-800 rounded w-16"></div>
                         </div>
                     </div>
-                    }
                 </div>
+                }
+            </div>
+            }
 
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
+                @for (salon of displayedSalons(); track salon.id) {
+                <a [routerLink]="['/detail', salon.id]"
+                    class="group bg-white dark:bg-slate-900 rounded-xl md:rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-800 hover:shadow-xl hover:border-primary-200 dark:hover:border-primary-800 transition-all duration-300 block">
+                    <!-- Image -->
+                    <div class="relative h-32 md:h-44 overflow-hidden">
+                        <img [src]="salon.images && salon.images.length ? salon.images[0] : 'https://images.unsplash.com/photo-1521590832896-135932617485?w=800&auto=format&fit=crop'"
+                            [alt]="salon.name"
+                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+
+                        <!-- Rating Badge -->
+                        <div
+                            class="absolute top-2 right-2 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm px-1.5 py-0.5 rounded-md flex items-center gap-0.5 text-[10px] md:text-xs font-bold shadow-sm">
+                            <lucide-icon name="star" class="w-2.5 h-2.5 md:w-3 md:h-3 text-amber-500 fill-amber-500">
+                            </lucide-icon>
+                            <span class="text-slate-900 dark:text-white">{{ salon.rating || '4.5' }}</span>
+                        </div>
+
+                        <!-- Discount Badge -->
+                        @if(salon.discount) {
+                        <div
+                            class="absolute top-2 left-2 bg-rose-500 text-white px-1.5 py-0.5 rounded-md text-[10px] md:text-xs font-bold">
+                            {{ salon.discount }}% OFF
+                        </div>
+                        }
+
+                        <!-- Favorite Button -->
+                        <button (click)="$event.preventDefault(); $event.stopPropagation()"
+                            class="absolute bottom-2 right-2 w-7 h-7 md:w-8 md:h-8 bg-white/90 dark:bg-slate-900/90 rounded-full flex items-center justify-center shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
+                            <lucide-icon name="heart"
+                                class="w-3.5 h-3.5 md:w-4 md:h-4 text-slate-400 hover:text-rose-500 transition-colors">
+                            </lucide-icon>
+                        </button>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="p-3 md:p-4">
+                        <h3
+                            class="text-sm md:text-base font-bold text-slate-900 dark:text-white mb-1 line-clamp-1 group-hover:text-primary-600 transition-colors">
+                            {{ salon.name }}
+                        </h3>
+                        <p class="text-slate-500 dark:text-slate-400 text-[11px] md:text-xs mb-2 md:mb-3 line-clamp-1">
+                            <lucide-icon name="map-pin" class="w-3 h-3 inline mr-0.5"></lucide-icon>
+                            {{ salon.address }}
+                        </p>
+
+                        <!-- Tags -->
+                        <div class="flex flex-wrap gap-1 mb-2 md:mb-3">
+                            <span
+                                class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[9px] md:text-[10px] font-medium">Hair</span>
+                            <span
+                                class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[9px] md:text-[10px] font-medium">Spa</span>
+                            @if(salon.openingTime) {
+                            <span
+                                class="px-1.5 py-0.5 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded text-[9px] md:text-[10px] font-medium">Open</span>
+                            }
+                        </div>
+
+                        <!-- Footer -->
+                        <div
+                            class="flex items-center justify-between pt-2 md:pt-3 border-t border-slate-100 dark:border-slate-800">
+                            <div class="text-[10px] md:text-xs text-slate-500">
+                                <lucide-icon name="clock" class="w-3 h-3 inline mr-0.5"></lucide-icon>
+                                {{ salon.openingTime || '10:00' }} - {{ salon.closingTime || '20:00' }}
+                            </div>
+                            <span
+                                class="text-primary-600 dark:text-primary-400 text-[10px] md:text-xs font-semibold flex items-center gap-0.5">
+                                Book
+                                <lucide-icon name="arrow-right" class="w-3 h-3"></lucide-icon>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+                }
+                @empty {
+                <div
+                    class="col-span-full h-48 flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800">
+                    <lucide-icon name="search-x" class="w-10 h-10 mb-3 opacity-50"></lucide-icon>
+                    <p class="text-sm font-medium">No salons found</p>
+                    <p class="text-xs text-slate-400">Try adjusting your filters</p>
+                </div>
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- Special Offers Banner -->
+    <section class="py-6 md:py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div
+                class="bg-linear-to-r from-amber-500 to-orange-500 rounded-2xl p-5 md:p-8 flex flex-col md:flex-row items-center justify-between gap-4 overflow-hidden relative">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2">
+                </div>
+                <div
+                    class="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2">
+                </div>
+                <div class="text-center md:text-left text-white relative z-10">
+                    <span
+                        class="inline-block px-2 py-0.5 bg-white/20 rounded-full text-[10px] md:text-xs font-bold mb-2">🔥
+                        HOT DEAL</span>
+                    <h3 class="text-xl md:text-2xl font-bold mb-1">Refer & Earn ₹500</h3>
+                    <p class="text-amber-100 text-sm">Invite friends and earn rewards on every booking</p>
+                </div>
                 <button
-                    class="bg-violet-600 hover:bg-violet-700 text-white px-8 py-3 rounded-xl font-medium transition-colors duration-200">
-                    Search
+                    class="bg-white text-amber-600 px-6 py-2.5 rounded-full text-sm font-bold hover:bg-amber-50 transition-colors shadow-lg relative z-10 shrink-0">
+                    Invite Now
                 </button>
             </div>
         </div>
     </section>
 
-    <!-- Salon Grid -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="flex items-center justify-between mb-8">
-            <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Top Rated Salons</h2>
-            <!-- Optional: Add sorting or view all link -->
-        </div>
-
-        <!-- Loading State -->
-        @if (isLoading()) {
-        <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 mb-8">
-            @for (i of [1,2,3,4,5,6,7,8,9]; track i) {
-            <div
-                class="bg-white dark:bg-slate-900 rounded-xl md:rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm animate-pulse">
-                <!-- Image Placeholder -->
-                <div class="h-28 sm:h-36 md:h-48 bg-slate-200 dark:bg-slate-800 w-full relative">
+    <!-- Why Choose Us -->
+    <section class="bg-white dark:bg-slate-900 py-8 md:py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-6 md:mb-8">
+                <h2 class="text-lg md:text-2xl font-bold text-slate-900 dark:text-white mb-2">Why Choose Ragna</h2>
+                <p class="text-xs md:text-sm text-slate-500 dark:text-slate-400">Experience the best in beauty &
+                    wellness
+                </p>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+                <div class="text-center p-4">
                     <div
-                        class="absolute top-2 right-2 md:top-3 md:right-3 w-8 md:w-12 h-4 md:h-6 bg-slate-300 dark:bg-slate-700 rounded-md md:rounded-lg">
+                        class="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-primary-600 dark:text-primary-400 mx-auto mb-3">
+                        <lucide-icon name="shield" class="w-6 h-6 md:w-7 md:h-7"></lucide-icon>
                     </div>
+                    <h4 class="text-sm md:text-base font-bold text-slate-900 dark:text-white mb-1">Verified Salons</h4>
+                    <p class="text-[10px] md:text-xs text-slate-500 dark:text-slate-400">All partners are verified &
+                        trusted</p>
                 </div>
-
-                <!-- Content Placeholder -->
-                <div class="p-3 md:p-5">
-                    <div class="h-4 md:h-7 bg-slate-200 dark:bg-slate-800 rounded w-3/4 mb-2 md:mb-4"></div>
-                    <div class="h-3 md:h-4 bg-slate-200 dark:bg-slate-800 rounded w-full mb-1.5 md:mb-2"></div>
-                    <div class="hidden md:block h-4 bg-slate-200 dark:bg-slate-800 rounded w-2/3 mb-6"></div>
-
+                <div class="text-center p-4">
                     <div
-                        class="flex items-center justify-between pt-2 md:pt-4 border-t border-slate-100 dark:border-slate-800">
-                        <div class="h-3 md:h-5 bg-slate-200 dark:bg-slate-800 rounded w-1/4"></div>
-                        <div class="h-3 md:h-5 bg-slate-200 dark:bg-slate-800 rounded w-1/4 md:w-1/3"></div>
+                        class="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 mx-auto mb-3">
+                        <lucide-icon name="tag" class="w-6 h-6 md:w-7 md:h-7"></lucide-icon>
                     </div>
+                    <h4 class="text-sm md:text-base font-bold text-slate-900 dark:text-white mb-1">Best Prices</h4>
+                    <p class="text-[10px] md:text-xs text-slate-500 dark:text-slate-400">Exclusive deals & discounts</p>
+                </div>
+                <div class="text-center p-4">
+                    <div
+                        class="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center text-amber-600 dark:text-amber-400 mx-auto mb-3">
+                        <lucide-icon name="star" class="w-6 h-6 md:w-7 md:h-7"></lucide-icon>
+                    </div>
+                    <h4 class="text-sm md:text-base font-bold text-slate-900 dark:text-white mb-1">Top Rated</h4>
+                    <p class="text-[10px] md:text-xs text-slate-500 dark:text-slate-400">Highly rated by 10k+ users</p>
+                </div>
+                <div class="text-center p-4">
+                    <div
+                        class="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-rose-100 dark:bg-rose-900/30 flex items-center justify-center text-rose-600 dark:text-rose-400 mx-auto mb-3">
+                        <lucide-icon name="heart" class="w-6 h-6 md:w-7 md:h-7"></lucide-icon>
+                    </div>
+                    <h4 class="text-sm md:text-base font-bold text-slate-900 dark:text-white mb-1">Hygiene First</h4>
+                    <p class="text-[10px] md:text-xs text-slate-500 dark:text-slate-400">100% sanitized equipment</p>
                 </div>
             </div>
-            }
-        </div>
-        }
-
-        <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
-            @for (salon of filteredSalons().length ? filteredSalons() : salons(); track salon.id; let i = $index) {
-            <a [routerLink]="['/detail', salon.id]"
-                class="group bg-white dark:bg-slate-900 rounded-xl md:rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 block">
-                <!-- Image -->
-                <div class="relative h-28 sm:h-36 md:h-48 overflow-hidden">
-                    <img [src]="salon.images && salon.images.length ? salon.images[0] : 'https://images.unsplash.com/photo-1521590832896-135932617485?w=800&auto=format&fit=crop'"
-                        [alt]="salon.name"
-                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                    <div
-                        class="absolute top-2 right-2 md:top-3 md:right-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm px-1.5 py-0.5 md:px-2 md:py-1 rounded-md md:rounded-lg flex items-center gap-0.5 md:gap-1 text-[10px] md:text-xs font-semibold shadow-sm">
-                        <lucide-icon name="star"
-                            class="w-2.5 h-2.5 md:w-3 md:h-3 text-amber-500 fill-amber-500"></lucide-icon>
-                        <span class="text-slate-900 dark:text-white">{{ salon.rating || 'New' }}</span>
-                    </div>
-                    @if(salon.discount) {
-                    <div
-                        class="absolute top-2 left-2 md:top-3 md:left-3 bg-rose-500 text-white px-1.5 py-0.5 md:px-2 md:py-1 rounded-md md:rounded-lg text-[10px] md:text-xs font-bold shadow-sm">
-                        {{ salon.discount }}% OFF
-                    </div>
-                    }
-                </div>
-
-                <!-- Content -->
-                <div class="p-3 md:p-5">
-                    <h3
-                        class="text-sm md:text-lg font-bold text-slate-900 dark:text-white mb-1 md:mb-2 group-hover:text-violet-600 transition-colors line-clamp-1">
-                        {{ salon.name }}</h3>
-                    <p
-                        class="text-slate-500 dark:text-slate-400 text-xs md:text-sm mb-2 md:mb-4 line-clamp-1 md:line-clamp-2">
-                        {{ salon.address }}</p>
-
-                    <div
-                        class="flex items-center justify-between pt-2 md:pt-4 border-t border-slate-100 dark:border-slate-800">
-                        <div
-                            class="flex items-center gap-1 md:gap-2 text-xs md:text-sm text-slate-500 dark:text-slate-400">
-                            <lucide-icon name="map-pin" class="w-3 h-3 md:w-4 md:h-4"></lucide-icon>
-                            <span class="truncate max-w-[60px] md:max-w-none">{{ salon.city_name || 'City' }}</span>
-                        </div>
-                        <span
-                            class="text-violet-600 dark:text-violet-400 text-xs md:text-sm font-medium flex items-center gap-1">
-                            <span class="hidden sm:inline">View Details</span>
-                            <lucide-icon name="arrow-right" class="w-3 h-3 md:w-4 md:h-4"></lucide-icon>
-                        </span>
-                    </div>
-                </div>
-            </a>
-            }
-            @empty {
-            <div
-                class="col-span-full h-64 flex flex-col items-center justify-center text-slate-500 dark:text-slate-400">
-                <lucide-icon name="search-x" class="w-12 h-12 mb-4 opacity-50"></lucide-icon>
-                <p>No salons found matching your criteria.</p>
-            </div>
-            }
         </div>
     </section>
-
 </div>

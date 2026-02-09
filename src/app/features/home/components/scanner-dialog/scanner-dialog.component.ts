@@ -36,13 +36,13 @@ import { LucideAngularModule, X } from 'lucide-angular';
         </zxing-scanner>
 
         <!-- Guide Frame -->
-        <div class="absolute inset-0 border-2 border-violet-500/30 z-0 pointer-events-none">
+        <div class="absolute inset-0 border-2 border-primary-500/30 z-0 pointer-events-none">
             <div class="absolute inset-0 flex items-center justify-center">
                 <div class="w-64 h-64 border-2 border-white/80 rounded-2xl relative shadow-[0_0_0_9999px_rgba(0,0,0,0.5)]">
-                    <div class="absolute top-0 left-0 w-6 h-6 border-t-4 border-l-4 border-violet-500 -mt-1 -ml-1 rounded-tl-lg"></div>
-                    <div class="absolute top-0 right-0 w-6 h-6 border-t-4 border-r-4 border-violet-500 -mt-1 -mr-1 rounded-tr-lg"></div>
-                    <div class="absolute bottom-0 left-0 w-6 h-6 border-b-4 border-l-4 border-violet-500 -mb-1 -ml-1 rounded-bl-lg"></div>
-                    <div class="absolute bottom-0 right-0 w-6 h-6 border-b-4 border-r-4 border-violet-500 -mb-1 -mr-1 rounded-br-lg"></div>
+                    <div class="absolute top-0 left-0 w-6 h-6 border-t-4 border-l-4 border-primary-500 -mt-1 -ml-1 rounded-tl-lg"></div>
+                    <div class="absolute top-0 right-0 w-6 h-6 border-t-4 border-r-4 border-primary-500 -mt-1 -mr-1 rounded-tr-lg"></div>
+                    <div class="absolute bottom-0 left-0 w-6 h-6 border-b-4 border-l-4 border-primary-500 -mb-1 -ml-1 rounded-bl-lg"></div>
+                    <div class="absolute bottom-0 right-0 w-6 h-6 border-b-4 border-r-4 border-primary-500 -mb-1 -mr-1 rounded-br-lg"></div>
                 </div>
             </div>
         </div>

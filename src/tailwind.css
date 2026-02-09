@@ -1,6 +1,21 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Custom Primary Color Theme */
+@theme {
+    --color-primary-50: #e6f2f3;
+    --color-primary-100: #b3d9dc;
+    --color-primary-200: #80c0c5;
+    --color-primary-300: #4da7ae;
+    --color-primary-400: #1a8e97;
+    --color-primary-500: #065a5f;
+    --color-primary-600: #063336;
+    --color-primary-700: #052a2c;
+    --color-primary-800: #042122;
+    --color-primary-900: #031818;
+    --color-primary: #063336;
+}
+
 /* Global font */
 @layer base {
     body {

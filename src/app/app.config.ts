@@ -17,7 +17,10 @@ import {
   User, Mail, Star, Sparkles,
   Ban, Eye,
   MapPin, CheckCircle, EyeOff, ArrowLeft, Camera, Upload, Image, Download, QrCode, SearchX, ArrowRight, ChevronDown, Facebook, Instagram, Twitter, Youtube, Clock, Check,
-  LogIn, UserPlus, Lock, Tag
+  LogIn, UserPlus, Lock, Tag, ShoppingBag,
+  Calendar, Settings,
+  // Category icons
+  Scissors, Hand, Palette, Droplet, Heart, Loader2
 } from 'lucide-angular';
 import { routes } from './app.routes';
 import { authInterceptor } from './core/auth/auth.interceptor';
@@ -30,7 +33,8 @@ const usedIcons = {
   Menu, Bell, Search, Pencil, Trash2, ImagePlus, Phone,
   Sun, Moon, TrendingUp, Cpu, Activity, Shield,
   User, Mail, Star, Sparkles, Ban, Eye, MapPin, CheckCircle, EyeOff, ArrowLeft, Camera, Upload, Image, Download, QrCode, SearchX, ArrowRight, ChevronDown, Facebook, Instagram, Twitter, Youtube, Clock, Check,
-  LogIn, UserPlus, Lock, Tag
+  LogIn, UserPlus, Lock, Tag, ShoppingBag, Calendar, Settings,
+  Scissors, Hand, Palette, Droplet, Heart, Loader2
 };
 
 export const appConfig: ApplicationConfig = {

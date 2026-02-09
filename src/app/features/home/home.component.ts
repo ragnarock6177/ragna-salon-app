@@ -164,4 +164,22 @@ export class HomeComponent {
             return matchesCity && matchesSearch;
         });
     });
+
+    // Categories for filter chips
+    categories = [
+        { id: 'hair', name: 'Hair', icon: 'scissors' },
+        { id: 'spa', name: 'Spa', icon: 'sparkles' },
+        { id: 'nails', name: 'Nails', icon: 'hand' },
+        { id: 'makeup', name: 'Makeup', icon: 'palette' },
+        { id: 'skincare', name: 'Skincare', icon: 'droplet' },
+    ];
+
+    selectedCategory = signal<string>('all');
+
+    // Displayed salons (limited for featured section)
+    displayedSalons = computed(() => {
+        const salons = this.filteredSalons();
+        // Return first 8 for featured section
+        return salons.slice(0, 8);
+    });
 }

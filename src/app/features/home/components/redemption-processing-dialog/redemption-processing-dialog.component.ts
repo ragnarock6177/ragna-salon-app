@@ -4,19 +4,19 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
-    selector: 'app-redemption-processing-dialog',
-    standalone: true,
-    imports: [CommonModule, MatDialogModule, LucideAngularModule],
-    template: `
+  selector: 'app-redemption-processing-dialog',
+  standalone: true,
+  imports: [CommonModule, MatDialogModule, LucideAngularModule],
+  template: `
     <div class="bg-white dark:bg-zinc-900 rounded-3xl p-8 text-center max-w-sm mx-auto shadow-2xl border border-gray-100 dark:border-zinc-800">
       <div class="relative w-24 h-24 mx-auto mb-6">
         <!-- Spinning border -->
-        <div class="absolute inset-0 rounded-full border-4 border-violet-100 dark:border-violet-900/30"></div>
-        <div class="absolute inset-0 rounded-full border-4 border-violet-600 border-t-transparent animate-spin"></div>
+        <div class="absolute inset-0 rounded-full border-4 border-primary-100 dark:border-primary-900/30"></div>
+        <div class="absolute inset-0 rounded-full border-4 border-primary-600 border-t-transparent animate-spin"></div>
         
         <!-- Icon in center -->
         <div class="absolute inset-0 flex items-center justify-center">
-            <lucide-icon name="loader-2" class="w-8 h-8 text-violet-600 animate-pulse"></lucide-icon>
+            <lucide-icon name="loader-2" class="w-8 h-8 text-primary-600 animate-pulse"></lucide-icon>
         </div>
       </div>
 
@@ -26,7 +26,7 @@ import { LucideAngularModule } from 'lucide-angular';
       </p>
     </div>
   `,
-    styles: [],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  styles: [],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RedemptionProcessingDialogComponent { }
