@@ -56,6 +56,7 @@ export class CartService {
         // Check if we are adding from a different salon
         if (currentItems.length > 0 && currentItems[0].salonId !== salon.id) {
             this.clearCart();
+            this.snackBar.open('Cart cleared - switching to different salon', 'OK', { duration: 2000 });
         }
 
         let updatedItems = currentItems.length > 0 && currentItems[0].salonId !== salon.id ? [] : currentItems;
@@ -64,6 +65,9 @@ export class CartService {
 
         if (existingItem) {
             this.updateQuantity(coupon.id, existingItem.quantity + 1);
+            this.snackBar.open('Quantity updated in cart', 'View Cart', { duration: 3000 }).onAction().subscribe(() => {
+                this.openCart();
+            });
         } else {
             this.cartItems.set([...updatedItems, {
                 id: coupon.id,
@@ -74,8 +78,11 @@ export class CartService {
                 salonId: salon.id,
                 salonName: salon.name
             }]);
+            this.snackBar.open('Coupon added to cart!', 'View Cart', { duration: 3000 }).onAction().subscribe(() => {
+                this.openCart();
+            });
         }
-        this.openCart(); // Auto open
+        // Cart will only open when user clicks "View Cart" button in snackbar or the floating cart button
     }
 
     removeItem(itemId: number) {

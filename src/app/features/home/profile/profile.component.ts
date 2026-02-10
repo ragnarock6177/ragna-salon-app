@@ -10,11 +10,12 @@ import { RedemptionSuccessDialogComponent } from '../components/redemption-succe
 import { RedemptionProcessingDialogComponent } from '../components/redemption-processing-dialog/redemption-processing-dialog.component';
 import { finalize } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { CouponCardComponent } from '../components/coupon-card/coupon-card.component';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, RouterLink, LucideAngularModule],
+  imports: [CommonModule, RouterLink, LucideAngularModule, CouponCardComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -29,6 +30,9 @@ export class ProfileComponent {
 
   purchasedCoupons = signal<any[]>([]);
 
+  // Show all coupons or limited view
+  showAllCoupons = signal(false);
+
   // Computed signals for filtering coupons by status
   activeCoupons = computed(() =>
     this.purchasedCoupons().filter(c => c.purchase_status === 'active')
@@ -36,6 +40,19 @@ export class ProfileComponent {
 
   usedCoupons = computed(() =>
     this.purchasedCoupons().filter(c => c.purchase_status === 'redeemed')
+  );
+
+  // Computed signal for displayed coupons (limited or all)
+  displayedCoupons = computed(() => {
+    const coupons = this.activeCoupons();
+    return this.showAllCoupons() ? coupons : coupons.slice(0, 2);
+  });
+
+  // Computed signals for statistics
+  totalCoupons = computed(() => this.purchasedCoupons().length);
+
+  unusedCoupons = computed(() =>
+    this.purchasedCoupons().filter(c => c.purchase_status === 'active').length
   );
 
   effectRef = effect(() => {

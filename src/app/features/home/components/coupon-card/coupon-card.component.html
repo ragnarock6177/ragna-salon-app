@@ -1,0 +1,62 @@
+<!-- Enhanced Coupon Ticket Card -->
+<div
+    class="bg-white dark:bg-slate-900 rounded-xl md:rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 flex overflow-hidden group hover:shadow-lg hover:border-primary-200 dark:hover:border-primary-800 transition-all duration-300">
+    <!-- Left: Discount Side -->
+    <div
+        class="relative w-20 sm:w-28 md:w-32 bg-linear-to-br from-primary-500 via-primary-600 to-primary-700 text-white flex flex-col items-center justify-center p-3 shrink-0">
+        <div class="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        <span class="text-2xl sm:text-3xl md:text-4xl font-bold relative z-10">{{ coupon().discount }}%</span>
+        <span class="text-[10px] sm:text-xs font-semibold uppercase tracking-widest opacity-90 relative z-10">OFF</span>
+
+        <!-- Decorative Circles for "Ticket" effect -->
+        <div class="absolute -right-2 top-1/2 -translate-y-1/2 w-4 h-4 bg-slate-50 dark:bg-slate-950 rounded-full">
+        </div>
+        <div class="absolute -left-2 top-1/2 -translate-y-1/2 w-4 h-4 bg-slate-50 dark:bg-slate-950 rounded-full">
+        </div>
+    </div>
+
+    <!-- Right: Details Side -->
+    <div class="flex-1 p-3 sm:p-4 flex flex-col justify-between min-w-0">
+        <div class="mb-2 sm:mb-3">
+            <h4 class="font-bold text-slate-900 dark:text-white text-sm sm:text-base md:text-lg mb-1 line-clamp-2">
+                {{ coupon().description }}
+            </h4>
+            <div class="flex items-center gap-1.5 text-[10px] sm:text-xs text-slate-500 dark:text-slate-400">
+                <lucide-icon name="store" class="w-3 h-3 sm:w-3.5 sm:h-3.5"></lucide-icon>
+                <span class="truncate">{{ coupon().salon_name || 'Ragna Salon' }}</span>
+            </div>
+        </div>
+
+        <div class="space-y-2 sm:space-y-3">
+            <!-- Coupon Code & Redeem Button Row -->
+            <div class="flex items-stretch gap-2">
+                <div class="flex-1 min-w-0">
+                    <p class="text-[9px] sm:text-[10px] text-slate-400 uppercase font-semibold mb-1">
+                        Coupon Code</p>
+                    <div
+                        class="h-8 sm:h-11 font-mono text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 tracking-wide bg-slate-100 dark:bg-slate-800 px-2 sm:px-3 rounded border border-slate-200 dark:border-slate-700 border-dashed flex items-center justify-center sm:justify-start">
+                        {{ coupon().code }}
+                    </div>
+                </div>
+                <div class="flex flex-col justify-end">
+                    <button (click)="redeemCoupon()"
+                        class="h-8 sm:h-11 px-3 sm:px-4 bg-linear-to-r from-slate-900 to-slate-800 dark:from-white dark:to-slate-100 text-white dark:text-slate-900 text-xs sm:text-sm font-bold rounded-lg hover:shadow-lg hover:scale-105 transition-all duration-200 flex items-center justify-center gap-1.5 shrink-0 whitespace-nowrap">
+                        <lucide-icon name="scan" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></lucide-icon>
+                        <span class="hidden sm:inline">Redeem</span>
+                    </button>
+                </div>
+            </div>
+
+            <div
+                class="pt-2 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center text-[9px] sm:text-[10px] text-slate-400">
+                <div class="flex items-center gap-1">
+                    <lucide-icon name="calendar" class="w-3 h-3"></lucide-icon>
+                    <span>Valid till {{ coupon().valid_to | date:'MMM d, y' }}</span>
+                </div>
+                <span class="text-emerald-500 font-semibold flex items-center gap-1">
+                    <lucide-icon name="check-circle" class="w-3 h-3"></lucide-icon> Active
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

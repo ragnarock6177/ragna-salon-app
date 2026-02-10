@@ -115,7 +115,16 @@ export class HomeComponent {
     ), { initialValue: [] as any[] });
 
     salons = toSignal(this.apiService.getSalons().pipe(
-        map((res: any) => (res.data || []) as any[]),
+        map((res: any) => {
+            const salons = (res.data || []) as any[];
+            // Parse stringified services array
+            return salons.map(salon => ({
+                ...salon,
+                services: typeof salon.services === 'string'
+                    ? JSON.parse(salon.services)
+                    : (salon.services || [])
+            }));
+        }),
         tap(() => this.isLoading.set(false)),
         catchError(() => {
             this.isLoading.set(false);
@@ -183,4 +192,15 @@ export class HomeComponent {
         // Return first 8 for featured section
         return salons.slice(0, 8);
     });
+
+    // Helper method to safely get services array
+    getServices(salon: any): string[] {
+        if (!salon.services) return [];
+        if (Array.isArray(salon.services)) return salon.services;
+        try {
+            return JSON.parse(salon.services);
+        } catch {
+            return [];
+        }
+    }
 }

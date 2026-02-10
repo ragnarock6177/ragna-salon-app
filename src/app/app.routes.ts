@@ -18,6 +18,11 @@ export const routes: Routes = [
                 title: 'Home - Salons'
             },
             {
+                path: 'all-salons',
+                loadComponent: () => import('./features/home/all-salons/all-salons.component').then(m => m.AllSalonsComponent),
+                title: 'All Salons'
+            },
+            {
                 path: 'detail/:id',
                 loadComponent: () => import('./features/home/salon-details/salon-details.component').then(m => m.SalonDetailsComponent),
                 title: 'Salon Detail'

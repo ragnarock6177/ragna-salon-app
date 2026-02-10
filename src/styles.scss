@@ -408,9 +408,9 @@ html {
     ));
 
   // Custom border for light mode dialogs
-  .mat-mdc-dialog-surface {
-    border: 1px solid rgba(226, 232, 240, 0.8);
-  }
+  // .mat-mdc-dialog-surface {
+  //   border: 1px solid rgba(226, 232, 240, 0.8);
+  // }
 
   // --- Tabs Overrides (Light) ---
   @include mat.tabs-overrides((active-indicator-color: $_sky-500,
@@ -635,9 +635,9 @@ html.dark {
     ));
 
   // Custom border for dark mode dialogs
-  .mat-mdc-dialog-surface {
-    border: 1px solid rgba(71, 85, 105, 0.5);
-  }
+  // .mat-mdc-dialog-surface {
+  //   border: 1px solid rgba(71, 85, 105, 0.5);
+  // }
 
   // Overlay Backdrop
   .cdk-overlay-dark-backdrop {

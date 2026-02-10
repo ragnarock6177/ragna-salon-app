@@ -1,0 +1,156 @@
+<div class="min-h-screen bg-slate-50 dark:bg-slate-950 pb-10">
+    <!-- Search and Filters -->
+    <div class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <!-- Search Bar with Back Button -->
+            <div class="flex items-center gap-3 mb-4">
+                <a routerLink="/"
+                    class="shrink-0 w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                    <lucide-icon name="arrow-left" class="w-5 h-5"></lucide-icon>
+                </a>
+                <div class="relative flex-1">
+                    <lucide-icon name="search"
+                        class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5"></lucide-icon>
+                    <input [formControl]="searchControl" type="text"
+                        placeholder="Search salons by name or description..."
+                        class="w-full pl-12 pr-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-primary-500 text-sm text-slate-900 dark:text-white outline-none placeholder:text-slate-400">
+                </div>
+            </div>
+
+            <!-- City Filter Pills -->
+            <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                <button (click)="selectCity('')"
+                    class="shrink-0 px-4 py-2 rounded-full text-xs md:text-sm font-medium border transition-all"
+                    [class.bg-primary-600]="cityControl.value === ''" [class.text-white]="cityControl.value === ''"
+                    [class.border-primary-600]="cityControl.value === ''" [class.bg-white]="cityControl.value !== ''"
+                    [class.dark:bg-slate-900]="cityControl.value !== ''"
+                    [class.border-slate-200]="cityControl.value !== ''"
+                    [class.dark:border-slate-700]="cityControl.value !== ''"
+                    [class.text-slate-600]="cityControl.value !== ''"
+                    [class.dark:text-slate-400]="cityControl.value !== ''">
+                    All Cities
+                </button>
+                @for (city of cities(); track city.id) {
+                <button (click)="selectCity(city.id)"
+                    class="shrink-0 px-4 py-2 rounded-full text-xs md:text-sm font-medium border transition-all"
+                    [class.bg-primary-600]="cityControl.value === city.id"
+                    [class.text-white]="cityControl.value === city.id"
+                    [class.border-primary-600]="cityControl.value === city.id"
+                    [class.bg-white]="cityControl.value !== city.id"
+                    [class.dark:bg-slate-900]="cityControl.value !== city.id"
+                    [class.border-slate-200]="cityControl.value !== city.id"
+                    [class.dark:border-slate-700]="cityControl.value !== city.id"
+                    [class.text-slate-600]="cityControl.value !== city.id"
+                    [class.dark:text-slate-400]="cityControl.value !== city.id">
+                    {{ city.name }}
+                </button>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Salons Grid -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
+        @if (isLoading()) {
+        <!-- Loading State -->
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+            @for (i of [1,2,3,4,5,6,7,8]; track i) {
+            <div
+                class="bg-white dark:bg-slate-900 rounded-xl md:rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-800 animate-pulse">
+                <div class="h-40 md:h-48 bg-slate-200 dark:bg-slate-800"></div>
+                <div class="p-4">
+                    <div class="h-4 bg-slate-200 dark:bg-slate-800 rounded w-3/4 mb-2"></div>
+                    <div class="h-3 bg-slate-200 dark:bg-slate-800 rounded w-full mb-3"></div>
+                    <div class="flex gap-2">
+                        <div class="h-5 bg-slate-200 dark:bg-slate-800 rounded w-16"></div>
+                        <div class="h-5 bg-slate-200 dark:bg-slate-800 rounded w-20"></div>
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+        } @else {
+        <!-- Salons Grid -->
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+            @for (salon of filteredSalons(); track salon.id) {
+            <a [routerLink]="['/detail', salon.id]"
+                class="group bg-white dark:bg-slate-900 rounded-xl md:rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-800 hover:shadow-xl hover:border-primary-200 dark:hover:border-primary-800 transition-all duration-300 block">
+                <!-- Image -->
+                <div class="relative h-40 md:h-48 overflow-hidden">
+                    <img [src]="salon.images[0] ?? 'https://images.unsplash.com/photo-1521590832896-135932617485?w=800&auto=format&fit=crop'"
+                        [alt]="salon.name"
+                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+
+                    <!-- Rating Badge -->
+                    <div
+                        class="absolute top-2 right-2 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm px-2 py-1 rounded-md flex items-center gap-1 text-xs font-bold shadow-sm">
+                        <lucide-icon name="star" class="w-3 h-3 text-amber-500 fill-amber-500"></lucide-icon>
+                        <span class="text-slate-900 dark:text-white">{{ salon.rating || '4.5' }}</span>
+                    </div>
+
+                    <!-- Discount Badge -->
+                    @if(salon.discount) {
+                    <div class="absolute top-2 left-2 bg-rose-500 text-white px-2 py-1 rounded-md text-xs font-bold">
+                        {{ salon.discount }}% OFF
+                    </div>
+                    }
+                </div>
+
+                <!-- Content -->
+                <div class="p-3 md:p-4">
+                    <h3
+                        class="text-sm md:text-base font-bold text-slate-900 dark:text-white mb-1 line-clamp-1 group-hover:text-primary-600 transition-colors">
+                        {{ salon.name }}
+                    </h3>
+                    <p class="text-slate-500 dark:text-slate-400 text-xs mb-3 line-clamp-1">
+                        <lucide-icon name="map-pin" class="w-3 h-3 inline mr-0.5"></lucide-icon>
+                        {{ salon.address }}
+                    </p>
+
+                    <!-- Services Tags -->
+                    <div class="flex flex-wrap gap-1 mb-3">
+                        @if(getServices(salon).length > 0) {
+                        @for (service of getServices(salon).slice(0, 2); track service) {
+                        <span
+                            class="px-1.5 py-0.5 bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-400 rounded text-[10px] font-medium">{{
+                            service }}</span>
+                        }
+                        @if(getServices(salon).length > 2) {
+                        <span
+                            class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-medium">+{{
+                            getServices(salon).length - 2 }} more</span>
+                        }
+                        } @else {
+                        <span
+                            class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-medium">Services
+                            Available</span>
+                        }
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800">
+                        <div class="text-xs text-slate-500">
+                            <lucide-icon name="clock" class="w-3 h-3 inline mr-0.5"></lucide-icon>
+                            {{ salon.openingTime || '10:00' }} - {{ salon.closingTime || '20:00' }}
+                        </div>
+                        <span
+                            class="text-primary-600 dark:text-primary-400 text-xs font-semibold flex items-center gap-0.5">
+                            View
+                            <lucide-icon name="arrow-right" class="w-3 h-3"></lucide-icon>
+                        </span>
+                    </div>
+                </div>
+            </a>
+            }
+            @empty {
+            <div
+                class="col-span-full h-64 flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800">
+                <lucide-icon name="search-x" class="w-12 h-12 mb-4 opacity-50"></lucide-icon>
+                <p class="text-base font-medium">No salons found</p>
+                <p class="text-sm text-slate-400 mt-1">Try adjusting your search or filters</p>
+            </div>
+            }
+        </div>
+        }
+    </div>
+</div>

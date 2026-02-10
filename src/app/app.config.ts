@@ -29,7 +29,8 @@ import {
   AlertCircle,
   // Profile icons
   History,
-  Home
+  Home,
+  Scan
 } from 'lucide-angular';
 import { routes } from './app.routes';
 import { authInterceptor } from './core/auth/auth.interceptor';
@@ -47,7 +48,7 @@ const usedIcons = {
   Share2, Info, MessageSquare, ZoomIn, Smile,
   Minus, CreditCard,
   AlertCircle,
-  History, Home
+  History, Home, Scan
 };
 
 export const appConfig: ApplicationConfig = {

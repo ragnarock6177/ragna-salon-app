@@ -74,7 +74,14 @@ export class SalonDetailsComponent {
         this.apiService.getSalon(id).subscribe({
             next: (res: any) => {
                 if (res.data) {
-                    this.salon.set(res.data);
+                    // Parse stringified services if needed
+                    const salonData = {
+                        ...res.data,
+                        services: typeof res.data.services === 'string'
+                            ? JSON.parse(res.data.services)
+                            : (res.data.services || [])
+                    };
+                    this.salon.set(salonData);
                 }
                 this.isLoading.set(false);
             },
@@ -87,6 +94,44 @@ export class SalonDetailsComponent {
                 this.coupons.set(res.data || []);
             }
         });
+    }
+
+    // Helper method to get services array
+    getServices(): string[] {
+        const s = this.salon();
+        if (!s || !s.services) return [];
+        if (Array.isArray(s.services)) return s.services;
+        try {
+            return JSON.parse(s.services);
+        } catch {
+            return [];
+        }
+    }
+
+    // Map service names to icons
+    getServiceIcon(service: string): string {
+        const serviceLower = service.toLowerCase();
+        if (serviceLower.includes('hair') || serviceLower.includes('cut')) return 'scissors';
+        if (serviceLower.includes('spa') || serviceLower.includes('massage')) return 'sparkles';
+        if (serviceLower.includes('makeup') || serviceLower.includes('cosmetic')) return 'palette';
+        if (serviceLower.includes('nail') || serviceLower.includes('manicure') || serviceLower.includes('pedicure')) return 'hand';
+        if (serviceLower.includes('skin') || serviceLower.includes('facial')) return 'droplet';
+        if (serviceLower.includes('wax')) return 'zap';
+        if (serviceLower.includes('color') || serviceLower.includes('dye')) return 'paintbrush';
+        return 'sparkles'; // default icon
+    }
+
+    // Get color class for service icon
+    getServiceColorClass(index: number): string {
+        const colors = [
+            'bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400',
+            'bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400',
+            'bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400',
+            'bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400',
+            'bg-cyan-100 dark:bg-cyan-900/30 text-cyan-600 dark:text-cyan-400',
+            'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400',
+        ];
+        return colors[index % colors.length];
     }
 
     goBack() {
