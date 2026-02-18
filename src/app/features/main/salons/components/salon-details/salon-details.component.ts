@@ -18,7 +18,7 @@ import { Salon } from '../../../../../shared/models/salon';
 import { Coupon } from '../../../../../shared/models/coupon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSelectModule } from '@angular/material/select';
-import { CouponDialogComponent } from '../../components/coupon-dialog/coupon-dialog.component';
+import { CouponDialogComponent, CouponDialogData } from '../../components/coupon-dialog/coupon-dialog.component';
 import { formatDate } from '@angular/common';
 import { QrDialogComponent } from '../../components/qr-dialog/qr-dialog.component';
 import { MatTimepickerModule } from '@angular/material/timepicker';
@@ -271,31 +271,41 @@ export class SalonDetailsComponent {
     });
   }
 
-  openCouponDialog() {
+  openCouponDialog(coupon?: Coupon) {
+    const dialogData: CouponDialogData = { coupon };
     const dialogRef = this.dialog.open(CouponDialogComponent, {
       width: '600px',
-      disableClose: true
+      disableClose: true,
+      data: dialogData
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        // Map payload
-        const payload = {
-          code: result.code,
-          description: result.description,
-          type: result.type,
-          discount: result.discount,
-          min_order_amount: result.min_order_amount, // Optional in new payload? keeping strictly to logic if not specified
-          // New payload requests: code, discount, type, description, valid_from, valid_to, max_usage, status
-          valid_from: result.valid_from ? formatDate(result.valid_from, 'yyyy-MM-dd', 'en-US') : null,
-          valid_to: result.valid_to ? formatDate(result.valid_to, 'yyyy-MM-dd', 'en-US') : null,
-          max_usage: result.max_usage,
-          status: result.status // 'active' or 'inactive'
-        };
+      if (!result) return;
 
+      const payload = {
+        code: result.code,
+        description: result.description,
+        discount: result.discount,
+        valid_from: result.valid_from ? formatDate(result.valid_from, 'yyyy-MM-dd', 'en-US') : null,
+        valid_to: result.valid_to ? formatDate(result.valid_to, 'yyyy-MM-dd', 'en-US') : null,
+        max_usage: result.max_usage || null,
+        status: result.status
+      };
+
+      if (coupon) {
+        // Edit mode
+        this.apiService.updateCoupon(this.salon()!.id, coupon.id, payload).subscribe({
+          next: () => {
+            this.toast.success('Coupon updated successfully');
+            this.loadCoupons(this.salon()!.id);
+          },
+          error: () => this.toast.error('Failed to update coupon')
+        });
+      } else {
+        // Add mode
         this.apiService.addCoupon(this.salon()!.id, payload).subscribe({
           next: () => {
-            this.toast.success('Coupon added');
+            this.toast.success('Coupon added successfully');
             this.loadCoupons(this.salon()!.id);
           },
           error: () => this.toast.error('Failed to add coupon')
@@ -305,18 +315,34 @@ export class SalonDetailsComponent {
   }
 
   toggleCouponStatus(coupon: Coupon) {
-    const newStatus = coupon.is_active ? 0 : 1;
-    this.apiService.updateCoupon(coupon.id, { is_active: newStatus }).subscribe(() => {
-      this.loadCoupons(this.salon()!.id);
+    const newStatus = coupon.status === 'active' ? 'inactive' : 'active';
+    const action = newStatus === 'active' ? 'activated' : 'deactivated';
+    this.apiService.updateCoupon(this.salon()!.id, coupon.id, { status: newStatus }).subscribe({
+      next: () => {
+        this.toast.success(`Coupon ${action} successfully`);
+        this.loadCoupons(this.salon()!.id);
+      },
+      error: () => this.toast.error('Failed to update coupon status')
     });
   }
 
-  deleteCoupon(id: number) {
-    if (confirm('Are you sure you want to delete this coupon?')) {
-      this.apiService.deleteCoupon(id).subscribe(() => {
-        this.loadCoupons(this.salon()!.id);
-      });
-    }
+  deleteCoupon(coupon: Coupon) {
+    this.confirmationService.confirm({
+      title: 'Delete Coupon',
+      message: `Are you sure you want to delete coupon "${coupon.code}"? This action cannot be undone.`,
+      confirmText: 'Delete',
+      type: 'danger'
+    }).subscribe(confirmed => {
+      if (confirmed) {
+        this.apiService.deleteCoupon(this.salon()!.id, coupon.id).subscribe({
+          next: () => {
+            this.toast.success('Coupon deleted successfully');
+            this.loadCoupons(this.salon()!.id);
+          },
+          error: () => this.toast.error('Failed to delete coupon')
+        });
+      }
+    });
   }
 
   generateQr() {

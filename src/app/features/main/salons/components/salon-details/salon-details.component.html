@@ -195,14 +195,14 @@
                                 <span
                                     class="inline-flex items-center gap-1 rounded-full px-2 sm:px-2.5 py-0.5 text-xs border shrink-0"
                                     [ngClass]="{
-                  'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 border-emerald-300 dark:border-emerald-700': coupon.is_active,
-                  'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-400 border-gray-300 dark:border-gray-700': !coupon.is_active
+                  'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 border-emerald-300 dark:border-emerald-700': coupon.status === 'active',
+                  'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-400 border-gray-300 dark:border-gray-700': coupon.status === 'inactive'
                 }">
                                     <span class="h-1.5 w-1.5 rounded-full" [ngClass]="{
-                    'bg-emerald-500': coupon.is_active,
-                    'bg-gray-500': !coupon.is_active
+                    'bg-emerald-500': coupon.status === 'active',
+                    'bg-gray-500': coupon.status === 'inactive'
                   }"></span>
-                                    {{ coupon.is_active ? 'Active' : 'Inactive' }}
+                                    {{ coupon.status === 'active' ? 'Active' : 'Inactive' }}
                                 </span>
                             </div>
 
@@ -223,19 +223,21 @@
                                         date }}</span>
                                 </div>
                                 <div class="flex items-center justify-between">
-                                    <span class="text-slate-600 dark:text-slate-400">Usage Limit:</span>
+                                    <span class="text-slate-600 dark:text-slate-400">Used:</span>
                                     <span class="text-slate-900 dark:text-slate-100">
-                                        {{ coupon.max_usage || 'Unlimited' }}
+                                        {{ coupon.used_count || 0 }} / {{ coupon.max_usage || '∞' }}
                                     </span>
                                 </div>
                             </div>
 
                             <div class="mt-4 pt-4 border-t border-gray-200 dark:border-slate-800 flex gap-2">
-                                <button mat-stroked-button class="flex-1" (click)="toggleCouponStatus(coupon)">
-                                    {{ coupon.is_active ? 'Deactivate' : 'Activate' }}
+                                <button mat-stroked-button class="flex-1" (click)="openCouponDialog(coupon)">
+                                    Edit
                                 </button>
-                                <button mat-stroked-button color="warn" class="flex-1"
-                                    (click)="deleteCoupon(coupon.id)">
+                                <button mat-stroked-button class="flex-1" (click)="toggleCouponStatus(coupon)">
+                                    {{ coupon.status === 'active' ? 'Deactivate' : 'Activate' }}
+                                </button>
+                                <button mat-stroked-button color="warn" class="flex-1" (click)="deleteCoupon(coupon)">
                                     Delete
                                 </button>
                             </div>

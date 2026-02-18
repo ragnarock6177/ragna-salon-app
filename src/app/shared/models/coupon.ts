@@ -12,7 +12,7 @@ export interface Coupon {
     valid_to: string;
     max_usage: number | null;
     used_count: number;
-    is_active: number;
+    status: string;
     created_at: string;
     updated_at: string;
 }

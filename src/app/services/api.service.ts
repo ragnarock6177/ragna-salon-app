@@ -111,12 +111,12 @@ export class ApiService {
     return this.http.post(this.adminApiUrl + `/coupons/${salonId}`, data);
   }
 
-  updateCoupon(id: number | string, data: any): Observable<any> {
-    return this.http.put(this.adminApiUrl + `/coupons/${id}`, data);
+  updateCoupon(salonId: number | string, couponId: number | string, data: any): Observable<any> {
+    return this.http.put(this.adminApiUrl + `/coupons/${salonId}/${couponId}`, data);
   }
 
-  deleteCoupon(id: number | string): Observable<any> {
-    return this.http.delete(this.adminApiUrl + `/coupons/${id}`);
+  deleteCoupon(salonId: number | string, couponId: number | string): Observable<any> {
+    return this.http.delete(this.adminApiUrl + `/coupons/${salonId}/${couponId}`);
   }
 
   // Purchase API

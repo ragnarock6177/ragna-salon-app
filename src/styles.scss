@@ -397,6 +397,24 @@ html {
       container-background-color: $_white,
     ));
 
+  // --- Datepicker Overrides (Light) ---
+  @include mat.datepicker-overrides((calendar-container-background-color: $_white,
+      calendar-container-shape: 16px,
+      calendar-container-text-color: $_slate-700,
+      calendar-header-text-color: $_slate-900,
+      calendar-header-divider-color: transparent,
+      calendar-body-label-text-color: $_slate-500,
+      calendar-date-text-color: $_slate-700,
+      calendar-date-today-outline-color: $_sky-500,
+      calendar-date-selected-state-background-color: $_sky-500,
+      calendar-date-selected-state-text-color: $_white,
+      calendar-date-selected-disabled-state-background-color: $_slate-200,
+      calendar-container-elevation-shadow: none,
+      // Focus/Hover
+      calendar-date-hover-state-background-color: $_sky-500-fade,
+      calendar-date-focus-state-background-color: $_sky-500-fade,
+    ));
+
   // --- Table Overrides (Light) ---
   @include mat.table-overrides((background-color: $_white,
       header-headline-color: $_slate-700,
@@ -624,6 +642,24 @@ html.dark {
       container-background-color: $_slate-900,
     ));
 
+  // --- Datepicker Overrides (Dark) ---
+  @include mat.datepicker-overrides((calendar-container-background-color: $_slate-900,
+      calendar-container-shape: 16px,
+      calendar-container-text-color: $_slate-200,
+      calendar-header-text-color: $_slate-100,
+      calendar-header-divider-color: transparent,
+      calendar-body-label-text-color: $_slate-400,
+      calendar-date-text-color: $_slate-300,
+      calendar-date-today-outline-color: $_sky-500,
+      calendar-date-selected-state-background-color: $_sky-500,
+      calendar-date-selected-state-text-color: $_white,
+      calendar-date-selected-disabled-state-background-color: $_slate-700,
+      calendar-container-elevation-shadow: none,
+      // Focus/Hover
+      calendar-date-hover-state-background-color: rgba(14, 165, 233, 0.2),
+      calendar-date-focus-state-background-color: rgba(14, 165, 233, 0.2),
+    ));
+
   // --- Table Overrides (Dark) ---
   @include mat.table-overrides((background-color: var(--color-slate-950),
       header-headline-color: $_slate-300,
@@ -692,13 +728,15 @@ html.dark .mat-mdc-text-field-wrapper {
 
 // --- Menus & Panels ---
 .mat-mdc-select-panel,
-.mat-mdc-menu-panel {
+.mat-mdc-menu-panel,
+.mat-datepicker-content {
   border: 1px solid rgba(226, 232, 240, 0.8);
   border-radius: 0.5rem !important;
 }
 
 html.dark .mat-mdc-select-panel,
-html.dark .mat-mdc-menu-panel {
+html.dark .mat-mdc-menu-panel,
+html.dark .mat-datepicker-content {
   border-color: rgba(71, 85, 105, 0.8);
 }
 
