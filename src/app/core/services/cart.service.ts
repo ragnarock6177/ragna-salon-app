@@ -2,7 +2,7 @@ import { Injectable, computed, signal, inject } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../auth/auth.service';
 import { finalize } from 'rxjs';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { ToastService } from './toast.service';
 
 export interface CartItem {
     id: number;
@@ -20,7 +20,7 @@ export interface CartItem {
 export class CartService {
     private apiService = inject(ApiService);
     private authService = inject(AuthService);
-    private snackBar = inject(MatSnackBar);
+    private toast = inject(ToastService);
 
     // Use a map or array. Array is easier for iteration.
     private cartItems = signal<CartItem[]>([]);
@@ -56,7 +56,7 @@ export class CartService {
         // Check if we are adding from a different salon
         if (currentItems.length > 0 && currentItems[0].salonId !== salon.id) {
             this.clearCart();
-            this.snackBar.open('Cart cleared - switching to different salon', 'OK', { duration: 2000 });
+            this.toast.warning('Cart cleared — switching to a different salon');
         }
 
         let updatedItems = currentItems.length > 0 && currentItems[0].salonId !== salon.id ? [] : currentItems;
@@ -65,9 +65,7 @@ export class CartService {
 
         if (existingItem) {
             this.updateQuantity(coupon.id, existingItem.quantity + 1);
-            this.snackBar.open('Quantity updated in cart', 'View Cart', { duration: 3000 }).onAction().subscribe(() => {
-                this.openCart();
-            });
+            this.toast.info('Quantity updated in cart');
         } else {
             this.cartItems.set([...updatedItems, {
                 id: coupon.id,
@@ -78,11 +76,9 @@ export class CartService {
                 salonId: salon.id,
                 salonName: salon.name
             }]);
-            this.snackBar.open('Coupon added to cart!', 'View Cart', { duration: 3000 }).onAction().subscribe(() => {
-                this.openCart();
-            });
+            this.toast.success('Coupon added to cart!');
         }
-        // Cart will only open when user clicks "View Cart" button in snackbar or the floating cart button
+        // Cart will only open when user clicks the floating cart button
     }
 
     removeItem(itemId: number) {
@@ -126,12 +122,12 @@ export class CartService {
             .pipe(finalize(() => this.isCheckingOut.set(false)))
             .subscribe({
                 next: (res) => {
-                    this.snackBar.open('Purchase Successful!', 'Close', { duration: 3000 });
+                    this.toast.success('Purchase Successful! 🎉');
                     this.clearCart();
                     this.closeCart();
                 },
                 error: (err) => {
-                    this.snackBar.open('Purchase Failed: ' + (err.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+                    this.toast.error('Purchase Failed: ' + (err.error?.message || 'Unknown error'));
                     console.error(err);
                 }
             });

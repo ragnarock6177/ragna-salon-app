@@ -8,7 +8,8 @@ import { environment } from '../../environments/environment';
 })
 export class ApiService {
   private readonly http = inject(HttpClient);
-  private readonly adminApiUrl = environment.apiUrl;
+  private readonly adminApiUrl = environment.adminApiUrl;
+  private readonly userApiUrl = environment.userApiUrl;
 
   getSalons(): Observable<any> {
     return this.http.get(this.adminApiUrl + '/salons');
@@ -144,38 +145,38 @@ export class ApiService {
 
   // Review APIs
   getReviews(salonId: string | number, params?: any): Observable<any> {
-    return this.http.get(this.adminApiUrl + `/reviews/salon/${salonId}`, { params });
+    return this.http.get(this.userApiUrl + `/reviews/salon/${salonId}`, { params });
   }
 
   getReviewStats(salonId: string | number): Observable<any> {
-    return this.http.get(this.adminApiUrl + `/reviews/salon/${salonId}/stats`);
+    return this.http.get(this.userApiUrl + `/reviews/salon/${salonId}/stats`);
   }
 
   getSingleReview(id: string | number): Observable<any> {
-    return this.http.get(this.adminApiUrl + `/reviews/${id}`);
+    return this.http.get(this.userApiUrl + `/reviews/${id}`);
   }
 
   createReview(data: any): Observable<any> {
-    return this.http.post(this.adminApiUrl + '/reviews', data);
+    return this.http.post(this.userApiUrl + '/reviews', data);
   }
 
   updateReview(id: string | number, data: any): Observable<any> {
-    return this.http.put(this.adminApiUrl + `/reviews/${id}`, data);
+    return this.http.put(this.userApiUrl + `/reviews/${id}`, data);
   }
 
   deleteReview(id: string | number): Observable<any> {
-    return this.http.delete(this.adminApiUrl + `/reviews/${id}`);
+    return this.http.delete(this.userApiUrl + `/reviews/${id}`);
   }
 
   getUserReviews(): Observable<any> {
-    return this.http.get(this.adminApiUrl + '/reviews/user/me');
+    return this.http.get(this.userApiUrl + '/reviews/user/me');
   }
 
   toggleLikeReview(id: string | number): Observable<any> {
-    return this.http.post(this.adminApiUrl + `/reviews/${id}/like`, {});
+    return this.http.post(this.userApiUrl + `/reviews/${id}/like`, {});
   }
 
   reportReview(id: string | number, reason: string): Observable<any> {
-    return this.http.post(this.adminApiUrl + `/reviews/${id}/report`, { reason });
+    return this.http.post(this.userApiUrl + `/reviews/${id}/report`, { reason });
   }
 }

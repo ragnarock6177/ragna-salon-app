@@ -1,4 +1,4 @@
-import { Component, inject, signal, computed, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, signal, computed, ChangeDetectionStrategy, ChangeDetectorRef, effect } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -10,6 +10,9 @@ import { ImagePreviewDialogComponent } from '../../main/salons/components/image-
 import { SideCartComponent } from '../components/side-cart/side-cart.component';
 import { AuthService } from '../../../core/auth/auth.service';
 import { LoginDialogComponent } from '../../auth/components/login-dialog/login-dialog.component';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { catchError, EMPTY, filter, finalize, map, merge, of, switchMap, tap } from 'rxjs';
+import { ToastService } from '../../../core/services/toast.service';
 
 @Component({
     selector: 'app-salon-details',
@@ -25,22 +28,133 @@ export class SalonDetailsComponent {
     private location = inject(Location);
     private cartService = inject(CartService);
     private dialog = inject(MatDialog);
+    private cdr = inject(ChangeDetectorRef);
     private authService = inject(AuthService);
+    private toast = inject(ToastService);
 
-    salonId = this.route.snapshot.paramMap.get('id');
+    salonId = signal<string | null>(null);
+
+
 
     salon = signal<any>(null);
     coupons = signal<any[]>([]);
     reviews = signal<any[]>([]);
     reviewStats = signal<any>(null);
     userReview = signal<any>(null); // To store current user's review if any
-    isLoading = signal(true);
+    isLoading = signal(false);
 
     // New Review Form Signals
     showReviewForm = signal(false);
     newReviewRating = signal(0);
     newReviewComment = signal('');
     isSubmittingReview = signal(false);
+
+    $loadAll = toSignal(
+        this.route.paramMap.pipe(
+            map(params => params.get('id')),
+            filter((id): id is string => !!id),
+
+            tap(id => {
+                this.isLoading.set(true);
+                this.salonId.set(id);
+            }),
+
+            switchMap(id =>
+                merge(
+
+                    // 1️⃣ Salon
+                    this.apiService.getSalon(id).pipe(
+                        map(res => res.data),
+                        tap(salon => {
+                            const salonData = {
+                                ...salon,
+                                services: typeof salon.services === 'string'
+                                    ? JSON.parse(salon.services)
+                                    : (salon.services || [])
+                            };
+                            this.salon.set(salonData);
+                        }),
+                        catchError(err => {
+                            console.error('Salon Error:', err);
+                            this.salon.set(null);
+                            return EMPTY; // prevents stream crash
+                        })
+                    ),
+
+                    // 2️⃣ Coupons
+                    this.apiService.getCoupons(id).pipe(
+                        map(res => res.data),
+                        tap(coupons => this.coupons.set(coupons)),
+                        catchError(err => {
+                            console.error('Coupons Error:', err);
+                            this.coupons.set([]);
+                            return EMPTY;
+                        })
+                    ),
+
+                    // 3️⃣ Reviews
+                    this.apiService.getReviews(id).pipe(
+                        map(res => res.data?.reviews || []),
+                        tap(reviews => this.reviews.set(reviews)),
+                        catchError(err => {
+                            console.error('Reviews Error:', err);
+                            this.reviews.set([]);
+                            return EMPTY;
+                        })
+                    ),
+
+                    // 4️⃣ Review Stats
+                    this.apiService.getReviewStats(id).pipe(
+                        map(res => res.data),
+                        tap(stats => {
+                            this.reviewStats.set({
+                                totalReviews: stats?.total_reviews ?? 0,
+                                averageRating: parseFloat(stats?.average_rating ?? 0),
+                                distribution: {
+                                    5: stats?.rating_distribution?.five_star?.count || 0,
+                                    4: stats?.rating_distribution?.four_star?.count || 0,
+                                    3: stats?.rating_distribution?.three_star?.count || 0,
+                                    2: stats?.rating_distribution?.two_star?.count || 0,
+                                    1: stats?.rating_distribution?.one_star?.count || 0
+                                }
+                            });
+                        }),
+                        catchError(err => {
+                            console.error('Stats Error:', err);
+                            return EMPTY;
+                        })
+                    ),
+
+                    // 5️⃣ User Reviews
+                    this.apiService.getUserReviews().pipe(
+                        map(res => res.data),
+                        tap(userReviews => {
+                            const found = userReviews?.find(
+                                (r: any) => String(r.salon_id) === String(id)
+                            );
+
+                            if (found) {
+                                this.userReview.set(found);
+                                this.newReviewRating.set(found.rating);
+                                this.newReviewComment.set(found.comment);
+                            } else {
+                                this.userReview.set(null);
+                            }
+                        }),
+                        catchError(err => {
+                            console.error('User Review Error:', err);
+                            this.userReview.set(null);
+                            return EMPTY;
+                        })
+                    )
+
+                )
+            ),
+            tap(() => this.isLoading.set(false)),
+        ),
+        { initialValue: null }
+    );
+
 
     // Computed signal to check if salon is currently open
     isOpen = computed(() => {
@@ -58,15 +172,6 @@ export class SalonDetailsComponent {
 
         return currentTime >= openTime && currentTime <= closeTime;
     });
-
-    constructor() {
-        if (this.salonId) {
-            this.loadData(this.salonId);
-            this.loadReviews(this.salonId);
-            this.loadReviewStats(this.salonId);
-            this.checkUserReview();
-        }
-    }
 
     loadData(id: string) {
         this.isLoading.set(true);
@@ -169,6 +274,7 @@ export class SalonDetailsComponent {
             next: (res: any) => {
                 // API returns { data: { reviews: [], pagination: {...} } }
                 this.reviews.set(res.data?.reviews || []);
+                this.cdr.detectChanges();
             },
             error: () => this.reviews.set([])
         });
@@ -192,6 +298,7 @@ export class SalonDetailsComponent {
                         1: data.rating_distribution?.one_star?.count || 0
                     }
                 });
+                this.cdr.detectChanges();
             },
             error: () => this.reviewStats.set(null)
         });
@@ -200,17 +307,18 @@ export class SalonDetailsComponent {
     checkUserReview() {
         this.apiService.getUserReviews().subscribe({
             next: (res: any) => {
-                // Filter specifically for this salon's review
                 const myReviews = res.data || [];
-                const review = myReviews.find((r: any) => r.salon_id == this.salonId);
+                // Use salonId() — call the signal to get the string value
+                const review = myReviews.find((r: any) => String(r.salon_id) === String(this.salonId()));
                 if (review) {
                     this.userReview.set(review);
                     this.newReviewRating.set(review.rating);
                     this.newReviewComment.set(review.comment);
+                } else {
+                    this.userReview.set(null);
                 }
             },
             error: () => {
-                // User likely not logged in or no reviews
                 this.userReview.set(null);
             }
         });
@@ -235,7 +343,7 @@ export class SalonDetailsComponent {
 
         this.isSubmittingReview.set(true);
         const data = {
-            salon_id: this.salonId,
+            salon_id: this.salonId(), // call the signal — not the signal reference
             rating: this.newReviewRating(),
             comment: this.newReviewComment()
         };
@@ -246,11 +354,15 @@ export class SalonDetailsComponent {
                 next: (res: any) => {
                     this.isSubmittingReview.set(false);
                     this.showReviewForm.set(false);
-                    this.loadReviews(this.salonId!);
-                    this.loadReviewStats(this.salonId!);
+                    this.loadReviews(this.salonId()!);
+                    this.loadReviewStats(this.salonId()!);
                     this.checkUserReview();
+                    this.toast.success('Review updated successfully!');
                 },
-                error: () => this.isSubmittingReview.set(false)
+                error: () => {
+                    this.isSubmittingReview.set(false);
+                    this.toast.error('Failed to update review. Please try again.');
+                }
             });
         } else {
             // Create new review
@@ -258,11 +370,15 @@ export class SalonDetailsComponent {
                 next: (res: any) => {
                     this.isSubmittingReview.set(false);
                     this.showReviewForm.set(false);
-                    this.loadReviews(this.salonId!);
-                    this.loadReviewStats(this.salonId!);
+                    this.loadReviews(this.salonId()!);
+                    this.loadReviewStats(this.salonId()!);
                     this.checkUserReview();
+                    this.toast.success('Review submitted successfully!');
                 },
-                error: () => this.isSubmittingReview.set(false)
+                error: () => {
+                    this.isSubmittingReview.set(false);
+                    this.toast.error('Failed to submit review. Please try again.');
+                }
             });
         }
     }
@@ -276,27 +392,32 @@ export class SalonDetailsComponent {
                     this.userReview.set(null);
                     this.newReviewRating.set(0);
                     this.newReviewComment.set('');
-                    this.loadReviews(this.salonId!);
-                    this.loadReviewStats(this.salonId!);
+                    this.loadReviews(this.salonId()!);
+                    this.loadReviewStats(this.salonId()!);
                 }
             });
         }
     }
 
     toggleLike(review: any) {
+        // Optimistic update: flip immediately in UI
+        this.reviews.update(list =>
+            list.map(r => r.id === review.id
+                ? { ...r, is_liked: !r.is_liked, likes_count: (r.likes_count || 0) + (r.is_liked ? -1 : 1) }
+                : r
+            )
+        );
+
         this.apiService.toggleLikeReview(review.id).subscribe({
-            next: (res: any) => {
-                // Update specific review in the list
-                const currentReviews = this.reviews();
-                const index = currentReviews.findIndex(r => r.id === review.id);
-                if (index !== -1) {
-                    // Optimistic update or reload could work, usually backend returns updated counts
-                    // For now, let's just create a shallow clone and update stats if we had them
-                    /* 
-                    // Ideally we reload reviews or update locally from response
-                    */
-                    this.loadReviews(this.salonId!);
-                }
+            error: () => {
+                // Revert on failure
+                this.reviews.update(list =>
+                    list.map(r => r.id === review.id
+                        ? { ...r, is_liked: !r.is_liked, likes_count: (r.likes_count || 0) + (r.is_liked ? -1 : 1) }
+                        : r
+                    )
+                );
+                this.toast.error('Failed to update. Please try again.');
             }
         });
     }

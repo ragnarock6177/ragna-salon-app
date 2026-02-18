@@ -1,4 +1,5 @@
 export const environment = {
     production: true,
-    apiUrl: 'https://salon-backend-zeta.vercel.app/api/admin'
+    adminApiUrl: 'https://salon-backend-zeta.vercel.app/api/admin',
+    userApiUrl: 'https://salon-backend-zeta.vercel.app/api'
 };

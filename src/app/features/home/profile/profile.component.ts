@@ -9,13 +9,12 @@ import { ScannerDialogComponent } from '../components/scanner-dialog/scanner-dia
 import { RedemptionSuccessDialogComponent } from '../components/redemption-success-dialog/redemption-success-dialog.component';
 import { RedemptionProcessingDialogComponent } from '../components/redemption-processing-dialog/redemption-processing-dialog.component';
 import { finalize } from 'rxjs';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { CouponCardComponent } from '../components/coupon-card/coupon-card.component';
+import { ToastService } from '../../../core/services/toast.service';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, RouterLink, LucideAngularModule, CouponCardComponent],
+  imports: [CommonModule, RouterLink, LucideAngularModule],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -24,14 +23,11 @@ export class ProfileComponent {
   authService = inject(AuthService);
   private apiService = inject(ApiService);
   private dialog = inject(MatDialog);
-  private snackBar = inject(MatSnackBar);
+  private toast = inject(ToastService);
 
   user = computed(() => this.authService.currentUser() as User | null);
 
   purchasedCoupons = signal<any[]>([]);
-
-  // Show all coupons or limited view
-  showAllCoupons = signal(false);
 
   // Computed signals for filtering coupons by status
   activeCoupons = computed(() =>
@@ -39,13 +35,13 @@ export class ProfileComponent {
   );
 
   usedCoupons = computed(() =>
-    this.purchasedCoupons().filter(c => c.purchase_status === 'redeemed')
+    this.purchasedCoupons().filter(c => c.purchase_status === 'used')
   );
 
   // Computed signal for displayed coupons (limited or all)
   displayedCoupons = computed(() => {
     const coupons = this.activeCoupons();
-    return this.showAllCoupons() ? coupons : coupons.slice(0, 2);
+    return coupons
   });
 
   // Computed signals for statistics
@@ -65,6 +61,7 @@ export class ProfileComponent {
   loadPurchases(userId: string) {
     this.apiService.getCustomerPurchases(userId).subscribe({
       next: (res: any) => {
+        console.log(res.data);
         this.purchasedCoupons.set(res.data);
       }
     });
@@ -87,11 +84,11 @@ export class ProfileComponent {
           if (data.type === 'salon' && data.id && data.name) {
             this.processRedemption(coupon, data);
           } else {
-            this.snackBar.open('Invalid QR Code. Please scan a valid Salon QR.', 'Close', { duration: 3000 });
+            this.toast.error('Invalid QR Code. Please scan a valid Salon QR.');
           }
         } catch (e) {
           console.error(e);
-          this.snackBar.open('Invalid QR Code format.', 'Close', { duration: 3000 });
+          this.toast.error('Invalid QR Code format.');
         }
       }
     });
@@ -102,7 +99,7 @@ export class ProfileComponent {
     // Optional: Check if coupon.salon_id matches salonData.id
     // Assuming user wants strict check:
     if (String(coupon.salon_id) !== String(salonData.id)) {
-      this.snackBar.open(`This coupon is only valid for ${coupon.salon_name || 'a different salon'}. You scanned ${salonData.name}.`, 'Close', { duration: 5000 });
+      this.toast.error(`This coupon is only valid for ${coupon.salon_name || 'a different salon'}. You scanned ${salonData.name}.`);
       return;
     }
     const userId = this.authService.currentUser()?.id;
@@ -134,7 +131,7 @@ export class ProfileComponent {
           if (userId) this.loadPurchases(userId);
         },
         error: (err) => {
-          this.snackBar.open(err.error?.message || 'Redemption failed. Please try again.', 'Close', { duration: 3000 });
+          this.toast.error(err.error?.message || 'Redemption failed. Please try again.');
         }
       });
   }

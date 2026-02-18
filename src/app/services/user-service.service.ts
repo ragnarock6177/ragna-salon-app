@@ -13,7 +13,7 @@ export class UserServiceService {
   // or maybe it's just api/auth/users. 
   // AuthService: environment.apiUrl.replace('/admin', '/auth') -> .../api/auth
   // Users endpoint: .../api/auth/users
-  private readonly API_URL = environment.apiUrl.replace('/admin', '/auth') + '/users';
+  private readonly API_URL = environment.adminApiUrl.replace('/admin', '/auth') + '/users';
 
   private _users: User[] = [];
 

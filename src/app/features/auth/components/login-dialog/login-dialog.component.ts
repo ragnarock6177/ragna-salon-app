@@ -4,12 +4,12 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { AuthService } from '../../../../core/auth/auth.service';
 import { LucideAngularModule } from 'lucide-angular';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { ToastService } from '../../../../core/services/toast.service';
 
 @Component({
   selector: 'app-login-dialog',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatDialogModule, LucideAngularModule, MatSnackBarModule],
+  imports: [CommonModule, ReactiveFormsModule, MatDialogModule, LucideAngularModule],
   template: `
     <div class="bg-white dark:bg-slate-900 rounded-2xl md:rounded-3xl overflow-hidden relative shadow-2xl">
       <!-- Close Button -->
@@ -199,7 +199,7 @@ export class LoginDialogComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private dialogRef = inject(MatDialogRef<LoginDialogComponent>);
-  private snackBar = inject(MatSnackBar);
+  private toast = inject(ToastService);
 
   isLoginMode = signal(true);
   showPassword = signal(false);
@@ -261,13 +261,13 @@ export class LoginDialogComponent {
   }
 
   private handleSuccess(message: string) {
-    this.snackBar.open(message, 'Close', { duration: 3000, horizontalPosition: 'center', verticalPosition: 'bottom' });
+    // this.snackBar.open(message, 'Close', { duration: 3000, horizontalPosition: 'center', verticalPosition: 'bottom' });
     this.dialogRef.close(true);
     this.isLoading.set(false);
   }
 
   private handleError(message: string) {
-    this.snackBar.open(message, 'Close', { duration: 3000, panelClass: ['error-snackbar'] });
+    this.toast.error(message);
     this.isLoading.set(false);
   }
 }

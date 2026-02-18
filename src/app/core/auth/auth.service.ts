@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
-import { catchError, map, Observable, of, tap, throwError } from 'rxjs';
+import { NavigationEnd, Router } from '@angular/router';
+import { catchError, filter, map, Observable, of, tap, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 export interface User {
@@ -31,10 +31,21 @@ export class AuthService {
 
     // Derive auth URL from environment
     // env.apiUrl is '.../api/admin', we want '.../api/auth'
-    private readonly AUTH_API = environment.apiUrl.replace('/admin', '/auth');
+    private readonly AUTH_API = environment.adminApiUrl.replace('/admin', '/auth');
 
     constructor() {
         this.checkAuth();
+
+        // Reset signals when the interceptor clears the token on 401
+        // and navigates away — avoids circular dependency with the interceptor
+        this.router.events.pipe(
+            filter(event => event instanceof NavigationEnd)
+        ).subscribe(() => {
+            if (!localStorage.getItem('token')) {
+                this.currentUser.set(null);
+                this.isAuthenticated.set(false);
+            }
+        });
     }
 
     private checkAuth() {

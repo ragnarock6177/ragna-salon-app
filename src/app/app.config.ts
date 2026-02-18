@@ -30,12 +30,13 @@ import {
   // Profile icons
   History,
   Home,
-  Scan
+  Scan,
+  ThumbsUp
 } from 'lucide-angular';
 import { routes } from './app.routes';
 import { authInterceptor } from './core/auth/auth.interceptor';
 import { SeoTitleStrategy } from './core/seo/seo-title-strategy';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+
 
 const usedIcons = {
   LayoutDashboard, Building2, Users, Store, Ticket, Crown,
@@ -48,7 +49,7 @@ const usedIcons = {
   Share2, Info, MessageSquare, ZoomIn, Smile,
   Minus, CreditCard,
   AlertCircle,
-  History, Home, Scan
+  History, Home, Scan, ThumbsUp
 };
 
 export const appConfig: ApplicationConfig = {
@@ -59,7 +60,7 @@ export const appConfig: ApplicationConfig = {
       anchorScrolling: 'enabled',
     })),
     provideHttpClient(withInterceptors([authInterceptor])),
-    importProvidersFrom(LucideAngularModule.pick(usedIcons), MatSnackBarModule),
+    importProvidersFrom(LucideAngularModule.pick(usedIcons)),
     // SEO: Custom title strategy for consistent page titles
     { provide: TitleStrategy, useClass: SeoTitleStrategy },
     // Global Form Field Config

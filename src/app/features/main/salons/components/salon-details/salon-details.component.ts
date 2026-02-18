@@ -9,7 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { ToastService } from '../../../../../core/services/toast.service';
 import { LucideAngularModule } from 'lucide-angular';
 import { catchError, finalize, of, switchMap, tap } from 'rxjs';
 import { ApiService } from '../../../../../services/api.service';
@@ -39,7 +39,7 @@ import { ImagePreviewDialogComponent } from '../image-preview-dialog/image-previ
     MatButtonModule,
     MatIconModule,
     MatSlideToggleModule,
-    MatSnackBarModule,
+
     MatChipsModule,
     MatSelectModule,
     MatSelectModule,
@@ -55,7 +55,7 @@ import { ImagePreviewDialogComponent } from '../image-preview-dialog/image-previ
 export class SalonDetailsComponent {
   private fb = inject(FormBuilder);
   private apiService = inject(ApiService);
-  private snackBar = inject(MatSnackBar);
+  private toast = inject(ToastService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private dialog = inject(MatDialog);
@@ -161,11 +161,11 @@ export class SalonDetailsComponent {
 
     this.apiService.updateSalon(this.salon()!.id, updates).pipe(
       tap(() => {
-        this.snackBar.open('Salon updated successfully', 'Close', { duration: 3000 });
+        this.toast.success('Salon updated successfully');
         this.router.navigate(['/salons']);
       }),
       catchError(err => {
-        this.snackBar.open('Error updating salon', 'Close', { duration: 3000 });
+        this.toast.error('Error updating salon');
         console.error(err);
         return of(null);
       }),
@@ -182,19 +182,19 @@ export class SalonDetailsComponent {
         const compressedFile = await this.imageCompressionService.compressImage(file);
         this.apiService.uploadSingle(compressedFile, salon.id, salon.name).subscribe({
           next: () => {
-            this.snackBar.open('Image uploaded', 'Close', { duration: 3000 });
+            this.toast.success('Image uploaded');
             this.loadSalonDetails(salon.id);
             this.isLoading.set(false);
           },
           error: () => {
-            this.snackBar.open('Upload failed', 'Close', { duration: 3000 });
+            this.toast.error('Upload failed');
             this.isLoading.set(false);
           }
         });
       } catch (error) {
         console.error('Compression or upload error:', error);
         this.isLoading.set(false);
-        this.snackBar.open('Upload failed', 'Close', { duration: 3000 });
+        this.toast.error('Upload failed');
       }
     }
   }
@@ -213,19 +213,19 @@ export class SalonDetailsComponent {
           })
         ).subscribe({
           next: () => {
-            this.snackBar.open('Logo uploaded successfully', 'Close', { duration: 3000 });
+            this.toast.success('Logo uploaded successfully');
             this.loadSalonDetails(salon.id);
             this.isLoading.set(false);
           },
           error: () => {
-            this.snackBar.open('Logo upload failed', 'Close', { duration: 3000 });
+            this.toast.error('Logo upload failed');
             this.isLoading.set(false);
           }
         });
       } catch (error) {
         console.error('Compression or upload error:', error);
         this.isLoading.set(false);
-        this.snackBar.open('Logo upload failed', 'Close', { duration: 3000 });
+        this.toast.error('Logo upload failed');
       }
     }
   }
@@ -247,14 +247,14 @@ export class SalonDetailsComponent {
         if (imageUrl) {
           this.apiService.deleteSalonImage(salon.id, imageUrl).subscribe({
             next: () => {
-              this.snackBar.open('Image deleted', 'Close', { duration: 3000 });
+              this.toast.success('Image deleted');
               this.loadSalonDetails(salon.id);
             },
-            error: () => this.snackBar.open('Failed to delete image', 'Close', { duration: 3000 })
+            error: () => this.toast.error('Failed to delete image')
           });
         } else {
           console.error('Image object missing URL', img);
-          this.snackBar.open('Cannot delete image: Missing URL', 'Close', { duration: 3000 });
+          this.toast.error('Cannot delete image: Missing URL');
         }
       }
     });
@@ -295,10 +295,10 @@ export class SalonDetailsComponent {
 
         this.apiService.addCoupon(this.salon()!.id, payload).subscribe({
           next: () => {
-            this.snackBar.open('Coupon added', 'Close', { duration: 3000 });
+            this.toast.success('Coupon added');
             this.loadCoupons(this.salon()!.id);
           },
-          error: () => this.snackBar.open('Failed to add coupon', 'Close', { duration: 3000 })
+          error: () => this.toast.error('Failed to add coupon')
         });
       }
     });
@@ -334,10 +334,10 @@ export class SalonDetailsComponent {
             width: '400px'
           });
         } else {
-          this.snackBar.open('Failed to generate QR code', 'Close', { duration: 3000 });
+          this.toast.error('Failed to generate QR code');
         }
       },
-      error: () => this.snackBar.open('Failed to generate QR code', 'Close', { duration: 3000 })
+      error: () => this.toast.error('Failed to generate QR code')
     });
   }
 }
