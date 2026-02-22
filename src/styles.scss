@@ -303,9 +303,6 @@ $checkbox-overrides: (
   unselected-hover-state-layer-opacity: 0,
   unselected-pressed-state-layer-opacity: 0,
 
-  // Touch Target
-  touch-target-size: 40px,
-
   // Selected (Checked) Icon Colors
   selected-icon-color: $_sky-500,
   selected-hover-icon-color: $_sky-500,
@@ -314,12 +311,9 @@ $checkbox-overrides: (
   selected-checkmark-color: $_white,
 
   // Disabled Colors
-  disabled-label-color: var(--mat-sys-on-surface),
-  disabled-selected-icon-color: var(--mat-sys-on-surface),
-  disabled-unselected-icon-color: var(--mat-sys-on-surface),
-
-  // Density
-  state-layer-size: 40px,
+  disabled-label-color: $_slate-400,
+  disabled-selected-icon-color: $_slate-200,
+  disabled-unselected-icon-color: $_slate-200,
 );
 
 /* --- 3. Apply Themes & Overrides --- */
@@ -329,7 +323,10 @@ html {
 
   @include mat.button-overrides($button-theme-overrides);
   @include mat.icon-button-overrides($icon-button-overrides);
-  @include mat.checkbox-overrides($checkbox-overrides);
+  @include mat.checkbox-overrides(map-merge($checkbox-overrides, (unselected-icon-color: $_slate-300,
+        unselected-hover-icon-color: $_slate-400,
+        unselected-focus-icon-color: $_slate-400,
+      )));
   @include mat.fab-overrides($fab-overrides);
 
   // --- Form Field Overrides (Light) ---
@@ -511,7 +508,13 @@ html.dark {
   @include mat.button-overrides($dark-button-theme-overrides);
   @include mat.icon-button-overrides($dark-icon-button-overrides);
   @include mat.fab-overrides($dark-fab-overrides);
-  @include mat.checkbox-overrides($checkbox-overrides);
+  @include mat.checkbox-overrides(map-merge($checkbox-overrides, (unselected-icon-color: $_slate-600,
+        unselected-hover-icon-color: $_slate-500,
+        unselected-focus-icon-color: $_slate-500,
+        disabled-selected-icon-color: $_slate-800,
+        disabled-unselected-icon-color: $_slate-800,
+        disabled-label-color: $_slate-600,
+      )));
 
   // --- Tabs Overrides (Dark) ---
   @include mat.tabs-overrides((active-indicator-color: $_sky-500,
@@ -732,6 +735,30 @@ html.dark .mat-mdc-text-field-wrapper {
 .mat-datepicker-content {
   border: 1px solid rgba(226, 232, 240, 0.8);
   border-radius: 0.5rem !important;
+}
+
+// --- Checkbox Styling (Tailwind-like) ---
+.mdc-checkbox {
+
+  // Make checks slightly smaller and rounded
+  .mdc-checkbox__background {
+    border-radius: 4px !important; // Rounded corners like Tailwind
+    border-width: 1.5px !important; // Slightly thicker border for better visibility
+  }
+
+  // Thicker checkmark for better visibility (Tailwind-style)
+  .mdc-checkbox__checkmark {
+    --mdc-checkbox-selected-checkmark-color: #fff;
+    // Scale up the icon to fill the box more (Tailwind style)
+    transform: scale(0.8) !important;
+    transform-origin: center !important;
+  }
+
+  // Remove the ripple container to ensure valid click targets but no visual noise
+  .mat-mdc-checkbox-ripple,
+  .mdc-checkbox__ripple {
+    display: none !important;
+  }
 }
 
 html.dark .mat-mdc-select-panel,

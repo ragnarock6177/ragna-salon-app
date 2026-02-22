@@ -14,7 +14,7 @@
     content="salon management, beauty salon, spa management, appointment booking, salon software, Ragna Salon">
   <meta name="author" content="Ragna Salon">
   <meta name="robots" content="index, follow">
-  <meta name="theme-color" content="#6366f1">
+  <meta name="theme-color" content="#063336">
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
@@ -40,7 +40,7 @@
   <meta name="apple-mobile-web-app-title" content="Ragna Salon">
 
   <!-- Microsoft Tile -->
-  <meta name="msapplication-TileColor" content="#6366f1">
+  <meta name="msapplication-TileColor" content="#063336">
 
   <!-- Canonical URL is set dynamically by SeoService per route -->
 
@@ -55,10 +55,411 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Nunito:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
     rel="stylesheet">
+
+  <style>
+    /* Loader styles - Angular optimized */
+    .ragna-loader {
+      --primary: #063336;
+      --secondary: #063336;
+
+      position: fixed;
+      inset: 0;
+      background: #0a0a0a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      transition: opacity 0.3s ease;
+    }
+
+    .ragna-loader.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .loader-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2.5rem;
+    }
+
+    /* Logo animation container */
+    .logo-container {
+      position: relative;
+      width: clamp(140px, 25vw, 180px);
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Rotating ring */
+    .ring {
+      position: absolute;
+      inset: 0;
+      border: 2px solid rgba(255, 215, 180, 0.1);
+      border-radius: 50%;
+    }
+
+    .ring::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border: 2px solid transparent;
+      border-top-color: var(--primary);
+      border-right-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1.5s cubic-bezier(0.76, 0.01, 0.26, 1.5) infinite;
+    }
+
+    /* Salon icon */
+    .salon-icon {
+      width: 90px;
+      aspect-ratio: 1;
+      position: relative;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    /* Scissors */
+    .scissor-blade {
+      position: absolute;
+      width: 50px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      border-radius: 4px;
+      transform-origin: left center;
+      top: 45px;
+      left: 20px;
+    }
+
+    .blade-1 {
+      transform: rotate(35deg);
+      animation: snip 2.2s ease-in-out infinite;
+    }
+
+    .blade-2 {
+      transform: rotate(-35deg);
+      animation: snip 2.2s ease-in-out infinite reverse;
+    }
+
+    .scissor-handle {
+      position: absolute;
+      width: 20px;
+      aspect-ratio: 1;
+      border: 2px solid var(--primary);
+      border-radius: 50%;
+      left: 15px;
+      top: 35px;
+    }
+
+    .scissor-handle::after {
+      content: '';
+      position: absolute;
+      width: 8px;
+      aspect-ratio: 1;
+      background: var(--primary);
+      border-radius: 50%;
+      inset: 4px;
+      opacity: 0.5;
+    }
+
+    /* Comb */
+    .comb {
+      position: absolute;
+      right: 15px;
+      top: 25px;
+      width: 30px;
+      height: 40px;
+    }
+
+    .comb-back {
+      position: absolute;
+      width: 8px;
+      height: 40px;
+      background: linear-gradient(180deg, var(--primary), var(--secondary));
+      border-radius: 4px;
+      right: 0;
+    }
+
+    .comb-teeth {
+      position: absolute;
+      width: 20px;
+      height: 2px;
+      background: var(--secondary);
+      right: 8px;
+      top: 5px;
+      box-shadow: 0 8px 0 var(--secondary),
+        0 16px 0 var(--secondary),
+        0 24px 0 var(--secondary),
+        0 32px 0 var(--secondary);
+      opacity: 0.8;
+    }
+
+    /* Brand text */
+    .brand {
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .brand-name {
+      color: #fff;
+      font-size: clamp(24px, 5vw, 32px);
+      letter-spacing: 8px;
+      font-weight: 300;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+      padding-right: 8px;
+    }
+
+    .brand-name span {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: slideUp 0.8s ease forwards;
+    }
+
+    /* Letter animation delays */
+    .brand-name span:nth-child(1) {
+      animation-delay: 0.1s;
+    }
+
+    .brand-name span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .brand-name span:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+
+    .brand-name span:nth-child(4) {
+      animation-delay: 0.4s;
+    }
+
+    .brand-name span:nth-child(5) {
+      animation-delay: 0.5s;
+    }
+
+    .brand-tagline {
+      color: var(--primary);
+      font-size: 0.75rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeIn 1s ease 0.8s forwards;
+    }
+
+    /* Progress bar */
+    .progress {
+      width: 200px;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .progress::after {
+      content: '';
+      position: absolute;
+      width: 60px;
+      height: 100%;
+      background: var(--primary);
+      animation: progress 2s ease-in-out infinite;
+      box-shadow: 0 0 15px var(--primary);
+    }
+
+    /* Particles */
+    .particle {
+      position: absolute;
+      width: 2px;
+      aspect-ratio: 1;
+      background: var(--primary);
+      border-radius: 50%;
+      opacity: 0.3;
+      animation: particleFloat 8s linear infinite;
+      pointer-events: none;
+    }
+
+    .particle:nth-child(1) {
+      top: 20%;
+      left: 20%;
+    }
+
+    .particle:nth-child(2) {
+      top: 70%;
+      left: 80%;
+      width: 3px;
+      animation-delay: 1s;
+    }
+
+    .particle:nth-child(3) {
+      top: 40%;
+      left: 90%;
+      animation-delay: 2s;
+    }
+
+    .particle:nth-child(4) {
+      top: 80%;
+      left: 30%;
+      width: 4px;
+      animation-delay: 3s;
+    }
+
+    .particle:nth-child(5) {
+      top: 15%;
+      left: 75%;
+      animation-delay: 4s;
+    }
+
+    .particle:nth-child(6) {
+      top: 60%;
+      left: 15%;
+      animation-delay: 5s;
+    }
+
+    /* Animations */
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes float {
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    @keyframes snip {
+      50% {
+        transform: rotate(45deg) scaleX(1.1);
+      }
+    }
+
+    @keyframes slideUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes progress {
+      from {
+        left: -60px;
+      }
+
+      to {
+        left: 200px;
+      }
+    }
+
+    @keyframes particleFloat {
+
+      0%,
+      100% {
+        transform: translate(0, 0);
+        opacity: 0.3;
+      }
+
+      25% {
+        transform: translate(10px, -20px);
+        opacity: 0.5;
+      }
+
+      50% {
+        transform: translate(0, -30px);
+        opacity: 0.3;
+      }
+
+      75% {
+        transform: translate(-10px, -20px);
+        opacity: 0.5;
+      }
+    }
+
+    /* Hide loader when Angular is bootstrapped */
+    app-root:empty+.ragna-loader {
+      display: flex;
+    }
+  </style>
 </head>
 
 <body>
+  <!-- Angular root component -->
   <app-root></app-root>
+
+  <!-- Loader - will be shown until Angular bootstraps -->
+  <div class="ragna-loader" id="ragnaLoader">
+    <!-- Floating particles -->
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+
+    <div class="loader-content">
+      <!-- Logo animation -->
+      <div class="logo-container">
+        <div class="ring"></div>
+        <div class="salon-icon">
+          <div class="scissor-blade blade-1"></div>
+          <div class="scissor-blade blade-2"></div>
+          <div class="scissor-handle"></div>
+          <div class="comb">
+            <div class="comb-back"></div>
+            <div class="comb-teeth"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Brand text -->
+      <div class="brand">
+        <div class="brand-name">
+          <span>R</span>
+          <span>A</span>
+          <span>G</span>
+          <span>N</span>
+          <span>A</span>
+        </div>
+        <div class="brand-tagline">salon & spa</div>
+      </div>
+
+      <!-- Progress -->
+      <div class="progress"></div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      // Auto-hide loader when Angular is ready
+      window.addEventListener('load', function () {
+        const loader = document.getElementById('ragnaLoader');
+
+        // Check if Angular has bootstrapped
+        const checkAngular = setInterval(function () {
+          const appRoot = document.querySelector('app-root');
+
+          // If app-root has content (Angular bootstrapped), hide loader
+          if (appRoot && appRoot.children.length > 0) {
+            clearInterval(checkAngular);
+
+            // Remove loader after animation
+            setTimeout(function () {
+              loader.style.display = 'none';
+            }, 500);
+          }
+        }, 100);
+      });
+    })();
+  </script>
 </body>
 
 </html>
