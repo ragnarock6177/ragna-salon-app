@@ -1,5 +1,5 @@
 export const environment = {
     production: false,
-    adminApiUrl: 'http://localhost:3000/api/admin',
-    userApiUrl: 'http://localhost:3000/api'
+    adminApiUrl: 'https://salon-backend-zeta.vercel.app/api/admin',
+    userApiUrl: 'https://salon-backend-zeta.vercel.app/api'
 };

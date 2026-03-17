@@ -103,7 +103,7 @@
                     <h2 class="text-xl md:text-3xl font-bold mb-2">Up to 50% Off on First Booking</h2>
                     <p class="text-primary-100 text-sm md:text-base mb-4">Use code <span
                             class="font-mono font-bold bg-white/20 px-2 py-0.5 rounded">FIRST50</span></p>
-                    <button
+                    <button type="button"
                         class="bg-white text-primary-600 px-5 py-2 rounded-full text-sm font-bold hover:bg-primary-50 transition-colors shadow-lg">
                         Explore Offers
                     </button>
@@ -121,7 +121,7 @@
     <section class="bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div class="flex gap-2 md:gap-3 overflow-x-auto pb-2 scrollbar-hide">
-                <button (click)="selectedCategory.set('all')"
+                <button type="button" (click)="selectedCategory.set('all')"
                     class="shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all"
                     [class.bg-primary-600]="selectedCategory() === 'all'"
                     [class.text-white]="selectedCategory() === 'all'"
@@ -132,7 +132,7 @@
                     All
                 </button>
                 @for (category of categories; track category.id) {
-                <button (click)="selectedCategory.set(category.id)"
+                <button type="button" (click)="selectedCategory.set(category.id)"
                     class="shrink-0 flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all"
                     [class.bg-primary-600]="selectedCategory() === category.id"
                     [class.text-white]="selectedCategory() === category.id"

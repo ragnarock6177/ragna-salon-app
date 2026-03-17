@@ -27,7 +27,7 @@
     [class.pointer-events-auto]="isOpen()">
     <div class="absolute inset-0 overflow-hidden">
         <!-- Background overlay -->
-        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300"
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 cursor-pointer"
             [class.opacity-0]="!isOpen()" [class.opacity-100]="isOpen()" (click)="toggle()"></div>
 
         <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full">

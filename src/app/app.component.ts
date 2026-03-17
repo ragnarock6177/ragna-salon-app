@@ -13,7 +13,11 @@ export class AppComponent implements OnInit {
   private readonly seoService = inject(SeoService);
 
   ngOnInit(): void {
-    // Initialize SEO service to update meta tags on route changes
+    const loader = document.getElementById('ragnaLoader');
+    if (!loader) {
+      return;
+    }
+    queueMicrotask(() => requestAnimationFrame(() => loader.remove()));
     this.seoService.init();
   }
 }

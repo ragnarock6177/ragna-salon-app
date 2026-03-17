@@ -384,10 +384,6 @@
       }
     }
 
-    /* Hide loader when Angular is bootstrapped */
-    app-root:empty+.ragna-loader {
-      display: flex;
-    }
   </style>
 </head>
 
@@ -396,7 +392,7 @@
   <app-root></app-root>
 
   <!-- Loader - will be shown until Angular bootstraps -->
-  <div class="ragna-loader" id="ragnaLoader">
+  <div class="ragna-loader" id="ragnaLoader" aria-hidden="true">
     <!-- Floating particles -->
     <div class="particle"></div>
     <div class="particle"></div>
@@ -436,30 +432,5 @@
       <div class="progress"></div>
     </div>
   </div>
-
-  <script>
-    (function () {
-      // Auto-hide loader when Angular is ready
-      window.addEventListener('load', function () {
-        const loader = document.getElementById('ragnaLoader');
-
-        // Check if Angular has bootstrapped
-        const checkAngular = setInterval(function () {
-          const appRoot = document.querySelector('app-root');
-
-          // If app-root has content (Angular bootstrapped), hide loader
-          if (appRoot && appRoot.children.length > 0) {
-            clearInterval(checkAngular);
-
-            // Remove loader after animation
-            setTimeout(function () {
-              loader.style.display = 'none';
-            }, 500);
-          }
-        }, 100);
-      });
-    })();
-  </script>
 </body>
-
 </html>

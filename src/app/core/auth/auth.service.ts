@@ -35,17 +35,6 @@ export class AuthService {
 
     constructor() {
         this.checkAuth();
-
-        // Reset signals when the interceptor clears the token on 401
-        // and navigates away — avoids circular dependency with the interceptor
-        this.router.events.pipe(
-            filter(event => event instanceof NavigationEnd)
-        ).subscribe(() => {
-            if (!localStorage.getItem('token')) {
-                this.currentUser.set(null);
-                this.isAuthenticated.set(false);
-            }
-        });
     }
 
     private checkAuth() {

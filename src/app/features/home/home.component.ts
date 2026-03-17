@@ -1,15 +1,16 @@
-import { Component, inject, signal, computed, effect, untracked, ElementRef, ViewChild, HostListener, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, signal, computed, effect, untracked, ElementRef, ViewChild, HostListener, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { catchError, map, of, startWith, tap } from 'rxjs';
+import { catchError, forkJoin, map, of, startWith } from 'rxjs';
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../core/auth/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { LoginDialogComponent } from '../../features/auth/components/login-dialog/login-dialog.component';
 import { MatMenuModule } from '@angular/material/menu';
+import { HomeCacheService } from '../../core/services/home-cache.service';
 
 @Component({
     selector: 'app-home',
@@ -19,9 +20,10 @@ import { MatMenuModule } from '@angular/material/menu';
     styleUrl: './home.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
     private apiService = inject(ApiService);
     private fb = inject(FormBuilder);
+    private homeCacheService = inject(HomeCacheService);
     authService = inject(AuthService);
     dialog = inject(MatDialog);
 
@@ -107,33 +109,23 @@ export class HomeComponent {
     private searchControlValue = toSignal(this.searchControl.valueChanges.pipe(startWith('')), { initialValue: '' });
     private cityControlValue = toSignal(this.cityControl.valueChanges.pipe(startWith('')), { initialValue: '' });
 
-    isLoading = signal(true);
+    isLoading = signal(false);
 
-    cities = toSignal(this.apiService.getCities().pipe(
-        map((res: any) => (res.data || []) as any[]),
-        catchError(() => of([] as any[]))
-    ), { initialValue: [] as any[] });
+    cities = computed(() => this.homeCacheService.getCities());
 
-    salons = toSignal(this.apiService.getSalons().pipe(
-        map((res: any) => {
-            const salons = (res.data || []) as any[];
-            // Parse stringified services array
-            return salons.map(salon => ({
-                ...salon,
-                services: typeof salon.services === 'string'
-                    ? JSON.parse(salon.services)
-                    : (salon.services || [])
-            }));
-        }),
-        tap(() => this.isLoading.set(false)),
-        catchError(() => {
-            this.isLoading.set(false);
-            return of([] as any[]);
-        })
-    ), { initialValue: [] as any[] });
+    salons = computed(() => this.homeCacheService.getSalons());
 
     // Custom Dropdown State
     isCityDropdownOpen = signal(false);
+
+    ngOnInit(): void {
+        const hasCachedCities = this.homeCacheService.hasCities();
+        const hasCachedSalons = this.homeCacheService.hasSalons();
+        const hasCache = hasCachedCities && hasCachedSalons;
+
+        this.isLoading.set(!hasCache);
+        this.refreshHomeData(hasCache);
+    }
 
     toggleCityDropdown() {
         this.isCityDropdownOpen.update(v => !v);
@@ -202,5 +194,42 @@ export class HomeComponent {
         } catch {
             return [];
         }
+    }
+
+    private refreshHomeData(silent: boolean): void {
+        forkJoin({
+            cities: this.apiService.getCities().pipe(
+                map((res: any) => (res.data || []) as any[]),
+                catchError(() => of(this.homeCacheService.getCities()))
+            ),
+            salons: this.apiService.getSalons().pipe(
+                map((res: any) => this.normalizeSalons(res.data || [])),
+                catchError(() => of(this.homeCacheService.getSalons()))
+            )
+        }).subscribe({
+            next: ({ cities, salons }) => {
+                this.homeCacheService.setCities(cities);
+                this.homeCacheService.setSalons(salons);
+            },
+            error: () => {
+                if (!silent) {
+                    this.isLoading.set(false);
+                }
+            },
+            complete: () => {
+                if (!silent) {
+                    this.isLoading.set(false);
+                }
+            }
+        });
+    }
+
+    private normalizeSalons(salons: any[]): any[] {
+        return salons.map((salon) => ({
+            ...salon,
+            services: typeof salon.services === 'string'
+                ? JSON.parse(salon.services)
+                : (salon.services || [])
+        }));
     }
 }

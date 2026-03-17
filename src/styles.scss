@@ -316,17 +316,53 @@ $checkbox-overrides: (
   disabled-unselected-icon-color: $_slate-200,
 );
 
+$light-checkbox-overrides: (
+  selected-focus-state-layer-opacity: 0,
+  selected-hover-state-layer-opacity: 0,
+  selected-pressed-state-layer-opacity: 0,
+  unselected-focus-state-layer-opacity: 0,
+  unselected-hover-state-layer-opacity: 0,
+  unselected-pressed-state-layer-opacity: 0,
+  selected-icon-color: $_sky-500,
+  selected-hover-icon-color: $_sky-500,
+  selected-focus-icon-color: $_sky-500,
+  selected-pressed-icon-color: $_sky-500,
+  selected-checkmark-color: $_white,
+  disabled-label-color: $_slate-400,
+  disabled-selected-icon-color: $_slate-200,
+  disabled-unselected-icon-color: $_slate-200,
+  unselected-icon-color: $_slate-300,
+  unselected-hover-icon-color: $_slate-400,
+  unselected-focus-icon-color: $_slate-400,
+);
+
+$dark-checkbox-overrides: (
+  selected-focus-state-layer-opacity: 0,
+  selected-hover-state-layer-opacity: 0,
+  selected-pressed-state-layer-opacity: 0,
+  unselected-focus-state-layer-opacity: 0,
+  unselected-hover-state-layer-opacity: 0,
+  unselected-pressed-state-layer-opacity: 0,
+  selected-icon-color: $_sky-500,
+  selected-hover-icon-color: $_sky-500,
+  selected-focus-icon-color: $_sky-500,
+  selected-pressed-icon-color: $_sky-500,
+  selected-checkmark-color: $_white,
+  disabled-label-color: $_slate-600,
+  disabled-selected-icon-color: $_slate-800,
+  disabled-unselected-icon-color: $_slate-800,
+  unselected-icon-color: $_slate-600,
+  unselected-hover-icon-color: $_slate-500,
+  unselected-focus-icon-color: $_slate-500,
+);
+
 /* --- 3. Apply Themes & Overrides --- */
 html {
-  scroll-behavior: smooth;
   @include mat.all-component-themes($light-theme);
 
   @include mat.button-overrides($button-theme-overrides);
   @include mat.icon-button-overrides($icon-button-overrides);
-  @include mat.checkbox-overrides(map-merge($checkbox-overrides, (unselected-icon-color: $_slate-300,
-        unselected-hover-icon-color: $_slate-400,
-        unselected-focus-icon-color: $_slate-400,
-      )));
+  @include mat.checkbox-overrides($light-checkbox-overrides);
   @include mat.fab-overrides($fab-overrides);
 
   // --- Form Field Overrides (Light) ---
@@ -508,13 +544,7 @@ html.dark {
   @include mat.button-overrides($dark-button-theme-overrides);
   @include mat.icon-button-overrides($dark-icon-button-overrides);
   @include mat.fab-overrides($dark-fab-overrides);
-  @include mat.checkbox-overrides(map-merge($checkbox-overrides, (unselected-icon-color: $_slate-600,
-        unselected-hover-icon-color: $_slate-500,
-        unselected-focus-icon-color: $_slate-500,
-        disabled-selected-icon-color: $_slate-800,
-        disabled-unselected-icon-color: $_slate-800,
-        disabled-label-color: $_slate-600,
-      )));
+  @include mat.checkbox-overrides($dark-checkbox-overrides);
 
   // --- Tabs Overrides (Dark) ---
   @include mat.tabs-overrides((active-indicator-color: $_sky-500,
@@ -941,6 +971,26 @@ body {
   /* IE10+/Edge */
   user-select: none;
   /* Standard */
+}
+
+button:not(:disabled),
+[role='button']:not([aria-disabled='true']),
+a[href],
+a[routerLink],
+[routerLink],
+[matMenuTriggerFor],
+.mat-mdc-menu-item,
+.mat-mdc-option,
+tr[mat-row],
+.cursor-pointer {
+  cursor: pointer;
+}
+
+button:disabled,
+[aria-disabled='true'],
+.mat-mdc-button-disabled,
+.mat-mdc-menu-item[disabled] {
+  cursor: not-allowed;
 }
 
 // Allow selection in inputs and textareas

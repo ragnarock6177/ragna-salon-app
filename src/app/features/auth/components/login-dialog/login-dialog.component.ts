@@ -11,12 +11,12 @@ import { ToastService } from '../../../../core/services/toast.service';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, MatDialogModule, LucideAngularModule],
   template: `
-    <div class="bg-white dark:bg-slate-900 rounded-2xl md:rounded-3xl overflow-hidden relative shadow-2xl">
       <!-- Close Button -->
       <button (click)="close()" 
               class="absolute top-3 right-3 md:top-4 md:right-4 z-20 p-2 bg-white/80 dark:bg-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full text-slate-500 dark:text-slate-400 transition-colors backdrop-blur-sm">
         <lucide-icon name="x" class="w-4 h-4 md:w-5 md:h-5"></lucide-icon>
       </button>
+    <div class="bg-white dark:bg-slate-900 rounded-2xl md:rounded-3xl overflow-hidden relative shadow-2xl">
 
       <!-- Main Layout: Vertical on mobile, Horizontal on desktop -->
       <div class="flex flex-col md:flex-row">
